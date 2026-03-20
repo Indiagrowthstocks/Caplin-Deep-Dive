@@ -3,21 +3,134 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caplin Deep Dive</title>
+    <title>Company Report Cards</title>
     <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #2C3E50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        main {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: scale(1.05);
+        }
+        footer {
+            background-color: #2C3E50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+        .tag {
+            display: inline-block;
+            background-color: #3498DB;
+            color: white;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin: 5px 0;
+        }
+    </style>
 </head>
 <body>
-    <div class="report-cards">
-        <a href="01-the-quiet-gorilla.html" class="report-card">Quiet Gorilla</a>
-        <a href="02-financial-dna.html" class="report-card">Financial DNA</a>
-        <a href="03-tam-growth-runway.html" class="report-card">TAM Growth Runway</a>
-        <a href="04-management-quality.html" class="report-card">Management Quality</a>
-        <a href="05-moat-bottleneck-screen.html" class="report-card">Moat Bottleneck Screen</a>
-        <a href="06-three-masters-valuation.html" class="report-card">Three Masters Valuation</a>
-        <a href="07-peer-comparison.html" class="report-card">Peer Comparison</a>
-        <a href="08-risk-register.html" class="report-card">Risk Register</a>
-        <a href="09-return-profile-2035.html" class="report-card">Return Profile 2035</a>
-        <a href="10-monitoring-dashboard.html" class="report-card">Monitoring Dashboard</a>
-    </div>
+    <header>
+        <h1>Company Name</h1>
+    </header>
+    <main>
+        <div class="grid">
+            <div class="card">
+                <h2>Report Card 1</h2>
+                <p>Description for report card 1.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 2</h2>
+                <p>Description for report card 2.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 3</h2>
+                <p>Description for report card 3.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 4</h2>
+                <p>Description for report card 4.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 5</h2>
+                <p>Description for report card 5.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 6</h2>
+                <p>Description for report card 6.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 7</h2>
+                <p>Description for report card 7.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 8</h2>
+                <p>Description for report card 8.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 9</h2>
+                <p>Description for report card 9.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+            <div class="card">
+                <h2>Report Card 10</h2>
+                <p>Description for report card 10.</p>
+                <span class="tag">Tag1</span>
+                <span class="tag">Tag2</span>
+            </div>
+        </div>
+    </main>
+    <footer>
+        <p>&copy; 2026 Company Name. All rights reserved.</p>
+    </footer>
 </body>
 </html>
