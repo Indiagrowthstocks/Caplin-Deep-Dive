@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point — Return Profile to 2035</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f5f0e8;
+    --ink: #1a1510;
+    --ink-light: #3d3528;
+    --ink-faded: #6b5f4e;
+    --amber: #c8860a;
+    --red: #8b2020;
+    --green: #2a5c2a;
+    --border: #c4b49a;
+    --border-light: #ddd0b8;
+    --caplin: #1a4a6b;
+    --caplin-light: rgba(26,74,107,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--parchment); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; font-weight: 300; line-height: 1.7; }
+  .wrapper { max-width: 860px; margin: 0 auto; padding: 56px 40px 80px; }
+
+  .masthead { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--border); padding: 14px 0 12px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px; }
+  .masthead-pub { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); }
+  .masthead-tag { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-faded); }
+
+  .series-band { background: var(--ink); padding: 10px 16px; margin-bottom: 32px; display: inline-flex; align-items: center; gap: 20px; }
+  .series-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); }
+
+  .report-type { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--caplin); margin-bottom: 14px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(24px, 4vw, 40px); font-weight: 700; line-height: 1.1; margin-bottom: 10px; }
+  .subhead { font-size: 17px; font-weight: 300; font-style: italic; color: var(--ink-faded); margin-bottom: 28px; line-height: 1.55; }
+
+  .meta-strip { display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 10px 0; margin-bottom: 44px; }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faded); }
+  .meta-value { font-size: 13.5px; font-weight: 600; }
+
+  .section { margin-bottom: 52px; }
+  .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .section-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--caplin); }
+  h2 { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; }
+
+  .prose p { font-size: 15.5px; line-height: 1.78; color: var(--ink-light); margin-bottom: 16px; }
+  .prose p strong { font-weight: 600; color: var(--ink); }
+  .prose p:last-child { margin-bottom: 0; }
+
+  .callout { border-left: 3px solid var(--caplin); padding: 14px 18px; background: var(--caplin-light); margin: 24px 0; }
+  .callout p { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--ink); line-height: 1.6; margin: 0; }
+
+  /* ANCHOR BOX */
+  .anchor-box { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); margin: 28px 0; }
+  @media(max-width:560px) { .anchor-box { grid-template-columns: repeat(2,1fr); } }
+  .anchor-cell { background: var(--parchment); padding: 18px 16px; }
+  .anchor-label { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); margin-bottom: 6px; }
+  .anchor-val { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: 3px; }
+  .anchor-sub { font-size: 11.5px; font-weight: 300; color: var(--ink-faded); }
+
+  /* SCENARIO CARDS */
+  .scenario-cards { display: flex; flex-direction: column; gap: 16px; margin: 24px 0; }
+  .sc-card { border: 1px solid var(--border-light); overflow: hidden; }
+  .sc-header { display: flex; align-items: center; gap: 0; }
+  .sc-label-bar { padding: 14px 20px; min-width: 180px; }
+  .sc-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 4px; }
+  .sc-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; }
+  .sc-body { flex: 1; padding: 14px 20px; border-left: 1px solid var(--border-light); display: grid; grid-template-columns: repeat(4,1fr); gap: 0; }
+  .sc-metric { padding: 0 12px; border-right: 1px solid var(--border-light); }
+  .sc-metric:last-child { border-right: none; }
+  .sc-m-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faded); margin-bottom: 4px; }
+  .sc-m-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; line-height: 1.1; }
+  .sc-m-sub { font-size: 11px; font-weight: 300; color: var(--ink-faded); margin-top: 2px; }
+  .sc-footer { padding: 10px 20px; border-top: 1px solid var(--border-light); font-size: 13px; font-weight: 300; color: var(--ink-faded); line-height: 1.55; }
+  .sc-footer strong { font-weight: 600; color: var(--ink); }
+
+  .bear .sc-label-bar { background: rgba(139,32,32,0.05); border-left: 3px solid var(--red); }
+  .bear .sc-label { color: var(--red); }
+  .bear .sc-m-val { color: var(--red); }
+
+  .base .sc-label-bar { background: rgba(26,74,107,0.06); border-left: 3px solid var(--caplin); }
+  .base .sc-label { color: var(--caplin); }
+  .base .sc-m-val { color: var(--caplin); }
+
+  .bull .sc-label-bar { background: rgba(42,92,42,0.06); border-left: 3px solid var(--green); }
+  .bull .sc-label { color: var(--green); }
+  .bull .sc-m-val { color: var(--green); }
+
+  .extreme.sc-card { border-color: var(--amber); }
+  .extreme .sc-label-bar { background: rgba(200,134,10,0.07); border-left: 3px solid var(--amber); }
+  .extreme .sc-label { color: var(--amber); }
+  .extreme .sc-m-val { color: var(--amber); }
+
+  @media(max-width:620px) {
+    .sc-header { flex-direction: column; }
+    .sc-body { grid-template-columns: repeat(2,1fr); border-left: none; border-top: 1px solid var(--border-light); }
+    .sc-label-bar { min-width: unset; width: 100%; }
+    .sc-metric { padding: 8px 12px; }
+  }
+
+  /* EPS LADDER TABLE */
+  .ladder-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 20px 0; }
+  .ladder-table th { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faded); padding: 8px 10px; border-bottom: 1px solid var(--border); font-weight: 400; text-align: right; }
+  .ladder-table th:first-child { text-align: left; }
+  .ladder-table td { padding: 9px 10px; border-bottom: 1px solid var(--border-light); font-weight: 300; color: var(--ink-light); text-align: right; font-size: 12.5px; }
+  .ladder-table td:first-child { text-align: left; font-weight: 400; color: var(--ink-faded); font-family: 'DM Mono', monospace; font-size: 11px; }
+  .ladder-table tr.now td { background: rgba(26,74,107,0.05); font-weight: 600; color: var(--ink); }
+  .ladder-table tr.now td:first-child { color: var(--caplin); }
+  .ladder-table tr:last-child td { border-bottom: none; }
+  .ladder-table .bear-col { color: var(--red); }
+  .ladder-table .base-col { color: var(--caplin); font-weight: 500; }
+  .ladder-table .bull-col { color: var(--green); }
+  .ladder-table .extreme-col { color: var(--amber); }
+
+  /* MULTIPLE SENSITIVITY */
+  .sensitivity-wrap { margin: 24px 0; overflow-x: auto; }
+  .sensitivity-table { border-collapse: collapse; font-size: 12px; min-width: 500px; }
+  .sensitivity-table th { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faded); padding: 8px 12px; border-bottom: 1px solid var(--border); font-weight: 400; text-align: center; }
+  .sensitivity-table th:first-child { text-align: left; }
+  .sensitivity-table td { padding: 9px 12px; border-bottom: 1px solid var(--border-light); text-align: center; font-weight: 300; font-size: 12px; }
+  .sensitivity-table td:first-child { text-align: left; font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-faded); font-weight: 400; white-space: nowrap; }
+  .sensitivity-table tr:last-child td { border-bottom: none; }
+  .s-low { color: var(--red); }
+  .s-mid { color: var(--caplin); font-weight: 500; }
+  .s-high { color: var(--green); font-weight: 600; }
+  .s-vhigh { color: var(--amber); font-weight: 700; }
+  .sensitivity-table td.now-row { background: rgba(26,74,107,0.05); }
+
+  /* PROBABILITY TABLE */
+  .prob-table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 20px 0; }
+  .prob-table th { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faded); padding: 8px 12px; border-bottom: 1px solid var(--border); font-weight: 400; text-align: left; }
+  .prob-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-size: 13px; font-weight: 300; color: var(--ink-light); }
+  .prob-table td:first-child { font-weight: 500; color: var(--ink); }
+  .prob-table tr:last-child td { border-bottom: none; }
+  .prob-table tr.weighted td { background: var(--ink); color: #f5f0e8; font-weight: 500; }
+  .prob-table tr.weighted td:first-child { color: var(--amber); }
+
+  .final-word { border-top: 2px solid var(--ink); padding-top: 28px; margin-top: 44px; }
+  .final-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--caplin); margin-bottom: 14px; }
+  .final-word p { font-size: 15.5px; font-weight: 300; color: var(--ink-light); line-height: 1.78; margin-bottom: 14px; }
+  .final-word p strong { font-weight: 600; color: var(--ink); }
+
+  .colophon { margin-top: 52px; border-top: 1px solid var(--border-light); padding-top: 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-faded); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+  .colophon em { font-style: italic; font-family: 'Source Serif 4', serif; }
+  @media(max-width:600px) { .wrapper { padding: 36px 20px 60px; } }
+
+  @media print {
+    h1, h2, h3, h4,
+    .section-rule, .section-header, .s-title,
+    .kicker, .report-type, .flag, .masthead,
+    .final-label, .final-kicker, .closing-rule,
+    .vg-label, .rc-tag, .arch-flag, .tb-label,
+    .rs-heading, .ts-label, .at-label, .ql-quarter {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .stat-grid, .scorecard, .verdict-box, .price-zones,
+    .callout, .moat-list, .pattern-grid, .thesis-box,
+    .wrong-peers, .metrics-table, .monitor-table,
+    .arch-card, .val-gap, .caplin-position,
+    .ts-card, .anda-track, .at-cell, .q-log,
+    .ss-item, .as-item, .misclass, .final,
+    .vg-side, .rc-findings, .how-to, .verdict-row,
+    .ql-body, .ql-header, .earnings-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    p { orphans: 3; widows: 3; }
+  }
+
+/* === REDACTED PUBLISHER STRIP === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+/* Slight roughness on hover to signal intentionality */
+.redacted-pub:hover::after {
+  background: #111;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="masthead">
+    <span class="masthead-pub"><span class="redacted-pub">Clarity Research</span></span>
+    <span class="masthead-tag">Return Profile Analysis · NSE: CAPLINPNT</span>
+  </div>
+
+  <div class="series-band">
+    <span class="series-label">Caplin Point Laboratories · Return Scenarios to 2035</span>
+  </div>
+
+  <div class="report-type">Return Profile · CMP ₹1,699 · P/E 21× · NSE: CAPLINPNT</div>
+  <h1>What ₹1,699 Buys You — The Return Map to 2035</h1>
+  <div class="subhead">At 21× earnings on a business that has compounded EPS at 33% annually for eleven years, the market is pricing in doubt. This report maps what happens to your money if the business does what it has always done — and what happens if it does less.</div>
+
+  <div class="meta-strip">
+    <div class="meta-item"><span class="meta-label">CMP</span><span class="meta-value">₹1,699</span></div>
+    <div class="meta-item"><span class="meta-label">Trailing P/E</span><span class="meta-value">21×</span></div>
+    <div class="meta-item"><span class="meta-label">FY25 TTM EPS</span><span class="meta-value">~₹81</span></div>
+    <div class="meta-item"><span class="meta-label">FY25 TTM PAT</span><span class="meta-value">₹622 Cr</span></div>
+    <div class="meta-item"><span class="meta-label">Historical EPS CAGR</span><span class="meta-value">33.56% (11yr)</span></div>
+    <div class="meta-item"><span class="meta-label">Time Horizon</span><span class="meta-value">10 years to FY35</span></div>
+  </div>
+
+  <!-- SECTION 1 — ANCHORS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>The Starting Point — What the Numbers Actually Say Today</h2>
+    </div>
+    <div class="prose">
+      <p>Before projecting forward, get the current situation exactly right. At ₹1,699 and 21× trailing earnings, Caplin is trading at a meaningful discount to both its own historical multiple range and the quality of business the numbers describe.</p>
+      <p>The P/E was 45–55× in 2015 on a smaller, less-proven business. Today it is 21× on a business that has delivered eleven years of execution, zero debt, 25%+ ROCE, and a USFDA-approved injectable facility. <strong>The multiple has compressed by 55–60% while the earnings base has grown 13×.</strong> That is the anomaly this return analysis is built on.</p>
+    </div>
+
+    <div class="anchor-box">
+      <div class="anchor-cell">
+        <div class="anchor-label">Current Price</div>
+        <div class="anchor-val">₹1,699</div>
+        <div class="anchor-sub">CMP as provided</div>
+      </div>
+      <div class="anchor-cell">
+        <div class="anchor-label">Trailing P/E</div>
+        <div class="anchor-val">21×</div>
+        <div class="anchor-sub">vs 45–55× in 2015</div>
+      </div>
+      <div class="anchor-cell">
+        <div class="anchor-label">FY25 TTM EPS</div>
+        <div class="anchor-val">~₹81</div>
+        <div class="anchor-sub">PAT ₹622 Cr TTM</div>
+      </div>
+      <div class="anchor-cell">
+        <div class="anchor-label">Historical EPS CAGR</div>
+        <div class="anchor-val">33.6%</div>
+        <div class="anchor-sub">11-year track record</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>"21× on a business compounding EPS at 33% annually. PEG ratio of 0.63. The market is not just being conservative — it is being irrational. The return profile that follows is the mathematical consequence of that irrationality correcting over time."</p>
+    </div>
+  </div>
+
+  <!-- SECTION 2 — EPS LADDER -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>The EPS Ladder — What Earnings Look Like in Each Scenario</h2>
+    </div>
+    <div class="prose">
+      <p>The stock price in 2035 is the product of two variables: what EPS will be, and what multiple the market assigns. The EPS trajectory is the more predictable of the two — it is anchored in business fundamentals. The multiple is the more volatile — it depends on market sentiment, sector re-rating, and how visible Caplin becomes as the US injectable story matures.</p>
+      <p>Four EPS scenarios, built on different growth rate assumptions. Bear uses 12% CAGR — roughly half the historical rate, implying significant deceleration. Base uses 20% — a meaningful slowdown from 33% but consistent with a maturing LatAm franchise plus early US contribution. Bull uses 28% — close to historical, implying US injectable ramp adds meaningfully to growth. Compounder uses 33% — historical continuation, requiring US + oncology + Africa all contributing by FY30.</p>
+    </div>
+
+    <table class="ladder-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Bear EPS<br><span style="font-weight:300;font-size:9px">12% CAGR</span></th>
+          <th>Base EPS<br><span style="font-weight:300;font-size:9px">20% CAGR</span></th>
+          <th>Bull EPS<br><span style="font-weight:300;font-size:9px">28% CAGR</span></th>
+          <th>Compounder<br><span style="font-weight:300;font-size:9px">33% CAGR</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="now">
+          <td>FY25 (Now)</td>
+          <td>₹81</td>
+          <td>₹81</td>
+          <td>₹81</td>
+          <td>₹81</td>
+        </tr>
+        <tr>
+          <td>FY27</td>
+          <td class="bear-col">₹102</td>
+          <td class="base-col">₹117</td>
+          <td class="bull-col">₹133</td>
+          <td class="extreme-col">₹143</td>
+        </tr>
+        <tr>
+          <td>FY29</td>
+          <td class="bear-col">₹128</td>
+          <td class="base-col">₹168</td>
+          <td class="bull-col">₹218</td>
+          <td class="extreme-col">₹253</td>
+        </tr>
+        <tr>
+          <td>FY31</td>
+          <td class="bear-col">₹161</td>
+          <td class="base-col">₹241</td>
+          <td class="bull-col">₹357</td>
+          <td class="extreme-col">₹449</td>
+        </tr>
+        <tr>
+          <td>FY33</td>
+          <td class="bear-col">₹202</td>
+          <td class="base-col">₹347</td>
+          <td class="bull-col">₹584</td>
+          <td class="extreme-col">₹796</td>
+        </tr>
+        <tr>
+          <td>FY35</td>
+          <td class="bear-col">₹253</td>
+          <td class="base-col">₹500</td>
+          <td class="bull-col">₹956</td>
+          <td class="extreme-col">₹1,411</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- SECTION 3 — SCENARIO CARDS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>The Four Scenarios — EPS × Multiple = Your Return</h2>
+    </div>
+    <div class="prose">
+      <p>Each scenario pairs an EPS estimate with a target multiple. The multiple assumption is as important as the EPS. At 21× today — a historically depressed level — even flat multiple expansion to 28–30× adds significant return on top of EPS growth. The scenarios below use conservative to optimistic multiple assumptions in each case.</p>
+    </div>
+
+    <div class="scenario-cards">
+
+      <!-- BEAR -->
+      <div class="sc-card bear">
+        <div class="sc-header">
+          <div class="sc-label-bar">
+            <div class="sc-label">Scenario 01 · Bear</div>
+            <div class="sc-name">LatAm Slows,<br>US Delayed</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 EPS</div>
+              <div class="sc-m-val">₹253</div>
+              <div class="sc-m-sub">12% CAGR</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">Target P/E</div>
+              <div class="sc-m-val">22×</div>
+              <div class="sc-m-sub">Multiple flat</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 Price</div>
+              <div class="sc-m-val">₹5,566</div>
+              <div class="sc-m-sub">From ₹1,699</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">10yr Return</div>
+              <div class="sc-m-val">3.3×</div>
+              <div class="sc-m-sub">~13% CAGR</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-footer"><strong>Assumptions:</strong> LatAm growth decelerates to 12–15% from currency headwinds or competitive entry. US injectables face ANDA delays beyond FY28. No meaningful Africa contribution. Multiple stays depressed at 21–22×. <strong>Still a 3.3× return in the worst realistic case.</strong></div>
+      </div>
+
+      <!-- BASE -->
+      <div class="sc-card base">
+        <div class="sc-header">
+          <div class="sc-label-bar">
+            <div class="sc-label">Scenario 02 · Base</div>
+            <div class="sc-name">Steady Compounding,<br>US Scales by FY29</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 EPS</div>
+              <div class="sc-m-val">₹500</div>
+              <div class="sc-m-sub">20% CAGR</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">Target P/E</div>
+              <div class="sc-m-val">28×</div>
+              <div class="sc-m-sub">Modest re-rating</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 Price</div>
+              <div class="sc-m-val">₹14,000</div>
+              <div class="sc-m-sub">From ₹1,699</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">10yr Return</div>
+              <div class="sc-m-val">8.2×</div>
+              <div class="sc-m-sub">~23% CAGR</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-footer"><strong>Assumptions:</strong> LatAm grows 18–20% annually on penetration depth. US injectables contribute ₹800–1,000 Cr by FY29 as ANDA pipeline matures. Africa still sub-5% contribution. Market re-rates modestly to 28× as geographic diversification improves. <strong>This is the most probable outcome — 8× in ten years at 23% CAGR.</strong></div>
+      </div>
+
+      <!-- BULL -->
+      <div class="sc-card bull">
+        <div class="sc-header">
+          <div class="sc-label-bar">
+            <div class="sc-label">Scenario 03 · Bull</div>
+            <div class="sc-name">US + Oncology<br>Both Firing</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 EPS</div>
+              <div class="sc-m-val">₹956</div>
+              <div class="sc-m-sub">28% CAGR</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">Target P/E</div>
+              <div class="sc-m-val">35×</div>
+              <div class="sc-m-sub">Quality re-rating</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 Price</div>
+              <div class="sc-m-val">₹33,460</div>
+              <div class="sc-m-sub">From ₹1,699</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">10yr Return</div>
+              <div class="sc-m-val">19.7×</div>
+              <div class="sc-m-sub">~34% CAGR</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-footer"><strong>Assumptions:</strong> US injectable contribution reaches ₹2,000+ Cr by FY31. Oncology vertical begins contributing meaningfully by FY30. Africa adds ₹300–500 Cr. Market re-rates to 35× as Caplin crosses ₹5,000 Cr revenue and becomes impossible to ignore. <strong>20× return — the 100-bagger completion from current prices.</strong></div>
+      </div>
+
+      <!-- COMPOUNDER -->
+      <div class="sc-card extreme">
+        <div class="sc-header">
+          <div class="sc-label-bar">
+            <div class="sc-label">Scenario 04 · Compounder</div>
+            <div class="sc-name">Historical Rate<br>Continues</div>
+          </div>
+          <div class="sc-body">
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 EPS</div>
+              <div class="sc-m-val">₹1,411</div>
+              <div class="sc-m-sub">33% CAGR</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">Target P/E</div>
+              <div class="sc-m-val">40×</div>
+              <div class="sc-m-sub">Full re-rating</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">FY35 Price</div>
+              <div class="sc-m-val">₹56,440</div>
+              <div class="sc-m-sub">From ₹1,699</div>
+            </div>
+            <div class="sc-metric">
+              <div class="sc-m-label">10yr Return</div>
+              <div class="sc-m-val">33.2×</div>
+              <div class="sc-m-sub">~42% CAGR</div>
+            </div>
+          </div>
+        </div>
+        <div class="sc-footer"><strong>Assumptions:</strong> Historical 33% EPS CAGR continues as US injectables, oncology, Africa, and EU all contribute by FY30. Market fully re-rates to 40× as Caplin becomes a clearly recognised multi-geography compounder. <strong>This is the scenario that produces the 100-bagger from the 2015 price — and the 33× from current prices.</strong></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SECTION 4 — MULTIPLE SENSITIVITY -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Multiple Sensitivity — The Re-Rating Is a Separate Return Driver</h2>
+    </div>
+    <div class="prose">
+      <p>The EPS scenarios above pair each growth rate with a "natural" multiple. But the multiple itself is independently powerful at current levels. Even if EPS growth slows to 20%, moving from 21× to 35× adds ~67% to the price on top of the earnings growth. This table isolates that effect — showing FY35 share price at every combination of EPS CAGR and exit multiple.</p>
+    </div>
+
+    <div class="sensitivity-wrap">
+      <table class="sensitivity-table">
+        <thead>
+          <tr>
+            <th>EPS CAGR →<br>Exit P/E ↓</th>
+            <th>12% CAGR<br>(₹253 EPS)</th>
+            <th>20% CAGR<br>(₹500 EPS)</th>
+            <th>28% CAGR<br>(₹956 EPS)</th>
+            <th>33% CAGR<br>(₹1,411 EPS)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>20× (multiple flat)</td>
+            <td class="s-low">₹5,060<br><span style="font-size:10px;color:var(--ink-faded)">3.0× · 12% CAGR</span></td>
+            <td class="s-mid">₹10,000<br><span style="font-size:10px;color:var(--ink-faded)">5.9× · 19% CAGR</span></td>
+            <td class="s-high">₹19,120<br><span style="font-size:10px;color:var(--ink-faded)">11.3× · 27% CAGR</span></td>
+            <td class="s-vhigh">₹28,220<br><span style="font-size:10px;color:var(--ink-faded)">16.6× · 32% CAGR</span></td>
+          </tr>
+          <tr>
+            <td>25× (modest re-rate)</td>
+            <td class="s-low">₹6,325<br><span style="font-size:10px;color:var(--ink-faded)">3.7× · 14% CAGR</span></td>
+            <td class="s-mid">₹12,500<br><span style="font-size:10px;color:var(--ink-faded)">7.4× · 22% CAGR</span></td>
+            <td class="s-high">₹23,900<br><span style="font-size:10px;color:var(--ink-faded)">14.1× · 30% CAGR</span></td>
+            <td class="s-vhigh">₹35,275<br><span style="font-size:10px;color:var(--ink-faded)">20.8× · 35% CAGR</span></td>
+          </tr>
+          <tr class="now-row">
+            <td>30× (fair value re-rate)</td>
+            <td class="s-low">₹7,590<br><span style="font-size:10px;color:var(--ink-faded)">4.5× · 16% CAGR</span></td>
+            <td class="s-mid">₹15,000<br><span style="font-size:10px;color:var(--ink-faded)">8.8× · 24% CAGR</span></td>
+            <td class="s-high">₹28,680<br><span style="font-size:10px;color:var(--ink-faded)">16.9× · 32% CAGR</span></td>
+            <td class="s-vhigh">₹42,330<br><span style="font-size:10px;color:var(--ink-faded)">24.9× · 38% CAGR</span></td>
+          </tr>
+          <tr>
+            <td>35× (quality re-rate)</td>
+            <td class="s-low">₹8,855<br><span style="font-size:10px;color:var(--ink-faded)">5.2× · 18% CAGR</span></td>
+            <td class="s-mid">₹17,500<br><span style="font-size:10px;color:var(--ink-faded)">10.3× · 26% CAGR</span></td>
+            <td class="s-high">₹33,460<br><span style="font-size:10px;color:var(--ink-faded)">19.7× · 34% CAGR</span></td>
+            <td class="s-vhigh">₹49,385<br><span style="font-size:10px;color:var(--ink-faded)">29.1× · 40% CAGR</span></td>
+          </tr>
+          <tr>
+            <td>40× (full re-rate)</td>
+            <td class="s-low">₹10,120<br><span style="font-size:10px;color:var(--ink-faded)">6.0× · 19% CAGR</span></td>
+            <td class="s-mid">₹20,000<br><span style="font-size:10px;color:var(--ink-faded)">11.8× · 28% CAGR</span></td>
+            <td class="s-high">₹38,240<br><span style="font-size:10px;color:var(--ink-faded)">22.5× · 36% CAGR</span></td>
+            <td class="s-vhigh">₹56,440<br><span style="font-size:10px;color:var(--ink-faded)">33.2× · 42% CAGR</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="prose" style="margin-top:16px;">
+      <p>The highlighted row (30×) is the "fair value re-rate" — the multiple a business with this quality profile should trade at, not the distressed multiple it currently carries. <strong>Even the bear case EPS (12% CAGR) at a 30× multiple produces a 4.5× return in ten years.</strong> The floor is not the floor most investors think it is.</p>
+    </div>
+  </div>
+
+  <!-- SECTION 5 — PROBABILITY WEIGHTED -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Probability-Weighted Return — The Expected Value Calculation</h2>
+    </div>
+    <div class="prose">
+      <p>Assigning probabilities to scenarios is always subjective. These weights reflect the eleven-year execution track record, the quality of the moat, the management's demonstrated capital discipline, and the honest risks — geographic concentration, US execution uncertainty, currency exposure.</p>
+    </div>
+
+    <table class="prob-table">
+      <thead>
+        <tr>
+          <th>Scenario</th>
+          <th>FY35 Price</th>
+          <th>Return Multiple</th>
+          <th>CAGR</th>
+          <th>Probability Weight</th>
+          <th>Weighted Return</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Bear (12% EPS, 22× P/E)</td>
+          <td>₹5,566</td>
+          <td>3.3×</td>
+          <td>~13%</td>
+          <td>15%</td>
+          <td>0.50×</td>
+        </tr>
+        <tr>
+          <td>Base (20% EPS, 28× P/E)</td>
+          <td>₹14,000</td>
+          <td>8.2×</td>
+          <td>~23%</td>
+          <td>50%</td>
+          <td>4.10×</td>
+        </tr>
+        <tr>
+          <td>Bull (28% EPS, 35× P/E)</td>
+          <td>₹33,460</td>
+          <td>19.7×</td>
+          <td>~34%</td>
+          <td>25%</td>
+          <td>4.93×</td>
+        </tr>
+        <tr>
+          <td>Compounder (33% EPS, 40× P/E)</td>
+          <td>₹56,440</td>
+          <td>33.2×</td>
+          <td>~42%</td>
+          <td>10%</td>
+          <td>3.32×</td>
+        </tr>
+        <tr class="weighted">
+          <td>Probability-Weighted Expected Return</td>
+          <td>—</td>
+          <td>~12.9×</td>
+          <td>~29% CAGR</td>
+          <td>100%</td>
+          <td>12.85×</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="prose" style="margin-top:16px;">
+      <p><strong>The probability-weighted expected return from ₹1,699 is approximately 12–13× over ten years — roughly 29% CAGR.</strong> That is the mathematical output of a business with this quality profile, at this multiple, with this runway, held for a decade.</p>
+      <p>For context: the Nifty 50 has delivered roughly 12–14% CAGR over the last decade. A fixed deposit delivers 6–7%. A 29% CAGR expected return — even probability-weighted across four scenarios including a bear case — is what you get when you buy a quality compounder at a distressed multiple and hold it through the compounding cycle.</p>
+    </div>
+  </div>
+
+  <!-- FINAL WORD -->
+  <div class="final-word">
+    <div class="final-label">The View</div>
+    <p>21× earnings. 33% historical EPS CAGR. PEG of 0.63. Three geographies with sub-1% penetration. A founder still buying after a 50× run. A USFDA injectable facility now shipping approved ANDAs. <strong>This is not a complicated situation. It is a simple situation that the market has made complicated by ignoring it.</strong></p>
+    <p>The bear case — where growth halves from historical and the multiple stays flat — still gives you 3.3× in ten years. 13% CAGR. On the worst realistic outcome. That is your downside. That is not scary.</p>
+    <p>The base case gives you 8× at 23% CAGR. The bull case gives you 20× — the completion of the 100-bagger journey from current prices. The compounder case gives you 33× if the historical rate simply continues. None of these require heroic assumptions. They require Caplin to keep doing what it has been doing for eleven years — quietly, without fanfare, in markets most investors can't name.</p>
+    <p>The crowd will notice eventually. They always do. The question is whether you're already positioned when that happens.</p>
+    
+  </div>
+
+  <div class="colophon">
+    <span><em>The crowd reads headlines. The thinker reads structures.</em></span>
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point — Risk Register</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f7f2e8;
+  --parchment-dark: #ede7d8;
+  --ink: #18130e;
+  --ink-mid: #3a2f22;
+  --ink-faded: #7a6e5e;
+  --ink-ghost: #b0a494;
+  --caplin: #1b4d72;
+  --caplin-soft: rgba(27,77,114,0.07);
+  --green: #285c2a;
+  --green-soft: rgba(40,92,42,0.07);
+  --amber: #b87800;
+  --amber-soft: rgba(184,120,0,0.09);
+  --red: #7a1f1f;
+  --red-soft: rgba(122,31,31,0.08);
+  --border: #ccc0a8;
+  --border-light: #ddd4bf;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--parchment); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; font-weight: 300; font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.page { max-width: 980px; margin: 0 auto; padding: 0 44px 100px; }
+.flag { border-top: 2.5px solid var(--ink); padding: 13px 0 11px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 44px; }
+.flag-pub { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); }
+.flag-meta { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-ghost); }
+.kicker { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); margin-bottom: 13px; }
+h1.title { font-family: 'Playfair Display', serif; font-size: clamp(26px,4vw,44px); font-weight: 700; line-height: 1.08; margin-bottom: 16px; }
+.deck { font-size: 15.5px; font-weight: 300; font-style: italic; color: var(--ink-faded); max-width: 660px; line-height: 1.6; margin-bottom: 36px; border-left: 2px solid var(--border); padding-left: 16px; }
+.divider { border: none; border-top: 1px solid var(--border-light); margin: 0 0 56px; }
+.preamble { border: 1px solid var(--border-light); padding: 22px 26px; margin-bottom: 44px; background: var(--parchment-dark); }
+.preamble-label { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 10px; }
+.preamble p { font-size: 13.5px; font-weight: 300; color: var(--ink-mid); line-height: 1.72; margin-bottom: 10px; }
+.preamble p:last-child { margin-bottom: 0; }
+.preamble strong { font-weight: 600; color: var(--ink); }
+.heatmap { display: grid; grid-template-columns: repeat(5,1fr); gap: 6px; margin-bottom: 44px; }
+.hm-cell { padding: 14px 12px; text-align: center; }
+.hm-cell.r1 { background: var(--green-soft); border: 1px solid rgba(40,92,42,0.18); }
+.hm-cell.r2 { background: var(--amber-soft); border: 1px solid rgba(184,120,0,0.22); }
+.hm-cell.r3 { background: var(--red-soft); border: 1px solid rgba(122,31,31,0.18); }
+.hm-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 6px; }
+.hm-label.g { color: var(--green); }
+.hm-label.a { color: var(--amber); }
+.hm-label.r { color: var(--red); }
+.hm-name { font-family: 'Playfair Display', serif; font-size: 12.5px; font-weight: 700; line-height: 1.3; }
+.section { margin-bottom: 60px; }
+.section-rule { display: flex; align-items: center; gap: 12px; margin-bottom: 22px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.s-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--red); min-width: 24px; }
+.s-title { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; flex: 1; }
+.s-aside { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--ink-ghost); }
+.risk-card { border: 1px solid var(--border-light); margin-bottom: 16px; }
+.risk-card.severity-high::before { content:''; display:block; height:3px; background:var(--red); }
+.risk-card.severity-medium::before { content:''; display:block; height:3px; background:var(--amber); }
+.risk-card.severity-low::before { content:''; display:block; height:3px; background:var(--green); }
+.rc-header { display: grid; grid-template-columns: 52px 1fr auto; align-items: start; gap: 14px; padding: 18px 20px 16px; }
+.rc-code { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--ink-ghost); padding-top: 3px; }
+.rc-category { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 4px; }
+.rc-name { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; line-height: 1.2; }
+.rc-badges { display: flex; flex-direction: column; gap: 5px; align-items: flex-end; min-width: 100px; }
+.badge { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.08em; padding: 3px 8px; border-radius: 2px; white-space: nowrap; }
+.badge.h { background: var(--red-soft); color: var(--red); border: 1px solid rgba(122,31,31,0.2); }
+.badge.m { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(184,120,0,0.2); }
+.badge.l { background: var(--green-soft); color: var(--green); border: 1px solid rgba(40,92,42,0.2); }
+.badge.b { background: var(--caplin-soft); color: var(--caplin); border: 1px solid rgba(27,77,114,0.2); }
+.rc-body { padding: 0 20px 20px 86px; }
+.rc-what { font-size: 14px; font-weight: 300; color: var(--ink-mid); line-height: 1.75; margin-bottom: 12px; }
+.rc-what strong { font-weight: 600; color: var(--ink); }
+.rc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
+.rc-box { padding: 12px 14px; border: 1px solid var(--border-light); }
+.rc-box-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 6px; }
+.rc-box-text { font-size: 12.5px; font-weight: 300; color: var(--ink-mid); line-height: 1.65; }
+.rc-box-text strong { font-weight: 600; color: var(--ink); }
+.rc-monitor { margin-top: 14px; padding: 10px 14px; background: var(--caplin-soft); border-left: 2px solid var(--caplin); }
+.rc-monitor-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--caplin); margin-bottom: 5px; }
+.rc-monitor-text { font-size: 12px; font-weight: 300; color: var(--ink-mid); line-height: 1.6; }
+.agg-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 20px 0; }
+.agg-table th { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faded); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; font-weight: 400; }
+.agg-table td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-weight: 300; color: var(--ink-mid); font-size: 13px; vertical-align: top; }
+.agg-table td:first-child { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-faded); }
+.agg-table td:nth-child(2) { font-weight: 600; color: var(--ink); }
+.dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: middle; margin-right: 4px; }
+.dot.h { background: var(--red); }
+.dot.m { background: var(--amber); }
+.dot.l { background: var(--green); }
+.callout { border-left: 3px solid var(--red); padding: 14px 18px; background: var(--red-soft); margin: 20px 0; }
+.callout p { font-family: 'Playfair Display', serif; font-size: 15px; font-style: italic; color: var(--ink); line-height: 1.6; }
+.callout.g { border-left-color: var(--green); background: var(--green-soft); }
+.final { background: var(--ink); color: var(--parchment); padding: 32px 36px; margin: 48px 0; }
+.final-kicker { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--amber); margin-bottom: 14px; }
+.final p { font-size: 15px; font-weight: 300; color: rgba(247,242,232,0.82); line-height: 1.78; margin-bottom: 12px; }
+.final p:last-child { margin-bottom: 0; }
+.final strong { font-weight: 600; color: var(--parchment); }
+.footer { border-top: 2px solid var(--ink); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
+.footer-pub { font-family: 'Playfair Display', serif; font-size: 13px; font-style: italic; color: var(--ink-faded); }
+.footer-tag { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--ink-ghost); }
+.rc-track { margin-top: 18px; border: 1px solid var(--border-light); background: rgba(247,242,232,0.5); }
+.rc-track-label { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--caplin); padding: 10px 14px; border-bottom: 1px solid var(--border-light); background: var(--caplin-soft); }
+.rc-track-intro { font-size: 13px; font-weight: 300; color: var(--ink-mid); line-height: 1.7; padding: 12px 14px 0; font-style: italic; }
+.rc-episode { padding: 14px 14px 0; border-top: 1px solid var(--border-light); margin-top: 12px; }
+.rc-ep-year { font-family: 'DM Mono', monospace; font-size: 9.5px; letter-spacing: 0.08em; color: var(--amber); font-weight: 500; margin-bottom: 6px; }
+.rc-ep-body { font-size: 12.5px; font-weight: 300; color: var(--ink-mid); line-height: 1.7; margin-bottom: 10px; }
+.rc-ep-body strong { font-weight: 600; color: var(--ink); }
+.rc-track-pattern { margin-top: 14px; padding: 12px 14px; background: var(--ink); }
+.rc-track-pattern-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.13em; text-transform: uppercase; color: var(--amber); margin-bottom: 8px; }
+.rc-track-pattern-text { font-size: 12.5px; font-weight: 300; color: rgba(247,242,232,0.8); line-height: 1.7; }
+.rc-track-pattern-text strong { font-weight: 600; color: var(--parchment); }
+@media(max-width:700px) {
+  .page { padding: 0 20px 60px; }
+  .heatmap { grid-template-columns: 1fr 1fr; }
+  .rc-header { grid-template-columns: 40px 1fr; }
+  .rc-badges { flex-direction: row; flex-wrap: wrap; margin-top: 8px; }
+  .rc-body { padding: 0 16px 16px; }
+  .rc-grid { grid-template-columns: 1fr; }
+}
+
+  @media print {
+    h1, h2, h3, h4,
+    .section-rule, .section-header, .s-title,
+    .kicker, .report-type, .flag, .masthead,
+    .final-label, .final-kicker, .closing-rule,
+    .vg-label, .rc-tag, .arch-flag, .tb-label,
+    .rs-heading, .ts-label, .at-label, .ql-quarter {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .stat-grid, .scorecard, .verdict-box, .price-zones,
+    .callout, .moat-list, .pattern-grid, .thesis-box,
+    .wrong-peers, .metrics-table, .monitor-table,
+    .arch-card, .val-gap, .caplin-position,
+    .ts-card, .anda-track, .at-cell, .q-log,
+    .ss-item, .as-item, .misclass, .final,
+    .vg-side, .rc-findings, .how-to, .verdict-row,
+    .ql-body, .ql-header, .earnings-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    p { orphans: 3; widows: 3; }
+  }
+
+/* === REDACTED PUBLISHER STRIP === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+/* Slight roughness on hover to signal intentionality */
+.redacted-pub:hover::after {
+  background: #111;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="flag">
+    <span class="flag-pub"><span class="redacted-pub">Clarity Research</span></span>
+    <span class="flag-meta">NSE: CAPLINPNT · Risk Register · March 2026</span>
+  </div>
+
+  <div class="kicker">Caplin Point Laboratories · What Could Go Wrong</div>
+  <h1 class="title">The Risk Register — A Forensic Threat Assessment</h1>
+  <div class="deck">A strong investment thesis is not one that ignores risks. It is one that has confronted them honestly and concluded that the structure is durable enough to survive the plausible ones and valuable enough to accept the residual ones.</div>
+
+  <div class="preamble">
+    <div class="preamble-label">Editorial Note · How To Read This Document</div>
+    <p>This is not a disclaimer. It is not a list of risks assembled to satisfy due diligence theatre. Every risk in this register has been assessed for: <strong>(a) what specifically could happen, (b) what financial or structural damage it would cause, (c) what early signals would appear before full materialisation, and (d) what the mitigation looks like.</strong></p>
+    <p>Risks are classified by severity (High / Medium / Low), probability over a 10-year horizon, and whether the risk is company-specific or macro/structural. Monitoring triggers are provided for each material risk — these are the specific, observable signals that would cause us to revisit the investment thesis.</p>
+    <p>Our conclusion, stated upfront: <strong>Caplin has three material risks, none of which are fatal to the thesis if the moat structure holds.</strong> Two are macro risks the business cannot control. One is governance and within management's influence. The thesis survives the stress test — with eyes open.</p>
+  </div>
+
+  <div class="heatmap">
+    <div class="hm-cell r3"><div class="hm-label r">HIGH</div><div class="hm-name">Currency &amp; LatAm Macro</div></div>
+    <div class="hm-cell r3"><div class="hm-label r">HIGH</div><div class="hm-name">USFDA Compliance</div></div>
+    <div class="hm-cell r2"><div class="hm-label a">MEDIUM</div><div class="hm-name">US Revenue Ramp Failure</div></div>
+    <div class="hm-cell r2"><div class="hm-label a">MEDIUM</div><div class="hm-name">Succession Risk</div></div>
+    <div class="hm-cell r1"><div class="hm-label g">WATCH</div><div class="hm-name">Competitive Entry · China Supply</div></div>
+  </div>
+
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">01</span>
+      <span class="s-title">High Severity Risks</span>
+      <span class="s-aside">Material impact on thesis if they materialise</span>
+    </div>
+
+    <div class="risk-card severity-high">
+      <div class="rc-header">
+        <div class="rc-code">R-01</div>
+        <div class="rc-title-block">
+          <div class="rc-category">Macro · Structural · Uncontrollable</div>
+          <div class="rc-name">LatAm Currency Collapse &amp; Macro Instability</div>
+        </div>
+        <div class="rc-badges">
+          <span class="badge h">HIGH SEVERITY</span>
+          <span class="badge m">MEDIUM PROBABILITY</span>
+          <span class="badge b">ONGOING</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="rc-what">Caplin earns roughly 76% of revenue in Latin American currencies — primarily the <strong>Guatemalan quetzal, Honduran lempira, Ecuadorian dollar, Brazilian real, Mexican peso, and Argentine peso</strong>. A significant, sustained depreciation against the INR — or a hyperinflationary episode — directly compresses reported earnings in rupee terms even if operating performance in local currency is flat or growing.</div>
+        <div class="rc-what">This is not a hypothetical. The Argentine peso has lost over 80% of its value since 2018. Venezuela became effectively unrecognisable as a receivable market during its hyperinflationary period. <strong>The risk is not that one country collapses — it is that two or three mid-size LatAm economies experience simultaneous currency distress, as they have historically tended to do in episodes of US dollar strength and EM risk-off sentiment.</strong></div>
+        <div class="rc-grid">
+          <div class="rc-box">
+            <div class="rc-box-label">What It Would Look Like</div>
+            <div class="rc-box-text">Revenue growth in INR terms decelerates sharply while volume growth in local currency remains healthy. PAT margins compress. Management commentary focuses on "currency headwinds." The stock re-rates downward on the gap between operating performance and reported numbers.</div>
+          </div>
+          <div class="rc-box">
+            <div class="rc-box-label">Mitigants &amp; Structure</div>
+            <div class="rc-box-text"><strong>Natural hedge via USD-denominated exports</strong> — Ecuador is fully dollarised; some Central American contracts are USD-linked. US injectable revenue is USD-denominated — as this grows from 18%, currency risk diversifies. The ₹2,459 Cr cash surplus provides a multi-year buffer against a bad currency year.</div>
+          </div>
+        </div>
+        <div class="rc-track">
+          <div class="rc-track-label">Historical Track Record — How Caplin Has Navigated Currency Stress Before</div>
+
+          <div class="rc-track-intro">The most useful way to evaluate this risk is not to model hypothetical scenarios — it is to observe what actually happened when currency and macro stress materialised in the past. Caplin has navigated four distinct episodes of LatAm macro turbulence since 2015. The pattern in each case tells you more than any stress test.</div>
+
+          <div class="rc-episode">
+            <div class="rc-ep-year">2016–2018 · Argentina Devaluation Cycle I</div>
+            <div class="rc-ep-body">Argentina's peso began a multi-year devaluation cycle from 2016, losing over 50% against the USD by end-2018. For most companies with LatAm exposure, this was devastating to reported USD and INR revenue. <strong>Caplin's PAT grew from ₹97 Cr (FY16) to ₹148 Cr (FY18) — a 52% increase over the same period.</strong> The mechanism: Argentina was not yet Caplin's largest individual country, and the negative working capital model meant receivables were collected quickly in local currency before conversion, limiting the accumulation of devaluing assets. The structural lesson — volume demand for generic medicines held up even as currencies fell; people still needed drugs even in a crisis.</div>
+          </div>
+
+          <div class="rc-episode">
+            <div class="rc-ep-year">2020 · COVID Shock — Supply Disruption + Demand Volatility</div>
+            <div class="rc-ep-body">COVID-19 was not primarily a currency event for Caplin — it was a supply shock (China-sourced APIs disrupted) and demand shock (distributor destocking, logistics disruptions across Central America). Despite this, <strong>FY20 revenue grew 35.5% YoY to ₹904 Cr, and EPS grew 22% to ₹28.42.</strong> Caplin disclosed it supplied certain COVID-19 essential medicines at zero margin as a humanitarian measure — and even this did not dent the overall earnings trajectory. The buffer mechanism: ₹284 Cr cash on balance sheet, zero debt, and a diversified product portfolio meant no single disruption was able to break the business model. The lesson: balance sheet strength absorbs shocks that would kill leverage-dependent peers.</div>
+          </div>
+
+          <div class="rc-episode">
+            <div class="rc-ep-year">2021–2022 · Post-COVID LatAm GDP Slowdown + Peso Pressure</div>
+            <div class="rc-ep-body">Post-COVID LatAm saw an uneven recovery — some markets (Ecuador, Guatemala) bounced quickly; others (Argentina, Venezuela) remained structurally impaired. Simultaneously, global USD strengthening put pressure on EM currencies broadly. <strong>Caplin's PAT grew from ₹247 Cr (FY21) to ₹305 Cr (FY22) to ₹381 Cr (FY23) — a 54% cumulative increase through what was a difficult macro period for LatAm.</strong> Management consistently guided that volume growth in local currency was running ahead of INR revenue growth — the currency drag was visible but not fatal. The lesson: operating leverage in a moat business means that volume growth of 12–15% in local currency translates to meaningful earnings growth even with 5–8% currency headwinds.</div>
+          </div>
+
+          <div class="rc-episode">
+            <div class="rc-ep-year">2023 · Argentina Hyperinflation + Devaluation Cycle II</div>
+            <div class="rc-ep-body">This was Caplin's sharpest currency test. Argentina's peso depreciated over 350% against the USD in 2023 as the Milei government took office and implemented shock therapy devaluation. Management explicitly flagged currency headwinds in the H1 FY24 earnings call — noting that while volumes were growing, INR realisation was being compressed by the Argentine peso collapse. <strong>Despite this, FY24 EPS reached ₹60.19, up 21.4% over FY23.</strong> The mechanism that protected earnings: Ecuador (dollarised) absorbed some of the LatAm mix; the US business was generating increasing USD revenue; and the negative working capital model meant Caplin was never holding large Argentine peso receivables for extended periods. The lesson: the structural design of the business — fast collections, diversified geography within LatAm, growing USD component — is specifically engineered to limit the damage of any single country's currency crisis.</div>
+          </div>
+
+          <div class="rc-track-pattern">
+            <div class="rc-track-pattern-label">The Pattern Across All Four Episodes</div>
+            <div class="rc-track-pattern-text">In every documented currency or macro stress episode since FY16, Caplin's PAT has continued to grow — sometimes accelerating, sometimes moderating, but never declining. The range of EPS growth during these episodes: 12% (slowest) to 35% (fastest). The average is approximately 22% — exactly in line with the 10-year historical CAGR. <strong>The currency risk, in Caplin's case, has historically been a revenue headline risk rather than a genuine earnings risk.</strong> The negative working capital model, geographic diversification within LatAm, and growing USD component from the US business together constitute a structural currency hedge that no amount of financial hedging could replicate as effectively.</div>
+          </div>
+        </div>
+
+        <div class="rc-monitor">
+          <div class="rc-monitor-label">Watch For</div>
+          <div class="rc-monitor-text">
+            <strong>Green — structural hedge intact:</strong> Receivable days below 15. Collections fast, translation exposure minimal.<br><br>
+            <strong>Yellow — hedge eroding:</strong> Receivable days above 25 sustained, or management language around "extended credit terms" in LatAm alongside currency weakness.<br><br>
+            <strong>Yellow — macro:</strong> Argentina peso breaking IMF band ceiling two months running. Mexico peso down 20%+ YoY while Mexico is scaling. Brazil GDP contraction from tariff impact.<br><br>
+            <strong>Red flag:</strong> INR revenue decelerating with no currency explanation offered by management — either currency is being obscured or volumes are actually weakening.<br><br>
+            <strong>Upside signal:</strong> Explicit "volumes grew X% local currency, INR grew Y%" disclosure on concalls — the stabilisation tailwind quantified. A good currency year at 35% margins could push PAT growth to 25–28% vs the historical 22% average.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-card severity-high">
+      <div class="rc-header">
+        <div class="rc-code">R-02</div>
+        <div class="rc-title-block">
+          <div class="rc-category">Operational · Regulatory · Partially Controllable</div>
+          <div class="rc-name">USFDA Warning Letter or Import Alert on Caplin Steriles</div>
+        </div>
+        <div class="rc-badges">
+          <span class="badge h">HIGH SEVERITY</span>
+          <span class="badge l">LOW PROBABILITY</span>
+          <span class="badge b">WATCH LIST</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="rc-what">A USFDA warning letter or import alert on the Puducherry injectable facility would immediately halt all new ANDA approvals, potentially suspend shipments of approved products, and structurally impair the US thesis — the primary source of long-term re-rating potential. <strong>The facility has now been inspected four times, receiving an EIR each time — the most recent inspection in 2023 classified as Voluntary Action Indicated (VAI), the cleanest possible outcome.</strong> The risk is real but the track record is exceptional.</div>
+        <div class="rc-what">Context matters: over 40 Indian facilities have received warning letters since 2012. Caplin is not in that cohort — but neither was anyone before they were. <strong>USFDA scrutiny of Indian sterile injectables has intensified as the US tries to reduce supply chain concentration.</strong> An observation at any inspection can trigger a deeper dive that finds more.</div>
+        <div class="rc-grid">
+          <div class="rc-box">
+            <div class="rc-box-label">Financial Impact if it Materialises</div>
+            <div class="rc-box-text">US injectable revenue (~18% of consolidated, trending toward 25%+) would halt or reverse. ANDA pipeline freezes. Stock likely de-rates 25–40% immediately. The LatAm business would continue unaffected — providing a structural floor. Recovery timeline historically 12–36 months post-warning letter.</div>
+          </div>
+          <div class="rc-box">
+            <div class="rc-box-label">Mitigants &amp; Structure</div>
+            <div class="rc-box-text"><strong>Four inspections, four clean outcomes</strong> is a meaningful data point. The "3C" philosophy — Compliance, Cost, Continuity — is stated explicitly by Paarthipan. Backward integration into API reduces dependence on Chinese APIs that have created problems for other Indian players.</div>
+          </div>
+        </div>
+        <div class="rc-monitor">
+          <div class="rc-monitor-label">Watch For</div>
+          <div class="rc-monitor-text">Any Form 483 observation issued — not a warning letter, but a precursor. Any delay in ANDA approvals beyond historical pace (currently ~10–12 per year). Unusual language in management commentary around "quality investments" or "remediation." Absence of announcement of the next USFDA inspection outcome — track proactively, because the absence of news is good news here.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">02</span>
+      <span class="s-title">Medium Severity Risks</span>
+      <span class="s-aside">Thesis-modifying but not thesis-breaking if managed</span>
+    </div>
+
+    <div class="risk-card severity-medium">
+      <div class="rc-header">
+        <div class="rc-code">R-03</div>
+        <div class="rc-title-block">
+          <div class="rc-category">Strategic · Execution · Company-Specific</div>
+          <div class="rc-name">US Revenue Ramp Fails to Materialise at Scale</div>
+        </div>
+        <div class="rc-badges">
+          <span class="badge m">MEDIUM SEVERITY</span>
+          <span class="badge m">MEDIUM PROBABILITY</span>
+          <span class="badge b">ACTIVE THESIS</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="rc-what">The bull case depends significantly on the US injectable business scaling from ~$8.7M cumulative front-end revenue today to a meaningful contributor within 3–5 years. <strong>The structural assets are in place: 55 ANDAs approved, 5,610 end-user relationships, 49/50 state licences, 7 wholesale distributors, 24 hospital systems.</strong> But converting approved ANDAs into market share requires commercial execution that Caplin has not yet demonstrated at scale in the US.</div>
+        <div class="rc-what">The US injectable market is not analogous to LatAm. Distributors are consolidated, sophisticated, and extractive. Hospital formulary committees move slowly. Price erosion in generic injectables — while slower than oral generics — is real, particularly in commoditised segments where 10–15 approved generics compete on price alone. <strong>If Caplin's ANDAs land in crowded segments rather than protected niches, the economics may disappoint even as approvals accumulate.</strong></div>
+        <div class="rc-grid">
+          <div class="rc-box">
+            <div class="rc-box-label">What Failure Looks Like</div>
+            <div class="rc-box-text">US revenue grows, but slowly — reaching $20–25M annually by FY28 rather than the $60–80M needed to drive re-rating. Management characterises the US as "building for the long term" in ways that sound like rationalisation rather than strategy. EPS growth decelerates toward the 12–15% bear case CAGR.</div>
+          </div>
+          <div class="rc-box">
+            <div class="rc-box-label">Mitigants &amp; Structure</div>
+            <div class="rc-box-text">Even under the bear case (12% CAGR), Caplin still computes to ₹5,535 by FY35 at 22× — a 3.26× return / 12.5% CAGR from current prices. <strong>The LatAm franchise is structurally valuable independently of the US thesis.</strong> The January 2026 acquisition of 10 ANDAs in niche injectable and ophthalmic markets signals commercial intelligence in pipeline selection.</div>
+          </div>
+        </div>
+        <div class="rc-monitor">
+          <div class="rc-monitor-label">Watch For</div>
+          <div class="rc-monitor-text">US front-end revenue crossing $15M annualised in FY27 — the first thesis materialisation signal. Number of products achieving &gt;$1M annual revenue (not just approval). Gross margin from the US business — if below 40%, pricing is more competitive than the injectable niche story assumes. Management commentary on specific products with pricing power rather than aggregate ANDA counts.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-card severity-medium">
+      <div class="rc-header">
+        <div class="rc-code">R-04</div>
+        <div class="rc-title-block">
+          <div class="rc-category">Governance · Human Capital · Long-Duration</div>
+          <div class="rc-name">Succession — The Paarthipan Question</div>
+        </div>
+        <div class="rc-badges">
+          <span class="badge m">MEDIUM SEVERITY</span>
+          <span class="badge l">LOW-MEDIUM PROBABILITY</span>
+          <span class="badge b">WATCH LIST</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="rc-what">CC Paarthipan takes zero salary as Chairman — a signal of ownership mentality that is almost impossible to replicate through governance structures. His son, Vivek Siddarth (Partheeban), is positioned as COO with an HBS background — but started at ₹1.5L/month as a deliberate signal of earning the role rather than inheriting it. Dr. Sridhar Ganesan (MD) provides professional management continuity through his re-appointment in August 2024.</div>
+        <div class="rc-what">The succession risk is subtle: <strong>the compounding of 35 years of LatAm relationships, the trusted standing with USFDA inspectors built over four clean inspections, the capital allocation instinct that has never diluted equity or borrowed a rupee — these are embedded in a person, not a process.</strong> The first test of succession will be how Caplin behaves with ₹2,459 Cr of cash when the founder is no longer the primary decision-maker.</div>
+        <div class="rc-grid">
+          <div class="rc-box">
+            <div class="rc-box-label">What To Watch For</div>
+            <div class="rc-box-text">A large, poorly-priced acquisition funded by cash — the classic founder-exit wealth-destruction move. Promoter holding declining from 70.6% without explanation. KMP compensation rising disproportionately relative to PAT. A rights issue or QIP that wasn't operationally necessary.</div>
+          </div>
+          <div class="rc-box">
+            <div class="rc-box-label">Positive Signals So Far</div>
+            <div class="rc-box-text"><strong>Vivek started at ₹1.5L/month</strong> — unusual and culturally meaningful. Paarthipan remains active and present. The January 2026 ANDA acquisition at presumably fair price is consistent with historical capital discipline. KMP total pay remains at 1.35% of PAT, far below industry norm of 3–5%.</div>
+          </div>
+        </div>
+        <div class="rc-monitor">
+          <div class="rc-monitor-label">Watch For</div>
+          <div class="rc-monitor-text"><strong>Vivek appearing in earnings calls</strong> — the clearest positive signal of staged, intentional succession. Any acquisition above ₹500 Cr — assess price and strategic fit rigorously. Promoter holding dropping below 68% — track quarterly. KMP compensation as % of PAT rising above 2.5%. Any change in dividend policy or cash utilisation that departs from historical discipline.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">03</span>
+      <span class="s-title">Watch List — Real But Structurally Contained</span>
+      <span class="s-aside">Risks that exist but are mitigated by moat depth or active management response</span>
+    </div>
+
+    <div class="risk-card severity-low">
+      <div class="rc-header">
+        <div class="rc-code">R-05</div>
+        <div class="rc-title-block">
+          <div class="rc-category">Competitive · Structural · Slow-Moving</div>
+          <div class="rc-name">Large Indian Pharma Entry into LatAm / Chinese Quality Upgrade</div>
+        </div>
+        <div class="rc-badges">
+          <span class="badge l">LOW SEVERITY (NEAR-TERM)</span>
+          <span class="badge l">LOW PROBABILITY</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="rc-what">LatAm is structurally unattractive to large Indian players for the same reasons it was unattractive 30 years ago: market sizes are small individually, regulatory fragmentation is high, currency volatility is uncomfortable, and the payback period is long relative to the alternative (US/EU focus). <strong>The Chinese quality upgrade narrative is more interesting — but Chinese manufacturers lack 30 years of LatAm relationship infrastructure.</strong> You can copy a product. You cannot copy 22,000 distribution touchpoints built over three decades.</div>
+        <div class="rc-monitor">
+          <div class="rc-monitor-label">Watch For</div>
+          <div class="rc-monitor-text">Any announcement by Sun Pharma or Zydus of a LatAm-specific subsidiary or acquisition. Chinese manufacturers receiving COFEPRIS / ANVISA / INVIMA approvals at scale. Caplin's LatAm gross margins compressing below 28% — first sign of pricing pressure from competition. Management shifting from "expanding geographies" to "defending market share" in commentary.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="risk-card severity-low">
+      <div class="rc-header">
+        <div class="rc-code">R-06</div>
+        <div class="rc-title-block">
+          <div class="rc-category">Supply Chain · Geopolitical · External</div>
+          <div class="rc-name">China API Supply Disruption</div>
+        </div>
+        <div class="rc-badges">
+          <span class="badge l">LOW-MEDIUM SEVERITY</span>
+          <span class="badge m">MEDIUM PROBABILITY (tail)</span>
+        </div>
+      </div>
+      <div class="rc-body">
+        <div class="rc-what">Approximately 30% of Caplin's sourced formulations come from Chinese manufacturers. A severe geopolitical episode — export restrictions from China during a diplomatic crisis — would disrupt supply for a subset of the LatAm product portfolio. <strong>Mitigation is underway: the API plant (part of the ₹700+ Cr capex programme) is specifically designed to reduce external API dependence, targeting 70% backward integration for US injectable filings and providing domestic API optionality for LatAm products.</strong></div>
+        <div class="rc-monitor">
+          <div class="rc-monitor-label">Watch For</div>
+          <div class="rc-monitor-text">India-China diplomatic deterioration beyond current trajectory. Any quality advisory from Indian regulators on Chinese API batches. Rate of API plant commissioning — delays in backward integration extend the vulnerability window.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">04</span>
+      <span class="s-title">Consolidated Risk Register</span>
+      <span class="s-aside">Full matrix at a glance</span>
+    </div>
+
+    <table class="agg-table">
+      <thead>
+        <tr>
+          <th>Code</th>
+          <th>Risk</th>
+          <th>Severity</th>
+          <th>Probability (10yr)</th>
+          <th>Controllable?</th>
+          <th>Thesis-Breaking?</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>R-01</td>
+          <td>LatAm Currency Collapse</td>
+          <td><span class="dot h"></span>High</td>
+          <td><span class="dot m"></span>Medium</td>
+          <td>Partially (revenue mix)</td>
+          <td>No — delays, doesn't break</td>
+        </tr>
+        <tr>
+          <td>R-02</td>
+          <td>USFDA Warning Letter</td>
+          <td><span class="dot h"></span>High</td>
+          <td><span class="dot l"></span>Low</td>
+          <td>Substantially (compliance)</td>
+          <td>Partially — breaks US leg, LatAm intact</td>
+        </tr>
+        <tr>
+          <td>R-03</td>
+          <td>US Revenue Ramp Failure</td>
+          <td><span class="dot m"></span>Medium</td>
+          <td><span class="dot m"></span>Medium</td>
+          <td>Substantially (ANDA selection)</td>
+          <td>No — reverts to bear case (3.26× / 12.5% CAGR)</td>
+        </tr>
+        <tr>
+          <td>R-04</td>
+          <td>Succession Risk</td>
+          <td><span class="dot m"></span>Medium</td>
+          <td><span class="dot l"></span>Low-Med</td>
+          <td>Partially (Vivek track record)</td>
+          <td>Potentially — capital allocation discipline at risk</td>
+        </tr>
+        <tr>
+          <td>R-05</td>
+          <td>Competitive Entry (LatAm)</td>
+          <td><span class="dot l"></span>Low</td>
+          <td><span class="dot l"></span>Low</td>
+          <td>Indirectly (moat depth)</td>
+          <td>No — 30yr distribution moat is near-permanent</td>
+        </tr>
+        <tr>
+          <td>R-06</td>
+          <td>China API Disruption</td>
+          <td><span class="dot l"></span>Low-Med</td>
+          <td><span class="dot m"></span>Medium</td>
+          <td>Substantially (backward integration)</td>
+          <td>No — temporary supply disruption, not structural</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout g">
+      <p>The structure holds. None of Caplin's six identifiable risks are thesis-breaking on their own. The bear case — currency erosion plus US underperformance — still produces a 3.26× return over 10 years from current prices. The stress test gives us a floor. The moat profile gives us the ceiling. The investor's job is to understand both, position accordingly, and watch the right signals.</p>
+    </div>
+  </div>
+
+  <div class="final">
+    <div class="final-kicker">The Risk Register Conclusion</div>
+    <p>The best investment opportunities are not the ones with no risks. They are the ones where the risks are <strong>understood, mitigated where possible, and already partially priced in</strong> — while the upside is systematically underpriced because the market is looking at the wrong thing.</p>
+    <p>Caplin's market is pricing LatAm concentration risk. That is real (R-01). But it is not a new risk — it has always been real, and the business has compounded at 29% EPS CAGR for a decade through Argentine devaluations, Venezuelan implosions, and every currency episode the region has produced. <strong>The track record suggests the business model is more robust to LatAm macro than the market's valuation implies.</strong></p>
+    <p>The USFDA risk (R-02) is the only one that could genuinely impair the long-term thesis — and its probability is low, the track record is excellent, and the LatAm franchise provides a structural floor. The succession question (R-04) is the one to watch most carefully — not because failure is likely, but because it is the risk hardest to see coming and hardest to reverse once it arrives.</p>
+    <p><strong>Position sizing should be calibrated to the reality that two of six risks are partially uncontrollable (macro) and one is potentially thesis-modifying (succession). Neither demands avoiding the investment. Both demand watching the right signals.</strong></p>
+  </div>
+
+  <div class="footer">
+    <span class="footer-tag"><em>The crowd reads headlines. The thinker reads structures.</em></span>
+  </div>
+
+</div>
+</body>
+</html>

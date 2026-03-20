@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point — Deep Dive Series</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f7f2e8;
+  --parchment-dark: #ede7d8;
+  --ink: #18130e;
+  --ink-mid: #3a2f22;
+  --ink-faded: #7a6e5e;
+  --ink-ghost: #b0a494;
+  --caplin: #1b4d72;
+  --caplin-soft: rgba(27,77,114,0.07);
+  --gold: #b87800;
+  --gold-soft: rgba(184,120,0,0.08);
+  --green: #285c2a;
+  --green-soft: rgba(40,92,42,0.08);
+  --border: #ccc0a8;
+  --border-light: #ddd4bf;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--parchment); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; font-weight: 300; -webkit-font-smoothing: antialiased; line-height: 1.7; }
+.page { max-width: 980px; margin: 0 auto; padding: 0 44px 80px; }
+
+.flag { border-top: 2.5px solid var(--ink); padding: 13px 0 11px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 52px; }
+.flag-left { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); }
+.flag-right { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-ghost); }
+
+.hero { margin-bottom: 48px; padding-bottom: 44px; border-bottom: 1px solid var(--border); }
+.hero-kicker { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--caplin); margin-bottom: 16px; }
+.hero-company { font-family: 'Playfair Display', serif; font-size: clamp(44px,6.5vw,84px); font-weight: 900; line-height: 0.92; color: var(--ink); margin-bottom: 8px; letter-spacing: -0.02em; }
+.hero-ticker { font-family: 'DM Mono', monospace; font-size: 11.5px; color: var(--ink-ghost); margin-bottom: 26px; letter-spacing: 0.13em; }
+.hero-deck { font-family: 'Playfair Display', serif; font-size: clamp(14px,1.8vw,18px); font-weight: 400; font-style: italic; color: var(--ink-faded); line-height: 1.55; max-width: 680px; margin-bottom: 32px; border-left: 2px solid var(--border); padding-left: 18px; }
+
+.stats-row { display: grid; grid-template-columns: repeat(6,1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); }
+.stat-cell { background: var(--parchment); padding: 16px 14px; }
+.stat-label { font-family: 'DM Mono', monospace; font-size: 7.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 6px; }
+.stat-val { font-family: 'Playfair Display', serif; font-size: 20px; font-weight: 700; line-height: 1; margin-bottom: 3px; color: var(--ink); }
+.stat-val.gold { color: var(--gold); }
+.stat-val.blue { color: var(--caplin); }
+.stat-sub { font-family: 'DM Mono', monospace; font-size: 8.5px; color: var(--ink-ghost); }
+
+.thesis-band { background: var(--ink); padding: 22px 28px; margin: 40px 0; }
+.tb-label { font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--gold); margin-bottom: 10px; }
+.tb-text { font-family: 'Playfair Display', serif; font-size: clamp(14px,1.7vw,18px); font-weight: 400; font-style: italic; color: rgba(247,242,232,0.82); line-height: 1.55; }
+
+.section-rule { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.s-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--caplin); min-width: 24px; }
+.s-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; }
+.s-aside { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-ghost); }
+
+.reports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 40px; }
+.rc { border: 1px solid var(--border-light); padding: 20px 22px; position: relative; }
+.rc-num { font-family: 'DM Mono', monospace; font-size: 30px; font-weight: 300; color: rgba(204,192,168,0.25); position: absolute; top: 14px; right: 16px; line-height: 1; }
+.rc-tag { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.rc-tag.core { color: var(--caplin); }
+.rc-tag.special { color: var(--gold); background: var(--gold-soft); padding: 2px 6px; border-radius: 2px; }
+.rc-tag.live { color: var(--green); background: var(--green-soft); padding: 2px 6px; border-radius: 2px; }
+.rc-title { font-family: 'Playfair Display', serif; font-size: 15.5px; font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 8px; }
+.rc-desc { font-size: 12.5px; font-weight: 300; color: var(--ink-faded); line-height: 1.65; margin-bottom: 12px; }
+.rc-desc strong { font-weight: 600; color: var(--ink-mid); }
+.rc-chips { display: flex; flex-wrap: wrap; gap: 5px; border-top: 1px solid var(--border-light); padding-top: 10px; }
+.rc-chip { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--ink-ghost); padding: 2px 7px; border: 1px solid var(--border-light); }
+
+.verdict-row { display: grid; grid-template-columns: repeat(4,1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); margin-bottom: 44px; }
+.vr-cell { background: var(--parchment-dark); padding: 20px 16px; }
+.vr-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 7px; }
+.vr-val { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 700; color: var(--ink); line-height: 1.2; margin-bottom: 5px; }
+.vr-val.gold { color: var(--gold); }
+.vr-val.blue { color: var(--caplin); }
+.vr-sub { font-size: 11.5px; font-weight: 300; color: var(--ink-faded); line-height: 1.55; }
+
+.footer { border-top: 2px solid var(--ink); padding-top: 18px; display: flex; justify-content: flex-end; }
+.footer-tag { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-faded); font-style: italic; }
+
+@media(max-width:700px){
+  .page { padding: 0 20px 60px; }
+  .stats-row { grid-template-columns: repeat(3,1fr); }
+  .reports-grid { grid-template-columns: 1fr; }
+  .verdict-row { grid-template-columns: 1fr 1fr; }
+}
+@media print {
+  h1, h2, .hero-kicker, .section-rule, .flag { page-break-after: avoid; break-after: avoid; }
+  .rc, .stats-row, .verdict-row, .thesis-band { page-break-inside: avoid; break-inside: avoid; }
+  p { orphans: 3; widows: 3; }
+}
+
+/* === REDACTED PUBLISHER STRIP === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+/* Slight roughness on hover to signal intentionality */
+.redacted-pub:hover::after {
+  background: #111;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="flag">
+    <span class="flag-left">Deep Dive Series</span>
+    <span class="flag-right">NSE: CAPLINPNT · 10 Reports · March 2026</span>
+  </div>
+
+  <div class="hero">
+    <div class="hero-kicker">Caplin Point Laboratories · Complete Research Series</div>
+    <div class="hero-company">Caplin Point</div>
+    <div class="hero-ticker">NSE: CAPLINPNT · CMP ~₹1,651 · Market Cap ~₹12,654 Cr · TTM EPS ₹80.74</div>
+    <div class="hero-deck">"The crowd is hunting for the next big Indian pharma story in the US, in large-cap CDMO, in blockbuster APIs. Caplin has been compounding quietly in the geography nobody wanted — and building the second moat while the first one generates the cash to pay for it."</div>
+    <div class="stats-row">
+      <div class="stat-cell"><div class="stat-label">10-Year PAT CAGR</div><div class="stat-val gold">29%</div><div class="stat-sub">FY15–FY25</div></div>
+      <div class="stat-cell"><div class="stat-label">Debt · 35 Years</div><div class="stat-val">₹0</div><div class="stat-sub">Zero. Always.</div></div>
+      <div class="stat-cell"><div class="stat-label">ROCE</div><div class="stat-val gold">25.8%</div><div class="stat-sub">5yr avg 25%+</div></div>
+      <div class="stat-cell"><div class="stat-label">Current P/E</div><div class="stat-val blue">21×</div><div class="stat-sub">vs 28× sector avg</div></div>
+      <div class="stat-cell"><div class="stat-label">Liquid Surplus</div><div class="stat-val gold">₹2,459 Cr</div><div class="stat-sub">Q3 FY26</div></div>
+      <div class="stat-cell"><div class="stat-label">Bottleneck Score</div><div class="stat-val">8.5/10</div><div class="stat-sub">5 moat layers</div></div>
+    </div>
+  </div>
+
+  <div class="thesis-band">
+    <div class="tb-label">Core Thesis</div>
+    <div class="tb-text">Caplin owns five structural bottlenecks — LatAm distribution, 5,000+ regulatory licences, vertical integration, US injectable ANDA portfolio, and a ₹2,459 Cr self-funding balance sheet. The market prices it as a generic exporter with concentration risk. The structure says toll booth. The price says restaurant. That gap is the opportunity.</div>
+  </div>
+
+  <div class="section-rule">
+    <span class="s-num">—</span>
+    <span class="s-title">Complete Research Series · 10 Reports</span>
+    <span class="s-aside">March 2026</span>
+  </div>
+
+  <div class="reports-grid">
+
+    <div class="rc"><div class="rc-num">01</div><div class="rc-tag core">Foundation Report</div><div class="rc-title">The Deep Dive — The Quiet Gorilla</div><div class="rc-desc">The canonical long-form piece. <strong>BYD analogy. Gorilla Framework.</strong> How Caplin built a distribution moat in 23 countries while Indian pharma fought for US shelf space. The full investment thesis in one document.</div><div class="rc-chips"><span class="rc-chip">Gorilla Framework</span><span class="rc-chip">BYD analogy</span><span class="rc-chip">30-year build</span><span class="rc-chip">Full thesis</span></div></div>
+
+    <div class="rc"><div class="rc-num">02</div><div class="rc-tag core">Financial Analysis</div><div class="rc-title">Financial DNA — Revenue, Margins, Returns & Cash</div><div class="rc-desc">Seven-section forensic analysis. <strong>Revenue 8× in 10 years. PAT 13×. EBITDA 35%.</strong> ROCE, ROIC, FCF conversion, and the net cash fortress that funds everything without outside capital.</div><div class="rc-chips"><span class="rc-chip">Revenue CAGR 22.6%</span><span class="rc-chip">PAT CAGR 29%</span><span class="rc-chip">OPM 35%</span><span class="rc-chip">ROCE 25.8%</span></div></div>
+
+    <div class="rc"><div class="rc-num">03</div><div class="rc-tag core">Market Sizing</div><div class="rc-title">TAM & Growth Runway — Three Markets, One Engine</div><div class="rc-desc">Full TAM build across three geographies. <strong>LatAm $75B→$102B. US injectables $18B→$43B. Africa $27B→$37B.</strong> Combined addressable market exceeding $180B at sub-1% current penetration.</div><div class="rc-chips"><span class="rc-chip">Combined TAM >$180B</span><span class="rc-chip">FY30E ₹5,000–7,000 Cr</span><span class="rc-chip">Africa optionality</span></div></div>
+
+    <div class="rc"><div class="rc-num">04</div><div class="rc-tag core">Management Quality</div><div class="rc-title">Management Forensic — Promise vs. Delivery</div><div class="rc-desc">Six-section assessment. <strong>Zero salary. Zero dilution. Zero debt in 35 years.</strong> Six tracked commitments, four kept, one exceeded. KMP pay at 1.35% of PAT. The 8.5/10 verdict and the succession watch.</div><div class="rc-chips"><span class="rc-chip">Score: 8.5/10</span><span class="rc-chip">Zero salary</span><span class="rc-chip">Succession: Vivek COO</span></div></div>
+
+    <div class="rc"><div class="rc-num">05</div><div class="rc-tag core">Moat Classification</div><div class="rc-title">Find the Toll Booth — Moat Profile & Bottleneck Screen</div><div class="rc-desc">Five moat layers classified and scored. <strong>LatAm distribution 9.2/10. Regulatory licences 9.0/10. Vertical integration 8.5/10. US ANDA portfolio 8.0/10.</strong> Composite 8.5/10.</div><div class="rc-chips"><span class="rc-chip">5 moat layers</span><span class="rc-chip">Composite 8.5/10</span><span class="rc-chip">Durability matrix</span><span class="rc-chip">Toll booth confirmed</span></div></div>
+
+    <div class="rc"><div class="rc-num">06</div><div class="rc-tag special">Special Report</div><div class="rc-title">Three Masters — Buffett, Munger & Fisher on Caplin</div><div class="rc-desc">A valuation tribunal. <strong>Buffett's owner earnings. Munger's lollapalooza checklist. Fisher's 15-point scuttlebutt.</strong> Three independent frameworks. One convergent conclusion.</div><div class="rc-chips"><span class="rc-chip">Owner earnings</span><span class="rc-chip">Lollapalooza triggers</span><span class="rc-chip">Scuttlebutt 15-point</span><span class="rc-chip">Convergent verdict</span></div></div>
+
+    <div class="rc"><div class="rc-num">07</div><div class="rc-tag core">Valuation</div><div class="rc-title">Return Profile to FY35 — Four Scenarios, One Decision</div><div class="rc-desc">EPS ladder FY17→FY25→FY35. <strong>Bear: ₹5,535. Base: ₹14,042. Bull: ₹33,471. Compounder: ₹56,112.</strong> Probability-weighted expected return 12.9× at ~29% CAGR.</div><div class="rc-chips"><span class="rc-chip">4 scenarios</span><span class="rc-chip">FY35 EPS ladder</span><span class="rc-chip">12.9× probability-weighted</span><span class="rc-chip">Sensitivity matrix</span></div></div>
+
+    <div class="rc"><div class="rc-num">08</div><div class="rc-tag core">Risk Assessment</div><div class="rc-title">Risk Register — What Could Break the Thesis</div><div class="rc-desc">Nine risks by severity and probability. <strong>Four critical, three elevated, two moderate.</strong> Historical track record through four LatAm currency stress episodes. Three thesis killers. Exit signals defined.</div><div class="rc-chips"><span class="rc-chip">9 risks assessed</span><span class="rc-chip">3 thesis killers</span><span class="rc-chip">Currency episodes</span><span class="rc-chip">Exit signals</span></div></div>
+
+    <div class="rc"><div class="rc-num">09</div><div class="rc-tag core">Peer Analysis</div><div class="rc-title">Why Caplin Has No Real Peers — The Category Error</div><div class="rc-desc">Wrong benchmark (Divi's, Syngene, Natco) vs. right archetypes (Hikma, BKT, Copart, ERIS). <strong>Wrong benchmark implies ₹1,700–2,250. Right benchmark implies ₹2,420–3,226.</strong> The gap is the category error quantified.</div><div class="rc-chips"><span class="rc-chip">Category error</span><span class="rc-chip">₹770–1,575 gap</span><span class="rc-chip">4 right archetypes</span><span class="rc-chip">Mispricing explained</span></div></div>
+
+    <div class="rc"><div class="rc-num">10</div><div class="rc-tag live">Living Document</div><div class="rc-title">Quarterly Monitoring Dashboard</div><div class="rc-desc">Ten core thesis monitors with green/amber/red thresholds. <strong>ANDA tracker. Quarterly results log. Thesis pillar status board.</strong> Add and sell signal definitions. Updated every quarter after results.</div><div class="rc-chips"><span class="rc-chip">10 core monitors</span><span class="rc-chip">Q3 FY26 logged</span><span class="rc-chip">ANDA tracker</span><span class="rc-chip">Add/sell triggers</span></div></div>
+
+  </div>
+
+  <div class="verdict-row">
+    <div class="vr-cell"><div class="vr-label">Investment Verdict</div><div class="vr-val gold">Strong Buy</div><div class="vr-sub">Distribution moat priced as commodity generics. The category error is the opportunity.</div></div>
+    <div class="vr-cell"><div class="vr-label">Bottleneck Score</div><div class="vr-val blue">8.5 / 10</div><div class="vr-sub">Five structural bottlenecks. Three near-permanent. Two building.</div></div>
+    <div class="vr-cell"><div class="vr-label">Prob.-Weighted Return (10yr)</div><div class="vr-val gold">12.9× / ~29% CAGR</div><div class="vr-sub">Bear case still delivers 3.26× at 12.5% CAGR. Asymmetric protection.</div></div>
+    <div class="vr-cell"><div class="vr-label">Primary Thesis Risk</div><div class="vr-val">US Scale Delay</div><div class="vr-sub">LatAm is the floor. US is the re-rating catalyst. $15M by Q2 FY27 is the first test.</div></div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-tag"><em>The crowd reads headlines. The thinker reads structures.</em></span>
+  </div>
+
+</div>
+</body>
+</html>

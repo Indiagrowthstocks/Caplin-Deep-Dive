@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point — Quarterly Monitoring Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f7f2e8;
+  --parchment-dark: #ede7d8;
+  --ink: #18130e;
+  --ink-mid: #3a2f22;
+  --ink-faded: #7a6e5e;
+  --ink-ghost: #b0a494;
+  --caplin: #1b4d72;
+  --caplin-soft: rgba(27,77,114,0.07);
+  --caplin-mid: rgba(27,77,114,0.15);
+  --green: #285c2a;
+  --green-soft: rgba(40,92,42,0.08);
+  --amber: #b87800;
+  --amber-soft: rgba(184,120,0,0.08);
+  --red: #7a1f1f;
+  --red-soft: rgba(122,31,31,0.07);
+  --border: #ccc0a8;
+  --border-light: #ddd4bf;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: var(--parchment); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; font-weight: 300; font-size: 15px; line-height: 1.7; -webkit-font-smoothing: antialiased; }
+.page { max-width: 1020px; margin: 0 auto; padding: 0 44px 100px; }
+
+.flag { border-top: 2.5px solid var(--ink); padding: 13px 0 11px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 44px; }
+.flag-pub { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); }
+.flag-meta { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-ghost); }
+.kicker { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--caplin); margin-bottom: 13px; }
+h1.title { font-family: 'Playfair Display', serif; font-size: clamp(24px,3.5vw,40px); font-weight: 700; line-height: 1.1; margin-bottom: 14px; }
+.deck { font-size: 14.5px; font-weight: 300; font-style: italic; color: var(--ink-faded); max-width: 640px; line-height: 1.6; margin-bottom: 36px; border-left: 2px solid var(--border); padding-left: 16px; }
+.divider { border: none; border-top: 1px solid var(--border-light); margin: 0 0 48px; }
+
+/* HOW TO USE */
+.how-to { background: var(--parchment-dark); border: 1px solid var(--border-light); padding: 20px 24px; margin-bottom: 44px; }
+.ht-label { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 10px; }
+.ht-text { font-size: 13px; font-weight: 300; color: var(--ink-mid); line-height: 1.7; }
+.ht-text strong { font-weight: 600; color: var(--ink); }
+
+/* SECTION */
+.section { margin-bottom: 56px; }
+.section-rule { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+.s-num { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--caplin); min-width: 24px; }
+.s-title { font-family: 'Playfair Display', serif; font-size: 19px; font-weight: 700; flex: 1; }
+.s-freq { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-ghost); }
+
+/* SCORECARD GRID */
+.scorecard { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border-light); border: 1px solid var(--border-light); margin-bottom: 28px; }
+.sc-cell { background: var(--parchment); padding: 16px; }
+.sc-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 6px; }
+.sc-metric { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; line-height: 1; margin-bottom: 4px; }
+.sc-metric.g { color: var(--green); }
+.sc-metric.a { color: var(--amber); }
+.sc-metric.r { color: var(--red); }
+.sc-metric.b { color: var(--caplin); }
+.sc-target { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--ink-ghost); }
+.sc-status { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 6px; border-radius: 2px; display: inline-block; margin-top: 4px; }
+.sc-status.on { background: var(--green-soft); color: var(--green); }
+.sc-status.watch { background: var(--amber-soft); color: var(--amber); }
+.sc-status.off { background: var(--red-soft); color: var(--red); }
+.sc-status.tbd { background: var(--caplin-soft); color: var(--caplin); }
+
+/* MONITOR TABLE */
+.monitor-table { width: 100%; border-collapse: collapse; font-size: 12.5px; margin: 0 0 20px; }
+.monitor-table th { font-family: 'DM Mono', monospace; font-size: 8.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faded); padding: 8px 14px; border-bottom: 1px solid var(--border); text-align: left; font-weight: 400; }
+.monitor-table td { padding: 11px 14px; border-bottom: 1px solid var(--border-light); vertical-align: top; font-weight: 300; color: var(--ink-mid); line-height: 1.6; }
+.monitor-table td:first-child { font-weight: 500; color: var(--ink); font-size: 13px; width: 22%; }
+.monitor-table td:nth-child(2) { font-family: 'DM Mono', monospace; font-size: 11px; width: 18%; }
+.monitor-table .dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 5px; vertical-align: middle; }
+.monitor-table .dot.g { background: var(--green); }
+.monitor-table .dot.a { background: var(--amber); }
+.monitor-table .dot.r { background: var(--red); }
+.trigger-g { color: var(--green); font-family: 'DM Mono', monospace; font-size: 10px; }
+.trigger-a { color: var(--amber); font-family: 'DM Mono', monospace; font-size: 10px; }
+.trigger-r { color: var(--red); font-family: 'DM Mono', monospace; font-size: 10px; }
+
+/* THESIS STATUS */
+.thesis-status { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; margin: 20px 0; }
+.ts-card { padding: 16px 18px; border: 1px solid var(--border-light); }
+.ts-card.intact { border-top: 2px solid var(--green); }
+.ts-card.watch { border-top: 2px solid var(--amber); }
+.ts-card.broken { border-top: 2px solid var(--red); }
+.ts-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+.ts-label.g { color: var(--green); }
+.ts-label.a { color: var(--amber); }
+.ts-label.r { color: var(--red); }
+.ts-name { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; margin-bottom: 6px; line-height: 1.2; }
+.ts-condition { font-size: 12px; font-weight: 300; color: var(--ink-mid); line-height: 1.6; }
+.ts-condition strong { font-weight: 600; color: var(--ink); }
+
+/* ANDA TRACKER */
+.anda-track { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin: 20px 0; }
+.at-cell { border: 1px solid var(--border-light); padding: 14px; }
+.at-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 6px; }
+.at-num { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 700; color: var(--caplin); line-height: 1; margin-bottom: 4px; }
+.at-sub { font-size: 11.5px; font-weight: 300; color: var(--ink-faded); line-height: 1.5; }
+
+/* QUARTERLY LOG */
+.q-log { border: 1px solid var(--border-light); margin-bottom: 12px; }
+.ql-header { display: grid; grid-template-columns: 120px 1fr auto; gap: 14px; align-items: center; padding: 14px 18px; background: var(--parchment-dark); border-bottom: 1px solid var(--border-light); }
+.ql-quarter { font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; color: var(--caplin); }
+.ql-headline { font-size: 13.5px; font-weight: 400; color: var(--ink); }
+.ql-verdict { font-family: 'DM Mono', monospace; font-size: 8.5px; padding: 3px 8px; border-radius: 2px; }
+.ql-verdict.beat { background: var(--green-soft); color: var(--green); border: 1px solid rgba(40,92,42,0.2); }
+.ql-verdict.inline { background: var(--caplin-soft); color: var(--caplin); border: 1px solid rgba(27,77,114,0.2); }
+.ql-verdict.miss { background: var(--amber-soft); color: var(--amber); border: 1px solid rgba(184,120,0,0.2); }
+.ql-body { display: grid; grid-template-columns: repeat(5,1fr); gap: 1px; background: var(--border-light); border-top: 1px solid var(--border-light); }
+.ql-metric { background: var(--parchment); padding: 12px 14px; }
+.ql-m-label { font-family: 'DM Mono', monospace; font-size: 8px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-ghost); margin-bottom: 4px; }
+.ql-m-val { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; line-height: 1; }
+.ql-m-yoy { font-family: 'DM Mono', monospace; font-size: 9px; margin-top: 3px; }
+.ql-m-yoy.up { color: var(--green); }
+.ql-m-yoy.dn { color: var(--red); }
+.ql-notes { padding: 12px 18px; font-size: 12.5px; font-weight: 300; color: var(--ink-mid); line-height: 1.65; border-top: 1px solid var(--border-light); }
+.ql-notes strong { font-weight: 600; color: var(--ink); }
+
+/* BLANK LOG */
+.blank-log { border: 1px dashed var(--border); padding: 20px 24px; margin-bottom: 12px; display: flex; align-items: center; gap: 16px; }
+.bl-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-ghost); }
+.bl-fields { display: flex; gap: 24px; flex-wrap: wrap; }
+.bl-field { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--border); text-transform: uppercase; letter-spacing: 0.1em; border-bottom: 1px solid var(--border-light); padding-bottom: 2px; min-width: 80px; }
+
+/* SELL SIGNAL */
+.sell-signals { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+.ss-item { border-left: 3px solid var(--red); padding: 12px 16px; background: var(--red-soft); }
+.ss-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.ss-desc { font-size: 12.5px; font-weight: 300; color: var(--ink-mid); line-height: 1.6; }
+.ss-desc strong { font-weight: 600; color: var(--ink); }
+
+/* ADD signals */
+.add-signals { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 20px 0; }
+.as-item { border-left: 3px solid var(--green); padding: 12px 16px; background: var(--green-soft); }
+.as-title { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; margin-bottom: 5px; }
+.as-desc { font-size: 12.5px; font-weight: 300; color: var(--ink-mid); line-height: 1.6; }
+.as-desc strong { font-weight: 600; color: var(--ink); }
+
+.footer { border-top: 2px solid var(--ink); padding-top: 20px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px; margin-top: 60px; }
+.footer-pub { font-family: 'Playfair Display', serif; font-size: 13px; font-style: italic; color: var(--ink-faded); }
+.footer-tag { font-family: 'DM Mono', monospace; font-size: 9.5px; color: var(--ink-ghost); }
+
+@media(max-width:700px){
+  .page { padding: 0 18px 60px; }
+  .scorecard { grid-template-columns: 1fr 1fr; }
+  .thesis-status { grid-template-columns: 1fr; }
+  .anda-track { grid-template-columns: 1fr 1fr; }
+  .ql-body { grid-template-columns: 1fr 1fr; }
+  .ql-header { grid-template-columns: 80px 1fr auto; }
+  .sell-signals, .add-signals { grid-template-columns: 1fr; }
+}
+
+  @media print {
+    h1, h2, h3, h4,
+    .section-rule, .section-header, .s-title,
+    .kicker, .report-type, .flag, .masthead,
+    .final-label, .final-kicker, .closing-rule,
+    .vg-label, .rc-tag, .arch-flag, .tb-label,
+    .rs-heading, .ts-label, .at-label, .ql-quarter {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .stat-grid, .scorecard, .verdict-box, .price-zones,
+    .callout, .moat-list, .pattern-grid, .thesis-box,
+    .wrong-peers, .metrics-table, .monitor-table,
+    .arch-card, .val-gap, .caplin-position,
+    .ts-card, .anda-track, .at-cell, .q-log,
+    .ss-item, .as-item, .misclass, .final,
+    .vg-side, .rc-findings, .how-to, .verdict-row,
+    .ql-body, .ql-header, .earnings-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    p { orphans: 3; widows: 3; }
+  }
+
+/* === REDACTED PUBLISHER STRIP === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+/* Slight roughness on hover to signal intentionality */
+.redacted-pub:hover::after {
+  background: #111;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="flag">
+    <span class="flag-pub"><span class="redacted-pub">Clarity Research</span></span>
+    <span class="flag-meta">NSE: CAPLINPNT · Monitoring Dashboard · Updated Q3 FY26</span>
+  </div>
+
+  <div class="kicker">Caplin Point Laboratories · Living Document</div>
+  <h1 class="title">Quarterly Monitoring Dashboard — Post-Investment Tracking</h1>
+  <div class="deck">The thesis is only as good as the discipline to monitor it. This document tracks the specific signals that confirm, challenge, or break the investment case — updated every quarter after results.</div>
+
+  <div class="how-to">
+    <div class="ht-label">How To Use This Document</div>
+    <div class="ht-text">Update this dashboard within 48 hours of each quarterly result. Check every metric against its target threshold. Any metric in <strong>amber</strong> requires an explanation in the notes column — is it a one-time blip or a structural trend? Two consecutive amber quarters on the same metric triggers a formal thesis review. Any <strong>red</strong> metric triggers an immediate review. This is not a sell signal by itself — it is a signal that the thesis needs to be re-argued from scratch before the next market open.</div>
+  </div>
+
+  <!-- CURRENT SCORECARD -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">01</span>
+      <span class="s-title">Current Quarter Scorecard</span>
+      <span class="s-freq">Q3 FY26 · October–December 2025</span>
+    </div>
+
+    <div class="scorecard">
+      <div class="sc-cell">
+        <div class="sc-label">Revenue (₹ Cr)</div>
+        <div class="sc-metric g">543</div>
+        <div class="sc-target">Target: >520 · YoY: +10%</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">EBITDA Margin</div>
+        <div class="sc-metric g">35.0%</div>
+        <div class="sc-target">Target: >30% · Floor: 27%</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">PAT (₹ Cr)</div>
+        <div class="sc-metric g">166</div>
+        <div class="sc-target">Target: >155 · YoY: +19%</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">TTM EPS (₹)</div>
+        <div class="sc-metric g">80.74</div>
+        <div class="sc-target">FY26E: ~₹88–92</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">US Revenue (annualised)</div>
+        <div class="sc-metric a">~$8.7M</div>
+        <div class="sc-target">Target: $15M by Q2 FY27</div>
+        <span class="sc-status watch">Building</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">Liquid Assets (₹ Cr)</div>
+        <div class="sc-metric g">2,459</div>
+        <div class="sc-target">Floor: >₹1,500 Cr</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">ANDA Approvals (cumul.)</div>
+        <div class="sc-metric g">55</div>
+        <div class="sc-target">Target: +8–12/year</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+      <div class="sc-cell">
+        <div class="sc-label">Promoter Holding</div>
+        <div class="sc-metric g">70.6%</div>
+        <div class="sc-target">Floor: >65% · Watch: <68%</div>
+        <span class="sc-status on">On Track</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- CORE THESIS MONITORS -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">02</span>
+      <span class="s-title">Core Thesis Monitors</span>
+      <span class="s-freq">Every Quarter · Non-Negotiable</span>
+    </div>
+
+    <table class="monitor-table">
+      <thead>
+        <tr>
+          <th>Signal</th>
+          <th>Current Status</th>
+          <th>Green Threshold</th>
+          <th>Amber Threshold</th>
+          <th>Red Threshold · Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>LatAm revenue growth (INR)</td>
+          <td><span class="dot g"></span>+10% YoY</td>
+          <td class="trigger-g">>12% YoY</td>
+          <td class="trigger-a">6–12% — check if currency drag or volume weakness</td>
+          <td class="trigger-r"><6% for 2 quarters → formal thesis review</td>
+        </tr>
+        <tr>
+          <td>EBITDA margin</td>
+          <td><span class="dot g"></span>35.0%</td>
+          <td class="trigger-g">>30%</td>
+          <td class="trigger-a">27–30% — identify cause (R&D spike vs structural)</td>
+          <td class="trigger-r"><27% sustained 2 quarters → thesis killer signal</td>
+        </tr>
+        <tr>
+          <td>Receivable days (LatAm proxy)</td>
+          <td><span class="dot g"></span>~8–12 days est.</td>
+          <td class="trigger-g"><15 days — structural hedge intact</td>
+          <td class="trigger-a">15–25 days — credit extension in volatile markets</td>
+          <td class="trigger-r">>25 days sustained → currency exposure rising materially</td>
+        </tr>
+        <tr>
+          <td>Debt on balance sheet</td>
+          <td><span class="dot g"></span>₹0</td>
+          <td class="trigger-g">Zero debt</td>
+          <td class="trigger-a">Any debt >₹200 Cr — understand purpose</td>
+          <td class="trigger-r">Debt >₹500 Cr without clear strategic rationale → escalate</td>
+        </tr>
+        <tr>
+          <td>US front-end revenue</td>
+          <td><span class="dot a"></span>$8.7M cumul.</td>
+          <td class="trigger-g">$15M annualised by Q2 FY27</td>
+          <td class="trigger-a">Flat for 2 quarters despite new ANDA launches</td>
+          <td class="trigger-r">Declining or USFDA warning letter → immediate review</td>
+        </tr>
+        <tr>
+          <td>ANDA approvals pace</td>
+          <td><span class="dot g"></span>55 cumulative</td>
+          <td class="trigger-g">8–12 new approvals/year</td>
+          <td class="trigger-a"><6 approvals in a year — pipeline thinning?</td>
+          <td class="trigger-r">Zero approvals for 2 consecutive quarters post-inspection</td>
+        </tr>
+        <tr>
+          <td>Promoter holding direction</td>
+          <td><span class="dot g"></span>70.6% stable</td>
+          <td class="trigger-g">Stable or increasing</td>
+          <td class="trigger-a">Declining below 68% — understand reason</td>
+          <td class="trigger-r">Sudden sale >3% in one quarter without disclosed rationale</td>
+        </tr>
+        <tr>
+          <td>Currency disclosure quality</td>
+          <td><span class="dot g"></span>Explicit on concalls</td>
+          <td class="trigger-g">Management quantifies local vs INR growth gap</td>
+          <td class="trigger-a">No currency commentary when INR revenue decelerates</td>
+          <td class="trigger-r">Sustained silence on currency + margin compression together</td>
+        </tr>
+        <tr>
+          <td>Liquid assets (₹ Cr)</td>
+          <td><span class="dot g"></span>₹2,459 Cr</td>
+          <td class="trigger-g">>₹2,000 Cr or growing</td>
+          <td class="trigger-a">₹1,500–2,000 Cr — track cash deployment</td>
+          <td class="trigger-r"><₹1,000 Cr without a disclosed acquisition rationale</td>
+        </tr>
+        <tr>
+          <td>USFDA inspection outcome</td>
+          <td><span class="dot g"></span>4/4 EIRs — last: Aug 2024 (zero obs.)</td>
+          <td class="trigger-g">EIR with VAI or NAI classification</td>
+          <td class="trigger-a">Form 483 with observations — review severity</td>
+          <td class="trigger-r">Warning letter or OAI classification → immediate position review</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- THESIS STATUS -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">03</span>
+      <span class="s-title">Thesis Pillar Status</span>
+      <span class="s-freq">Q3 FY26 Assessment</span>
+    </div>
+
+    <div class="thesis-status">
+      <div class="ts-card intact">
+        <div class="ts-label g">✓ Intact</div>
+        <div class="ts-name">LatAm Distribution Moat</div>
+        <div class="ts-condition">22,000+ touchpoints, negative working capital model intact, top-3 position in core CA markets. <strong>No signs of competitive entry or market share erosion.</strong> Mexico and Chile expansion proceeding.</div>
+      </div>
+      <div class="ts-card intact">
+        <div class="ts-label g">✓ Intact</div>
+        <div class="ts-name">Capital Allocation Discipline</div>
+        <div class="ts-condition">₹2,459 Cr liquid, zero debt, all capex self-funded. January 2026 ANDA acquisition in-domain (injectables/ophthalmics). <strong>No governance red flags.</strong> KMP pay at 1.35% of PAT.</div>
+      </div>
+      <div class="ts-card watch">
+        <div class="ts-label a">◑ Building</div>
+        <div class="ts-name">US Injectable Thesis</div>
+        <div class="ts-condition">Structural assets in place (55 ANDAs, 5,610 end users, 4 clean FDA inspections). <strong>Revenue materialisation is the pending confirmation.</strong> $15M annualised by Q2 FY27 is the first inflection test.</div>
+      </div>
+      <div class="ts-card intact">
+        <div class="ts-label g">✓ Intact</div>
+        <div class="ts-name">Earnings Compounding</div>
+        <div class="ts-condition">TTM EPS ₹80.74, up from ₹70.56 in FY25. 10-year PAT CAGR at 29%. Q3 FY26 PAT +19% YoY. <strong>Growth trajectory fully intact.</strong> FY26E EPS ₹88–92.</div>
+      </div>
+      <div class="ts-card intact">
+        <div class="ts-label g">✓ Intact</div>
+        <div class="ts-name">Succession Pipeline</div>
+        <div class="ts-condition">Vivek Siddarth as COO, Dr. Sridhar Ganesan re-appointed MD Aug 2024. <strong>Paarthipan active.</strong> Watch for Vivek's first earnings call appearance as succession signal.</div>
+      </div>
+      <div class="ts-card watch">
+        <div class="ts-label a">◑ Watch</div>
+        <div class="ts-name">LatAm Currency Stability</div>
+        <div class="ts-condition">Argentina under IMF programme — improving but fragile. Mexico peso under USMCA uncertainty pressure. <strong>Structural hedge (receivables model) intact.</strong> Stabilisation is a tailwind, not a requirement.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ANDA PIPELINE TRACKER -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">04</span>
+      <span class="s-title">US ANDA Pipeline Tracker</span>
+      <span class="s-freq">Updated as approvals announced</span>
+    </div>
+
+    <div class="anda-track">
+      <div class="at-cell">
+        <div class="at-label">Total Approvals (cumulative)</div>
+        <div class="at-num">55</div>
+        <div class="at-sub">Including 10 acquired ANDAs (Jan 2026). 54 filed independently.</div>
+      </div>
+      <div class="at-cell">
+        <div class="at-label">Pipeline (filed, pending)</div>
+        <div class="at-num">55+</div>
+        <div class="at-sub">Target for filing over next 4 years. Injectables, ophthalmics, oncology.</div>
+      </div>
+      <div class="at-cell">
+        <div class="at-label">Products Launched (US)</div>
+        <div class="at-num">29</div>
+        <div class="at-sub">Of 55 approved. Gap = 26 approved but not yet commercially launched.</div>
+      </div>
+      <div class="at-cell">
+        <div class="at-label">End Users (US front-end)</div>
+        <div class="at-num">5,610</div>
+        <div class="at-sub">Hospitals, pharmacies, clinics. Target: 10,000+ for inflection.</div>
+      </div>
+      <div class="at-cell">
+        <div class="at-label">State Licences</div>
+        <div class="at-num">49/50</div>
+        <div class="at-sub">Near-complete US coverage. 7 wholesale distributors, 24 hospital systems.</div>
+      </div>
+      <div class="at-cell">
+        <div class="at-label">Recent Approvals (Q4 FY26)</div>
+        <div class="at-num">3</div>
+        <div class="at-sub">Methylprednisolone (Jan), Desmopressin $26M mkt (Feb), Sodium Phosphates $67M mkt (Feb).</div>
+      </div>
+    </div>
+
+    <table class="monitor-table">
+      <thead>
+        <tr>
+          <th>Recent ANDA Event</th>
+          <th>Date</th>
+          <th>Product / Market Size</th>
+          <th>Significance</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>ANDA Acquisition</td>
+          <td>Jan 1, 2026</td>
+          <td>10 ANDAs (injectables + ophthalmics) · combined US market ~$473M</td>
+          <td>First inorganic ANDA move — in-domain, niche markets, commercial intelligence signal</td>
+        </tr>
+        <tr>
+          <td>USFDA Approval</td>
+          <td>Jan 27, 2026</td>
+          <td>Methylprednisolone Acetate Injectable Suspension</td>
+          <td>Complex injectable, limited competition, adds to niche injectable portfolio</td>
+        </tr>
+        <tr>
+          <td>USFDA Approval</td>
+          <td>Feb 24, 2026</td>
+          <td>Sodium Phosphates Injection · US market ~$67M</td>
+          <td>Meaningful market size, hospital formulary product</td>
+        </tr>
+        <tr>
+          <td>USFDA Approval</td>
+          <td>Feb 28, 2026</td>
+          <td>Desmopressin Acetate Injection · US market ~$26M</td>
+          <td>Specialty injectable, low generic competition expected</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <hr class="divider">
+
+  <!-- QUARTERLY LOG -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">05</span>
+      <span class="s-title">Quarterly Results Log</span>
+      <span class="s-freq">Add new entry within 48hrs of each result</span>
+    </div>
+
+    <div class="q-log">
+      <div class="ql-header">
+        <div class="ql-quarter">Q3 FY26</div>
+        <div class="ql-headline">Solid quarter — LatAm steady, margins expanding, US building</div>
+        <span class="ql-verdict inline">In Line</span>
+      </div>
+      <div class="ql-body">
+        <div class="ql-metric">
+          <div class="ql-m-label">Revenue</div>
+          <div class="ql-m-val">₹543 Cr</div>
+          <div class="ql-m-yoy up">+10% YoY</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">EBITDA</div>
+          <div class="ql-m-val">₹190 Cr</div>
+          <div class="ql-m-yoy up">+17% YoY</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">OPM</div>
+          <div class="ql-m-val">35.0%</div>
+          <div class="ql-m-yoy up">+200bps YoY</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">PAT</div>
+          <div class="ql-m-val">₹166 Cr</div>
+          <div class="ql-m-yoy up">+19% YoY</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">Mix: LatAm/US/Africa</div>
+          <div class="ql-m-val" style="font-size:14px">76/20/4%</div>
+          <div class="ql-m-yoy up">US share growing</div>
+        </div>
+      </div>
+      <div class="ql-notes"><strong>Key observations:</strong> Margin expansion to 35% is the standout — 200bps YoY while revenue grew only 10% confirms operating leverage in the model. US share at 20% (up from 15% two years ago) — directionally correct. LatAm at 76% steady — no currency drag flagged in this quarter. Liquid assets at ₹2,459 Cr, up from ₹1,984 Cr in Sep 2024 — cash compounding even during heavy capex cycle. <strong>No concerns. Thesis intact.</strong></div>
+    </div>
+
+    <div class="q-log">
+      <div class="ql-header">
+        <div class="ql-quarter">Q4 FY26</div>
+        <div class="ql-headline">Results pending · Expected April/May 2026</div>
+        <span class="ql-verdict inline">Pending</span>
+      </div>
+      <div class="ql-body">
+        <div class="ql-metric">
+          <div class="ql-m-label">Revenue</div>
+          <div class="ql-m-val">—</div>
+          <div class="ql-m-yoy">Target: >₹560 Cr</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">EBITDA</div>
+          <div class="ql-m-val">—</div>
+          <div class="ql-m-yoy">Target: >₹168 Cr</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">OPM</div>
+          <div class="ql-m-val">—</div>
+          <div class="ql-m-yoy">Floor: 30%</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">PAT</div>
+          <div class="ql-m-val">—</div>
+          <div class="ql-m-yoy">Target: >₹170 Cr</div>
+        </div>
+        <div class="ql-metric">
+          <div class="ql-m-label">Watch</div>
+          <div class="ql-m-val" style="font-size:13px">US rev</div>
+          <div class="ql-m-yoy">First $15M test begins</div>
+        </div>
+      </div>
+      <div class="ql-notes"><strong>Watch for Q4 FY26:</strong> (1) US front-end revenue — first quarter where the recently approved ANDAs (Desmopressin, Sodium Phosphates) could start contributing. (2) Mexico contribution — management has flagged Mexico as a high-focus market with 35+ filings; any Mexico revenue callout is a new data point. (3) Vivek Siddarth on the earnings call — any increased speaking role is a succession signal. (4) FY26 full-year EPS vs ₹88–92 range.</div>
+    </div>
+
+    <!-- Blank future quarters -->
+    <div class="blank-log">
+      <span class="bl-label">Q1 FY27</span>
+      <div class="bl-fields">
+        <span class="bl-field">Revenue ___</span>
+        <span class="bl-field">OPM ___</span>
+        <span class="bl-field">PAT ___</span>
+        <span class="bl-field">US Rev ___</span>
+        <span class="bl-field">EPS TTM ___</span>
+        <span class="bl-field">Verdict ___</span>
+      </div>
+    </div>
+    <div class="blank-log">
+      <span class="bl-label">Q2 FY27</span>
+      <div class="bl-fields">
+        <span class="bl-field">Revenue ___</span>
+        <span class="bl-field">OPM ___</span>
+        <span class="bl-field">PAT ___</span>
+        <span class="bl-field">US Rev ___</span>
+        <span class="bl-field">EPS TTM ___</span>
+        <span class="bl-field">Verdict ___</span>
+      </div>
+    </div>
+    <div class="blank-log">
+      <span class="bl-label">Q3 FY27</span>
+      <div class="bl-fields">
+        <span class="bl-field">Revenue ___</span>
+        <span class="bl-field">OPM ___</span>
+        <span class="bl-field">PAT ___</span>
+        <span class="bl-field">US Rev ___</span>
+        <span class="bl-field">EPS TTM ___</span>
+        <span class="bl-field">Verdict ___</span>
+      </div>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ADD / SELL SIGNALS -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">06</span>
+      <span class="s-title">Position Sizing Signals</span>
+      <span class="s-freq">When to add, hold, or exit</span>
+    </div>
+
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--green);margin-bottom:10px;">Add / Increase Position</div>
+    <div class="add-signals">
+      <div class="as-item">
+        <div class="as-title">US Revenue Inflection</div>
+        <div class="as-desc">US annualised revenue crosses <strong>$15M by Q2 FY27</strong>. First confirmation that the ANDA portfolio is converting to revenue at scale. The market will likely re-rate the multiple from 21× toward 28–30× on this signal alone.</div>
+      </div>
+      <div class="as-item">
+        <div class="as-title">LatAm Currency Tailwind</div>
+        <div class="as-desc">Management quantifies local currency growth materially above INR growth — <strong>e.g. "volumes +18%, INR +22%"</strong> — indicating currency is now a tailwind. A stabilisation year could add 300–500bps to PAT growth. Add on the first quarter this is explicit.</div>
+      </div>
+      <div class="as-item">
+        <div class="as-title">Stock Price Correction Unrelated to Thesis</div>
+        <div class="as-desc">A 20–30% stock correction driven by <strong>LatAm macro headlines, broader market sell-off, or technical factors</strong> — with no deterioration in any core thesis monitor — is the highest-conviction add signal in this position.</div>
+      </div>
+      <div class="as-item">
+        <div class="as-title">Vivek Succession Signal</div>
+        <div class="as-desc">Vivek Siddarth appearing as primary spokesperson on an earnings call. Signals <strong>staged, deliberate succession</strong> — removes the biggest governance uncertainty and likely triggers re-rating from "founder risk" discount to "institutional quality" premium.</div>
+      </div>
+    </div>
+
+    <div style="font-family:'DM Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--red);margin:24px 0 10px;">Reduce / Exit Position</div>
+    <div class="sell-signals">
+      <div class="ss-item">
+        <div class="ss-title">USFDA Warning Letter on Caplin Steriles</div>
+        <div class="ss-desc"><strong>Reduce position by 50% immediately.</strong> Do not sell entirely — assess whether LatAm earnings power is intact. If LatAm continues compounding and the warning letter is isolated to Steriles, the stock's decline will overshoot the fundamental damage. Re-evaluate within 30 days.</div>
+      </div>
+      <div class="ss-item">
+        <div class="ss-title">OPM Below 27% for Two Consecutive Quarters</div>
+        <div class="ss-desc">Sustained margin compression below 27% indicates <strong>structural erosion</strong> of the LatAm distribution moat — either competitive entry, pricing pressure, or mix deterioration. This is not a one-time event. Begin formal exit if confirmed in a third quarter.</div>
+      </div>
+      <div class="ss-item">
+        <div class="ss-title">Out-of-Domain Capital Allocation</div>
+        <div class="ss-desc">Any acquisition outside pharmaceuticals/healthcare, any acquisition above ₹500 Cr without disclosed financials, or any <strong>related-party transaction above ₹25 Cr</strong>. The 35-year capital discipline is the moat's foundation — one governance failure invalidates the track record premium.</div>
+      </div>
+      <div class="ss-item">
+        <div class="ss-title">LatAm Revenue Flat + US Revenue Flat Simultaneously</div>
+        <div class="ss-desc">Both growth engines stalling at the same time — for <strong>two consecutive quarters</strong> — with no credible macro explanation (temporary currency, one-time destocking). This is the scenario where the compounding thesis is broken, not stressed.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <span class="footer-tag"><em>The crowd reads headlines. The thinker reads structures.</em></span>
+  </div>
+
+</div>
+</body>
+</html>

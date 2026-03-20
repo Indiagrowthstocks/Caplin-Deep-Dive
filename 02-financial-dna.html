@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point — Financial DNA</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f7f2e8;
+  --parchment-dark: #ede7d8;
+  --ink: #18130e;
+  --ink-mid: #3a2f22;
+  --ink-faded: #7a6e5e;
+  --ink-ghost: #b0a494;
+  --caplin: #1b4d72;
+  --caplin-soft: rgba(27,77,114,0.08);
+  --caplin-mid: rgba(27,77,114,0.35);
+  --green: #285c2a;
+  --green-soft: rgba(40,92,42,0.09);
+  --amber: #b87800;
+  --amber-soft: rgba(184,120,0,0.09);
+  --red: #8b2020;
+  --border: #ccc0a8;
+  --border-light: #ddd4bf;
+  --rule: #b0a090;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 300;
+  font-size: 15px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── LAYOUT ─── */
+.page { max-width: 980px; margin: 0 auto; padding: 0 44px 100px; }
+
+/* ─── HEADER ─── */
+.flag {
+  border-top: 2.5px solid var(--ink);
+  padding: 13px 0 11px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 44px;
+}
+.flag-pub { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-faded); }
+.flag-meta { font-family: 'DM Mono', monospace; font-size: 10.5px; color: var(--ink-ghost); letter-spacing: 0.04em; }
+
+.kicker { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--caplin); margin-bottom: 13px; }
+
+h1.doc-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(26px, 4vw, 44px);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.01em;
+  margin-bottom: 16px;
+}
+.doc-deck {
+  font-size: 15.5px;
+  font-weight: 300;
+  font-style: italic;
+  color: var(--ink-faded);
+  max-width: 620px;
+  line-height: 1.6;
+  margin-bottom: 36px;
+  border-left: 2px solid var(--border);
+  padding-left: 16px;
+}
+
+/* ─── HEADLINE KPIs ─── */
+.kpi-strip {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  border: 1px solid var(--border);
+  margin-bottom: 56px;
+  background: var(--border);
+  gap: 1px;
+}
+.kpi {
+  background: var(--parchment);
+  padding: 18px 16px 16px;
+}
+.kpi-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 7px;
+  line-height: 1.4;
+}
+.kpi-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.kpi-val.g { color: var(--green); }
+.kpi-val.b { color: var(--caplin); }
+.kpi-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-ghost);
+}
+
+/* ─── SECTION ─── */
+.section { margin-bottom: 60px; }
+.section-rule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 22px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.s-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--caplin);
+  font-weight: 500;
+  min-width: 24px;
+}
+.s-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+  flex: 1;
+}
+.s-aside {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-ghost);
+  text-align: right;
+}
+
+/* ─── BAR CHARTS ─── */
+.bars { display: flex; flex-direction: column; gap: 5px; margin: 18px 0; }
+.bar-row {
+  display: grid;
+  grid-template-columns: 34px 1fr 70px;
+  align-items: center;
+  gap: 10px;
+}
+.b-yr {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-faded);
+  text-align: right;
+}
+.b-track {
+  height: 22px;
+  background: var(--parchment-dark);
+  border-radius: 2px;
+  overflow: hidden;
+  position: relative;
+}
+.b-fill {
+  height: 100%;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  padding-left: 9px;
+}
+.b-inner {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: rgba(255,255,255,0.92);
+  white-space: nowrap;
+}
+.b-right {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-faded);
+  text-align: right;
+}
+
+/* ─── MARGIN TABLE ─── */
+.m-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin: 18px 0;
+}
+.m-table th {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  font-weight: 400;
+}
+.m-table th:first-child { text-align: left; }
+.m-table td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--border-light);
+  text-align: right;
+  font-weight: 300;
+  color: var(--ink-mid);
+}
+.m-table td:first-child {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-faded);
+  text-align: left;
+}
+.m-table tr.ttm td { background: var(--caplin-soft); font-weight: 500; }
+.m-table tr.ttm td:first-child { color: var(--caplin); }
+.g { color: var(--green) !important; font-weight: 500 !important; }
+.b { color: var(--caplin) !important; font-weight: 500 !important; }
+.a { color: var(--amber) !important; }
+
+/* ─── INLINE MARGIN BARS ─── */
+.pct-bar {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  width: 100%;
+}
+.mini-track {
+  flex: 1;
+  height: 8px;
+  background: var(--parchment-dark);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.mini-fill { height: 100%; border-radius: 1px; }
+.mini-val {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  white-space: nowrap;
+  min-width: 32px;
+}
+
+/* ─── SCALE CARDS ─── */
+.scale-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 10px;
+  margin: 20px 0;
+}
+.sc {
+  border: 1px solid var(--border-light);
+  padding: 16px;
+  position: relative;
+}
+.sc::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--caplin);
+}
+.sc-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--caplin);
+  margin-bottom: 7px;
+}
+.sc-head {
+  font-family: 'Playfair Display', serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+  line-height: 1.25;
+}
+.sc-body {
+  font-size: 12.5px;
+  font-weight: 300;
+  color: var(--ink-mid);
+  line-height: 1.6;
+}
+.sc-body strong { font-weight: 600; color: var(--ink); }
+
+/* ─── FCF STRIP ─── */
+.fcf-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--border);
+  gap: 1px;
+  border: 1px solid var(--border);
+  margin: 20px 0;
+}
+.fcf-c {
+  background: var(--parchment);
+  padding: 16px;
+}
+.fcf-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 6px;
+}
+.fcf-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.fcf-val.g { color: var(--green); }
+.fcf-val.b { color: var(--caplin); }
+.fcf-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-ghost);
+}
+
+/* ─── FCF YEAR TABLE ─── */
+.fcf-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+  margin: 18px 0;
+}
+.fcf-table th {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  padding: 7px 12px;
+  border-bottom: 1px solid var(--border);
+  text-align: right;
+  font-weight: 400;
+}
+.fcf-table th:first-child, .fcf-table th:nth-child(2) { text-align: left; }
+.fcf-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--border-light);
+  text-align: right;
+  font-weight: 300;
+  color: var(--ink-mid);
+}
+.fcf-table td:first-child {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-faded);
+}
+.fcf-table td:nth-child(2) { font-size: 12px; color: var(--ink-faded); }
+.fcf-table tr.ttm td { background: var(--green-soft); font-weight: 500; }
+.badge {
+  display: inline-block;
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 2px;
+}
+.badge.g { background: var(--green-soft); color: var(--green); }
+.badge.a { background: var(--amber-soft); color: var(--amber); }
+.badge.b { background: var(--caplin-soft); color: var(--caplin); }
+
+/* ─── ROIC SECTION ─── */
+.roic-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  background: var(--border);
+  gap: 1px;
+  border: 1px solid var(--border);
+  margin: 18px 0;
+}
+.roic-c {
+  background: var(--parchment);
+  padding: 16px;
+}
+.roic-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+  margin-bottom: 6px;
+}
+.roic-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--green);
+  margin-bottom: 4px;
+}
+.roic-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-ghost);
+}
+
+/* ─── CALLOUT ─── */
+.callout {
+  border-left: 3px solid var(--caplin);
+  padding: 14px 18px;
+  background: var(--caplin-soft);
+  margin: 20px 0;
+}
+.callout p {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-style: italic;
+  color: var(--ink);
+  line-height: 1.6;
+}
+
+/* ─── PROSE ─── */
+.prose { margin: 16px 0; }
+.prose p {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink-mid);
+  line-height: 1.78;
+  margin-bottom: 12px;
+}
+.prose p:last-child { margin-bottom: 0; }
+.prose strong { font-weight: 600; color: var(--ink); }
+
+/* ─── DIVIDER ─── */
+.divider {
+  border: none;
+  border-top: 1px solid var(--border-light);
+  margin: 0 0 56px;
+}
+
+/* ─── FOOTER ─── */
+.footer {
+  border-top: 2px solid var(--ink);
+  padding-top: 20px;
+  margin-top: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.footer-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  font-style: italic;
+  color: var(--ink-faded);
+}
+.footer-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 9.5px;
+  color: var(--ink-ghost);
+}
+
+/* ─── FINAL WORD ─── */
+.final {
+  background: var(--ink);
+  color: var(--parchment);
+  padding: 32px 36px;
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+.final-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--amber);
+  margin-bottom: 14px;
+}
+.final p {
+  font-size: 15px;
+  font-weight: 300;
+  color: rgba(247,242,232,0.82);
+  line-height: 1.78;
+  margin-bottom: 12px;
+}
+.final p:last-child { margin-bottom: 0; }
+.final strong { font-weight: 600; color: var(--parchment); }
+
+@media(max-width:700px) {
+  .page { padding: 0 20px 60px; }
+  .kpi-strip { grid-template-columns: repeat(3,1fr); }
+  .scale-grid { grid-template-columns: 1fr; }
+  .fcf-strip { grid-template-columns: repeat(2,1fr); }
+  .roic-grid { grid-template-columns: repeat(2,1fr); }
+}
+@media(max-width:460px) {
+  .kpi-strip { grid-template-columns: repeat(2,1fr); }
+}
+
+  @media print {
+    h1, h2, h3, h4,
+    .section-rule, .section-header, .s-title,
+    .kicker, .report-type, .flag, .masthead,
+    .final-label, .final-kicker, .closing-rule,
+    .vg-label, .rc-tag, .arch-flag, .tb-label,
+    .rs-heading, .ts-label, .at-label, .ql-quarter {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .stat-grid, .scorecard, .verdict-box, .price-zones,
+    .callout, .moat-list, .pattern-grid, .thesis-box,
+    .wrong-peers, .metrics-table, .monitor-table,
+    .arch-card, .val-gap, .caplin-position,
+    .ts-card, .anda-track, .at-cell, .q-log,
+    .ss-item, .as-item, .misclass, .final,
+    .vg-side, .rc-findings, .how-to, .verdict-row,
+    .ql-body, .ql-header, .earnings-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    p { orphans: 3; widows: 3; }
+  }
+
+/* === REDACTED PUBLISHER STRIP === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+/* Slight roughness on hover to signal intentionality */
+.redacted-pub:hover::after {
+  background: #111;
+}
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="flag">
+    <span class="flag-pub"><span class="redacted-pub">Clarity Research</span></span>
+    <span class="flag-meta">NSE: CAPLINPNT · Financial DNA · Data: FY17–TTM Dec 2025</span>
+  </div>
+
+  <div class="kicker">Caplin Point Laboratories · Financial Analysis</div>
+  <h1 class="doc-title">Financial DNA — Every Pattern That Matters</h1>
+  <div class="doc-deck">ROCE. Gross, operating and net margins. Revenue profile. EPS compounding. Return on invested capital. Economies of scale. FCF and net cash. All sourced from live financials, FY17 to TTM.</div>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi">
+      <div class="kpi-label">PAT CAGR<br>10 Year</div>
+      <div class="kpi-val g">29.2%</div>
+      <div class="kpi-sub">EPS: ₹5.43 → ₹80.74</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Revenue CAGR<br>10 Year</div>
+      <div class="kpi-val g">22.6%</div>
+      <div class="kpi-sub">₹252 Cr → ₹2,089 Cr</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">ROCE<br>Current</div>
+      <div class="kpi-val g">25.8%</div>
+      <div class="kpi-sub">5yr avg sustained 25%+</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">OPM<br>TTM</div>
+      <div class="kpi-val b">35%</div>
+      <div class="kpi-sub">Was 21% in FY14</div>
+    </div>
+    <div class="kpi">
+      <div class="kpi-label">Net Margin<br>TTM</div>
+      <div class="kpi-val b">29.8%</div>
+      <div class="kpi-sub">Decade high</div>
+    </div>
+  </div>
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S1: REVENUE PROFILE -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">01</span>
+      <span class="s-title">Revenue Profile</span>
+      <span class="s-aside">FY17–TTM · 22.6% 10yr CAGR</span>
+    </div>
+
+    <div class="bars">
+      <div class="bar-row">
+        <span class="b-yr">FY17</span>
+        <div class="b-track"><div class="b-fill" style="width:19%;background:var(--caplin)"><span class="b-inner">₹402 Cr</span></div></div>
+        <span class="b-right">Base</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY18</span>
+        <div class="b-track"><div class="b-fill" style="width:26%;background:var(--caplin)"><span class="b-inner">₹540 Cr</span></div></div>
+        <span class="b-right">+34%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY19</span>
+        <div class="b-track"><div class="b-fill" style="width:31%;background:var(--caplin)"><span class="b-inner">₹649 Cr</span></div></div>
+        <span class="b-right">+20%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY20</span>
+        <div class="b-track"><div class="b-fill" style="width:41%;background:var(--caplin)"><span class="b-inner">₹863 Cr</span></div></div>
+        <span class="b-right">+33%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY21</span>
+        <div class="b-track"><div class="b-fill" style="width:51%;background:var(--caplin)"><span class="b-inner">₹1,061 Cr</span></div></div>
+        <span class="b-right">+23%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY22</span>
+        <div class="b-track"><div class="b-fill" style="width:61%;background:var(--caplin)"><span class="b-inner">₹1,269 Cr</span></div></div>
+        <span class="b-right">+20%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY23</span>
+        <div class="b-track"><div class="b-fill" style="width:70%;background:var(--caplin)"><span class="b-inner">₹1,467 Cr</span></div></div>
+        <span class="b-right">+16%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY24</span>
+        <div class="b-track"><div class="b-fill" style="width:81%;background:var(--caplin)"><span class="b-inner">₹1,694 Cr</span></div></div>
+        <span class="b-right">+15%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY25</span>
+        <div class="b-track"><div class="b-fill" style="width:93%;background:var(--caplin)"><span class="b-inner">₹1,937 Cr</span></div></div>
+        <span class="b-right">+14%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">TTM</span>
+        <div class="b-track"><div class="b-fill" style="width:100%;background:var(--green)"><span class="b-inner">₹2,089 Cr</span></div></div>
+        <span class="b-right">+11%</span>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>Revenue has grown 5.2× in eight years — from ₹402 Cr in FY17 to ₹2,089 Cr TTM. The deceleration from 33% in FY20 to 11% TTM reflects a maturing LatAm base, not structural deterioration. <strong>Two fresh USFDA ANDA approvals in early 2026 (Desmopressin and Sodium Phosphates, combined ~$93M US market) signal the next acceleration phase is beginning.</strong> Revenue mix is also derisking: LatAm's 81% share is expected to fall to 60–65% by FY30 as US and Africa scale — a re-rating catalyst in itself.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S2: EPS GROWTH -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">02</span>
+      <span class="s-title">EPS Growth</span>
+      <span class="s-aside">FY15–TTM · 29.2% 10yr CAGR</span>
+    </div>
+
+    <div class="bars">
+      <div class="bar-row">
+        <span class="b-yr">FY17</span>
+        <div class="b-track"><div class="b-fill" style="width:16%;background:var(--amber)"><span class="b-inner">₹12.65</span></div></div>
+        <span class="b-right">Base</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY18</span>
+        <div class="b-track"><div class="b-fill" style="width:24%;background:var(--amber)"><span class="b-inner">₹19.15</span></div></div>
+        <span class="b-right">+51%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY19</span>
+        <div class="b-track"><div class="b-fill" style="width:29%;background:var(--amber)"><span class="b-inner">₹23.35</span></div></div>
+        <span class="b-right">+22%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY20</span>
+        <div class="b-track"><div class="b-fill" style="width:35%;background:var(--amber)"><span class="b-inner">₹28.42</span></div></div>
+        <span class="b-right">+22%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY21</span>
+        <div class="b-track"><div class="b-fill" style="width:40%;background:var(--amber)"><span class="b-inner">₹32.03</span></div></div>
+        <span class="b-right">+13%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY22</span>
+        <div class="b-track"><div class="b-fill" style="width:49%;background:var(--amber)"><span class="b-inner">₹39.56</span></div></div>
+        <span class="b-right">+24%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY23</span>
+        <div class="b-track"><div class="b-fill" style="width:61%;background:var(--amber)"><span class="b-inner">₹49.57</span></div></div>
+        <span class="b-right">+25%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY24</span>
+        <div class="b-track"><div class="b-fill" style="width:75%;background:var(--amber)"><span class="b-inner">₹60.19</span></div></div>
+        <span class="b-right">+21%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY25</span>
+        <div class="b-track"><div class="b-fill" style="width:87%;background:var(--amber)"><span class="b-inner">₹70.56</span></div></div>
+        <span class="b-right">+17%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">TTM</span>
+        <div class="b-track"><div class="b-fill" style="width:100%;background:var(--green)"><span class="b-inner">₹80.74</span></div></div>
+        <span class="b-right">+14%</span>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p>EPS has compounded at 29.2% annually for 10 years — persistently faster than revenue's 22.6%. That gap is not accounting. It is the fingerprint of a business becoming more capital-efficient at scale. Every rupee of incremental revenue generates more profit than the last.</p>
+    </div>
+
+    <div class="prose">
+      <p>The FY21 dip to 13% EPS growth is the only meaningful interruption in the decade — and it occurred during peak injectable capex, not competitive pressure. By FY23 EPS growth had bounced back to 25%. The 10yr PEG ratio at current prices: <strong>0.63×</strong>. Below 1.0 on a 29% CAGR compounder is historically rare.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S3: MARGIN PROFILE -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">03</span>
+      <span class="s-title">Margin Profile — Gross, Operating & Net</span>
+      <span class="s-aside">All three at decade highs TTM</span>
+    </div>
+
+    <table class="m-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Revenue</th>
+          <th>Gross Margin*</th>
+          <th>OPM %</th>
+          <th>Net Margin %</th>
+          <th>PAT (Cr)</th>
+          <th>Phase</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FY17</td>
+          <td>₹402 Cr</td>
+          <td>~50%</td>
+          <td>31%</td>
+          <td class="a">23.9%</td>
+          <td>₹96 Cr</td>
+          <td>Early scale</td>
+        </tr>
+        <tr>
+          <td>FY18</td>
+          <td>₹540 Cr</td>
+          <td>~54%</td>
+          <td class="g">36%</td>
+          <td class="b">26.9%</td>
+          <td>₹145 Cr</td>
+          <td>Peak OPM</td>
+        </tr>
+        <tr>
+          <td>FY19</td>
+          <td>₹649 Cr</td>
+          <td>~55%</td>
+          <td class="g">36%</td>
+          <td class="b">27.3%</td>
+          <td>₹177 Cr</td>
+          <td>Sustained</td>
+        </tr>
+        <tr>
+          <td>FY20</td>
+          <td>₹863 Cr</td>
+          <td>~53%</td>
+          <td>30%</td>
+          <td>24.9%</td>
+          <td>₹215 Cr</td>
+          <td>Capex ramp</td>
+        </tr>
+        <tr>
+          <td>FY21</td>
+          <td>₹1,061 Cr</td>
+          <td>~54%</td>
+          <td>31%</td>
+          <td>23.7%</td>
+          <td>₹251 Cr</td>
+          <td>Peak capex</td>
+        </tr>
+        <tr>
+          <td>FY22</td>
+          <td>₹1,269 Cr</td>
+          <td>~55%</td>
+          <td>31%</td>
+          <td>24.3%</td>
+          <td>₹308 Cr</td>
+          <td>Steady</td>
+        </tr>
+        <tr>
+          <td>FY23</td>
+          <td>₹1,467 Cr</td>
+          <td>~56%</td>
+          <td>30%</td>
+          <td>25.7%</td>
+          <td>₹377 Cr</td>
+          <td>Recovering</td>
+        </tr>
+        <tr>
+          <td>FY24</td>
+          <td>₹1,694 Cr</td>
+          <td>~57%</td>
+          <td class="b">33%</td>
+          <td class="b">27.2%</td>
+          <td>₹461 Cr</td>
+          <td>Re-expansion</td>
+        </tr>
+        <tr>
+          <td>FY25</td>
+          <td>₹1,937 Cr</td>
+          <td>~58%</td>
+          <td class="b">34%</td>
+          <td class="b">27.9%</td>
+          <td>₹541 Cr</td>
+          <td>Expanding</td>
+        </tr>
+        <tr class="ttm">
+          <td>TTM</td>
+          <td>₹2,089 Cr</td>
+          <td>~59%</td>
+          <td class="g">35%</td>
+          <td class="g">29.8%</td>
+          <td>₹622 Cr</td>
+          <td>Decade highs</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="prose">
+      <p>*Gross margin estimated from company disclosures and industry benchmarks for backward-integrated generic exporters. The gross-to-operating gap of roughly 24–26pp reflects lean fixed overhead: R&D at ~4.5% of revenue, negligible consumer marketing (B2B institutional sales in LatAm require no advertising), and a vertically integrated manufacturing base that removes outsourcing premiums.</p>
+      <p><strong>The FY20–22 margin compression is the most important data point in this table — not because margins fell, but because they only fell to 30–31%.</strong> Caplin was running a ₹600–650 Cr injectable facility construction programme funded entirely from operating cash. Most companies see OPM dip to 18–22% under that kind of investment load. Caplin's floor was 30%. The recovery to 35% TTM — without any change in the LatAm business — is purely the injectable plant moving from cost drag to revenue contributor.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S4: ROCE -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">04</span>
+      <span class="s-title">ROCE — Return on Capital Employed</span>
+      <span class="s-aside">25%+ for 5 consecutive years</span>
+    </div>
+
+    <div class="roic-grid">
+      <div class="roic-c">
+        <div class="roic-label">ROCE · Current</div>
+        <div class="roic-val">25.8%</div>
+        <div class="roic-sub">Screener confirmed</div>
+      </div>
+      <div class="roic-c">
+        <div class="roic-label">ROE · Current</div>
+        <div class="roic-val">22.7%</div>
+        <div class="roic-sub">3yr avg: 24%</div>
+      </div>
+      <div class="roic-c">
+        <div class="roic-label">ROE · 10yr avg</div>
+        <div class="roic-val">27%</div>
+        <div class="roic-sub">Screener confirmed</div>
+      </div>
+      <div class="roic-c">
+        <div class="roic-label">Book Value / Share</div>
+        <div class="roic-val" style="color:var(--caplin);font-size:22px;">₹416</div>
+        <div class="roic-sub">P/B ~4.1× at CMP</div>
+      </div>
+    </div>
+
+    <div class="bars">
+      <div class="bar-row">
+        <span class="b-yr">FY19</span>
+        <div class="b-track"><div class="b-fill" style="width:73%;background:var(--green)"></div></div>
+        <span class="b-right">~28–30%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY20</span>
+        <div class="b-track"><div class="b-fill" style="width:64%;background:var(--green)"></div></div>
+        <span class="b-right">~25–27% · capex</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY21</span>
+        <div class="b-track"><div class="b-fill" style="width:62%;background:var(--green)"></div></div>
+        <span class="b-right">~25% · peak capex</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY22</span>
+        <div class="b-track"><div class="b-fill" style="width:64%;background:var(--green)"></div></div>
+        <span class="b-right">~25–26%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY23</span>
+        <div class="b-track"><div class="b-fill" style="width:65%;background:var(--green)"></div></div>
+        <span class="b-right">~26%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY24</span>
+        <div class="b-track"><div class="b-fill" style="width:65%;background:var(--green)"></div></div>
+        <span class="b-right">~26%</span>
+      </div>
+      <div class="bar-row">
+        <span class="b-yr">FY25</span>
+        <div class="b-track"><div class="b-fill" style="width:65%;background:var(--green)"></div></div>
+        <span class="b-right">25.8% confirmed</span>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>ROCE above 25% through a ₹650 Cr capex cycle is diagnostic. It means the underlying LatAm business was generating returns so high that the idle capital drag of a half-built injectable plant didn't pull the blended ROCE below the 25% threshold. <strong>The floor tells you more than the ceiling.</strong></p>
+      <p>For context: most Indian pharma exporters run ROCE of 12–18%. Branded domestic pharma companies — with superior pricing power — hover around 20–22%. Caplin achieves 25%+ as a branded generic exporter in semi-regulated markets where competition is real. That is not a lucky outcome. It is the output of 30 years of compounding distribution relationships, regulatory licences, and vertical integration that cannot be replicated quickly.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S5: ROIC -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">05</span>
+      <span class="s-title">Return on Invested Capital</span>
+      <span class="s-aside">Near-zero debt makes ROIC ≈ ROE</span>
+    </div>
+
+    <div class="callout">
+      <p>Debt-to-equity is 0.00. Interest paid across the entire decade: ₹0–2 Cr per year — rounding error. With no financial leverage, invested capital equals equity capital. ROIC is therefore effectively equivalent to ROE — running at 22–27% depending on the year. This is one of the cleanest ROIC profiles in Indian pharma.</p>
+    </div>
+
+    <div class="prose">
+      <p>Most discussions of ROIC in pharma get complicated by debt structures, off-balance-sheet liabilities, and goodwill from acquisitions. Caplin has none of these. The business has grown organically for 30 years, funded entirely by its own cash generation. <strong>No equity dilution since inception. No meaningful debt at any point in its history. Every rupee of capital employed is productive operating capital — nothing is financial engineering.</strong></p>
+      <p>The ROIC calculation is therefore unusually clean: PAT / (Equity + Debt) ≈ PAT / Equity = ROE. At FY25 PAT of ₹541 Cr on equity of roughly ₹3,170 Cr, ROIC runs at approximately 17–20% — which understates the true return on incremental invested capital, because the denominator includes ₹900 Cr+ of accumulated cash that earns only treasury returns. Strip out the cash pile from invested capital, and ROIC on deployed operating capital is materially higher.</p>
+      <p><strong>The accumulating cash surplus is simultaneously evidence of high ROIC (the business generates more cash than it can intelligently deploy at current scale) and a future ROIC tailwind</strong> — as US injectable revenue ramps on infrastructure already built and expensed, incremental ROIC on that segment should be very high.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S6: ECONOMIES OF SCALE -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">06</span>
+      <span class="s-title">Economies of Scale Advantages</span>
+      <span class="s-aside">Six compounding layers</span>
+    </div>
+
+    <div class="scale-grid">
+      <div class="sc">
+        <div class="sc-tag">Layer 01 · Distribution</div>
+        <div class="sc-head">Fixed Cost Leverage on 30,000 Touch Points</div>
+        <div class="sc-body">The LatAm distribution network was built once at high fixed cost. Every incremental product sold through existing relationships contributes at near-zero marginal distribution expense. <strong>This is why net margins expand even as revenue growth decelerates</strong> — the denominator grows slowly, but incremental margin on existing infrastructure approaches 100%.</div>
+      </div>
+      <div class="sc">
+        <div class="sc-tag">Layer 02 · Manufacturing</div>
+        <div class="sc-head">Backward Integration Gross Margin Premium</div>
+        <div class="sc-body">In-house API manufacturing captures the supplier margin that outsourced generics must pay away. <strong>Gross margins of 55–60% in generics are structurally impossible without vertical integration.</strong> As volumes scale, the fixed costs of API plants are spread across more units — unit economics improve automatically with revenue growth.</div>
+      </div>
+      <div class="sc">
+        <div class="sc-tag">Layer 03 · Regulatory</div>
+        <div class="sc-head">4,000+ Licences — Amortised Over 30 Years</div>
+        <div class="sc-body">Each country registration was expensed in the year earned, but generates revenue indefinitely. 4,000+ licences across 36 therapeutic areas represent a regulatory asset built over three decades at effectively zero ongoing cost. <strong>A new entrant cannot buy these — they must queue.</strong> Time is the moat, not capital.</div>
+      </div>
+      <div class="sc">
+        <div class="sc-tag">Layer 04 · Cost Structure</div>
+        <div class="sc-head">Low Marketing, Low R&D, High Operating Margin</div>
+        <div class="sc-body">B2B institutional sales in LatAm and Africa require no consumer advertising. R&D runs at ~4.5% of revenue — disciplined, not cheap. <strong>Consumer pharma peers spend 25–35% of revenue on selling and marketing. Caplin spends a fraction of that</strong> because institutional relationships are sticky and contractual, not volatile and brand-dependent.</div>
+      </div>
+      <div class="sc">
+        <div class="sc-tag">Layer 05 · US Injectables</div>
+        <div class="sc-head">High Fixed Cost Facility, High Margin Per ANDA</div>
+        <div class="sc-body">The USFDA injectable facility was fully expensed through the FY20–22 capex cycle. The first two ANDAs are the most expensive to earn — each subsequent approval uses the same infrastructure at lower incremental cost. <strong>As the pipeline grows from 2 to 15+ ANDAs by FY30, the fixed cost base is spread across a much larger revenue stream</strong>, driving blended margin expansion for the whole company.</div>
+      </div>
+      <div class="sc">
+        <div class="sc-tag">Layer 06 · Treasury</div>
+        <div class="sc-head">Cash Pile as Automatic Margin Accretion</div>
+        <div class="sc-body">As cash accumulates — now ₹900 Cr+ on the balance sheet — other income grows automatically. <strong>Other income has grown from ₹10 Cr in FY17 to ₹113 Cr TTM — a 10× increase requiring zero operational effort</strong>, directly boosting PBT with no incremental capital deployed. This is the compounding benefit of generating more cash than growth requires.</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The clearest single proof of operating leverage: OPM went from 21% in FY14 to 35% TTM while revenue grew 12×. <strong>That 14-percentage-point OPM expansion on a 12× revenue base is the mathematical signature of fixed costs compounding over decades.</strong> Fixed overhead grew far slower than revenue. Every year, a higher fraction of sales dropped to the operating profit line — automatically, without management intervention.</p>
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- ═══════════════════════════════════════════ -->
+  <!-- S7: FCF & NET CASH -->
+  <!-- ═══════════════════════════════════════════ -->
+  <div class="section">
+    <div class="section-rule">
+      <span class="s-num">07</span>
+      <span class="s-title">Free Cash Flow & Net Cash Position</span>
+      <span class="s-aside">Funded a ₹650 Cr facility without raising a rupee</span>
+    </div>
+
+    <div class="fcf-strip">
+      <div class="fcf-c">
+        <div class="fcf-label">Cash & Equivalents</div>
+        <div class="fcf-val g">~₹900 Cr+</div>
+        <div class="fcf-sub">On balance sheet (FY24)</div>
+      </div>
+      <div class="fcf-c">
+        <div class="fcf-label">Liquid Surplus (Jun 2023)</div>
+        <div class="fcf-val g">₹1,540 Cr</div>
+        <div class="fcf-sub">Management disclosure</div>
+      </div>
+      <div class="fcf-c">
+        <div class="fcf-label">Financial Debt</div>
+        <div class="fcf-val b">~Zero</div>
+        <div class="fcf-sub">Debt-to-equity: 0.00</div>
+      </div>
+      <div class="fcf-c">
+        <div class="fcf-label">Interest Paid (TTM)</div>
+        <div class="fcf-val b">₹1 Cr</div>
+        <div class="fcf-sub">Rounding error on ₹622 Cr PAT</div>
+      </div>
+    </div>
+
+    <table class="fcf-table">
+      <thead>
+        <tr>
+          <th>Year</th>
+          <th>Capex Phase</th>
+          <th>PAT (Cr)</th>
+          <th>Other Income</th>
+          <th>Interest</th>
+          <th>OPM</th>
+          <th>FCF Quality</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>FY17</td>
+          <td>Light capex</td>
+          <td>₹96 Cr</td>
+          <td>₹10 Cr</td>
+          <td>₹1 Cr</td>
+          <td>31%</td>
+          <td><span class="badge g">Strong</span></td>
+        </tr>
+        <tr>
+          <td>FY18</td>
+          <td>Moderate</td>
+          <td>₹145 Cr</td>
+          <td>₹13 Cr</td>
+          <td>₹1 Cr</td>
+          <td>36%</td>
+          <td><span class="badge g">Strong</span></td>
+        </tr>
+        <tr>
+          <td>FY19</td>
+          <td>Moderate</td>
+          <td>₹177 Cr</td>
+          <td>₹19 Cr</td>
+          <td>₹1 Cr</td>
+          <td>36%</td>
+          <td><span class="badge g">Strong</span></td>
+        </tr>
+        <tr>
+          <td>FY20</td>
+          <td>Heavy — injectable facility</td>
+          <td>₹215 Cr</td>
+          <td>₹41 Cr</td>
+          <td>₹0</td>
+          <td>30%</td>
+          <td><span class="badge a">Compressed</span></td>
+        </tr>
+        <tr>
+          <td>FY21</td>
+          <td>Heavy — peak spend</td>
+          <td>₹251 Cr</td>
+          <td>₹23 Cr</td>
+          <td>₹2 Cr</td>
+          <td>31%</td>
+          <td><span class="badge a">Compressed</span></td>
+        </tr>
+        <tr>
+          <td>FY22</td>
+          <td>Tapering</td>
+          <td>₹308 Cr</td>
+          <td>₹38 Cr</td>
+          <td>₹1 Cr</td>
+          <td>31%</td>
+          <td><span class="badge b">Recovering</span></td>
+        </tr>
+        <tr>
+          <td>FY23</td>
+          <td>Minimal</td>
+          <td>₹377 Cr</td>
+          <td>₹55 Cr</td>
+          <td>₹1 Cr</td>
+          <td>30%</td>
+          <td><span class="badge g">Strong</span></td>
+        </tr>
+        <tr>
+          <td>FY24</td>
+          <td>Minimal</td>
+          <td>₹461 Cr</td>
+          <td>₹66 Cr</td>
+          <td>₹1 Cr</td>
+          <td>33%</td>
+          <td><span class="badge g">Strong</span></td>
+        </tr>
+        <tr>
+          <td>FY25</td>
+          <td>Minimal</td>
+          <td>₹541 Cr</td>
+          <td>₹92 Cr</td>
+          <td>₹1 Cr</td>
+          <td>34%</td>
+          <td><span class="badge g">Strong</span></td>
+        </tr>
+        <tr class="ttm">
+          <td>TTM</td>
+          <td>Minimal</td>
+          <td>₹622 Cr</td>
+          <td>₹113 Cr</td>
+          <td>₹1 Cr</td>
+          <td>35%</td>
+          <td><span class="badge g">Peak quality</span></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="prose">
+      <p>The FCF story has three chapters. <strong>FY14–19:</strong> High FCF conversion as the LatAm business matures and cash builds with zero debt. <strong>FY20–22:</strong> FCF compressed but positive through the ₹650 Cr injectable facility build — the critical point being that it was funded entirely from operating cash, without a rights issue, QIP, or bank line. This is the single most important FCF data point: the investment cycle didn't require a rupee of outside capital. <strong>FY23–present:</strong> Capex cycle complete, cash generation accelerating, other income growing from ₹55 Cr to ₹113 Cr TTM as the cash pile compounds.</p>
+      <p><strong>Interest paid is ₹1 Cr on ₹622 Cr of PAT.</strong> That 0.16% interest-to-PAT ratio defines what it means to be a clean balance sheet. No debt service drag. No lender covenants. No refinancing risk. The ₹1,540 Cr liquid surplus disclosed by management in June 2023 — and growing since — is dry powder for US development, oncology groundwork, and Africa expansion, without ever touching external capital markets. That self-funding capacity is itself a compounding moat.</p>
+    </div>
+  </div>
+
+  <!-- FINAL WORD -->
+  <div class="final">
+    <div class="final-kicker">What the Patterns Say Together</div>
+    <p>Read these seven metrics in isolation and you see a good pharma company. Read them together and you see something rarer: <strong>a business where every financial pattern reinforces every other one.</strong></p>
+    <p>High ROCE funds growth internally. Internal funding means zero debt. Zero debt means all earnings are clean earnings. High gross margins fund R&D without distorting capital allocation. Operating leverage expands OPM automatically as the fixed-cost distribution network scales. Cash accumulates, generates treasury income, further boosts PAT. EPS compounds faster than revenue. The cycle repeats.</p>
+    <p>The number that sits at the centre of all this: a trailing P/E of 21× on a business with 25%+ ROCE, 29.8% net margins at TTM, zero debt, ₹1,500+ Cr cash, and a decade of EPS compounding at 29%. <strong>That is not a fair price for this financial profile. That is a market that hasn't done the work yet.</strong></p>
+  </div>
+
+  <div class="footer">
+    <span class="footer-tag"><em>The crowd reads headlines. The thinker reads structures.</em></span>
+  </div>
+
+</div>
+</body>
+</html>

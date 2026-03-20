@@ -1,0 +1,810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point Laboratories — Three Masters, One Verdict</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Mono:wght@300;400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --parchment: #f5f0e8;
+    --ink: #1a1510;
+    --ink-light: #3d3528;
+    --ink-faded: #6b5f4e;
+    --amber: #c8860a;
+    --amber-light: #e8a020;
+    --red: #8b2020;
+    --green: #2a5c2a;
+    --border: #c4b49a;
+    --border-light: #ddd0b8;
+    --cphl: #1b5e37;   /* Caplin accent — forest emerald */
+
+    --munger: #3b2f5e;
+    --munger-light: rgba(59,47,94,0.07);
+    --damodaran: #1a4a2e;
+    --damodaran-light: rgba(26,74,46,0.07);
+    --smith: #1a2d4a;
+    --smith-light: rgba(26,45,74,0.07);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--parchment); color: var(--ink); font-family: 'Source Serif 4', Georgia, serif; font-weight: 300; line-height: 1.7; }
+  .wrapper { max-width: 880px; margin: 0 auto; padding: 56px 40px 100px; }
+
+  .masthead { border-top: 2px solid var(--ink); border-bottom: 1px solid var(--border); padding: 14px 0 12px; display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 48px; }
+  .masthead-pub { font-family: 'Playfair Display', serif; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); }
+  .masthead-tag { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-faded); }
+
+  .series-band { background: var(--ink); padding: 10px 16px; margin-bottom: 32px; display: inline-flex; align-items: center; gap: 20px; }
+  .series-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--amber); }
+
+  .report-type { font-family: 'DM Mono', monospace; font-size: 11px; letter-spacing: 0.15em; text-transform: uppercase; color: var(--cphl); margin-bottom: 14px; }
+  h1 { font-family: 'Playfair Display', serif; font-size: clamp(28px, 4.5vw, 46px); font-weight: 700; line-height: 1.1; margin-bottom: 12px; }
+  .subhead { font-size: 17px; font-weight: 300; font-style: italic; color: var(--ink-faded); margin-bottom: 28px; line-height: 1.55; }
+
+  .meta-strip { display: flex; gap: 20px; flex-wrap: wrap; border-top: 1px solid var(--border-light); border-bottom: 1px solid var(--border-light); padding: 10px 0; margin-bottom: 52px; }
+  .meta-item { display: flex; flex-direction: column; gap: 2px; }
+  .meta-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-faded); }
+  .meta-value { font-size: 13.5px; font-weight: 600; }
+
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: baseline; gap: 14px; margin-bottom: 20px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+  .section-num { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--cphl); }
+  h2 { font-family: 'Playfair Display', serif; font-size: 21px; font-weight: 700; }
+
+  .prose p { font-size: 15.5px; line-height: 1.78; color: var(--ink-light); margin-bottom: 14px; }
+  .prose p strong { font-weight: 600; color: var(--ink); }
+  .prose p:last-child { margin-bottom: 0; }
+
+  /* MASTER CARD */
+  .master-card { margin-bottom: 48px; border: 1px solid var(--border-light); overflow: hidden; }
+  .master-header { padding: 24px 28px 20px; display: flex; align-items: flex-start; gap: 20px; border-bottom: 1px solid var(--border-light); }
+  .master-avatar { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; color: #fff; flex-shrink: 0; }
+  .master-meta { flex: 1; }
+  .master-name { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 3px; }
+  .master-title { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-faded); margin-bottom: 8px; }
+  .master-philosophy { font-size: 14px; font-weight: 300; color: var(--ink-faded); line-height: 1.6; font-style: italic; }
+  .master-verdict-chip { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 4px 10px; border-radius: 2px; white-space: nowrap; align-self: center; }
+
+  .master-tabs { display: flex; border-bottom: 1px solid var(--border-light); overflow-x: auto; }
+  .tab { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; padding: 12px 18px; cursor: pointer; color: var(--ink-faded); border-bottom: 2px solid transparent; margin-bottom: -1px; transition: all 0.2s; white-space: nowrap; }
+  .tab:hover { color: var(--ink); }
+  .tab.active { color: var(--ink); border-bottom-color: var(--ink); }
+
+  .master-body { padding: 24px 28px; }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+
+  .panel-prose p { font-size: 15px; line-height: 1.78; color: var(--ink-light); margin-bottom: 13px; }
+  .panel-prose p strong { font-weight: 600; color: var(--ink); }
+  .panel-prose p:last-child { margin-bottom: 0; }
+
+  .master-quote { padding: 18px 22px; margin: 18px 0; border-left: 4px solid; }
+  .master-quote p { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; line-height: 1.65; margin: 0; }
+  .master-quote .quote-attr { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--ink-faded); margin-top: 8px; letter-spacing: 0.06em; }
+
+  /* MUNGER */
+  .munger .master-header { background: var(--munger-light); }
+  .munger .master-avatar { background: var(--munger); }
+  .munger .master-name { color: var(--munger); }
+  .munger .master-tabs .tab.active { border-bottom-color: var(--munger); color: var(--munger); }
+  .munger .master-quote { border-left-color: var(--munger); background: var(--munger-light); }
+  .munger .master-quote p { color: var(--munger); }
+
+  /* DAMODARAN */
+  .damodaran .master-header { background: var(--damodaran-light); }
+  .damodaran .master-avatar { background: var(--damodaran); }
+  .damodaran .master-name { color: var(--damodaran); }
+  .damodaran .master-tabs .tab.active { border-bottom-color: var(--damodaran); color: var(--damodaran); }
+  .damodaran .master-quote { border-left-color: var(--damodaran); background: var(--damodaran-light); }
+  .damodaran .master-quote p { color: var(--damodaran); }
+
+  /* SMITH */
+  .smith .master-header { background: var(--smith-light); }
+  .smith .master-avatar { background: var(--smith); }
+  .smith .master-name { color: var(--smith); }
+  .smith .master-tabs .tab.active { border-bottom-color: var(--smith); color: var(--smith); }
+  .smith .master-quote { border-left-color: var(--smith); background: var(--smith-light); }
+  .smith .master-quote p { color: var(--smith); }
+
+  /* CHECKLIST */
+  .checklist { display: flex; flex-direction: column; gap: 8px; margin: 18px 0; }
+  .check-row { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; border: 1px solid var(--border-light); }
+  .check-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+  .check-text { font-size: 14px; font-weight: 300; color: var(--ink-light); line-height: 1.55; }
+  .check-text strong { font-weight: 600; color: var(--ink); }
+
+  /* VALUATION TABLE */
+  .vt { width: 100%; border-collapse: collapse; font-size: 13px; margin: 18px 0; }
+  .vt th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faded); padding: 8px 12px; border-bottom: 1px solid var(--border); font-weight: 400; text-align: left; }
+  .vt th:last-child { text-align: right; }
+  .vt td { padding: 10px 12px; border-bottom: 1px solid var(--border-light); font-weight: 300; color: var(--ink-light); vertical-align: top; line-height: 1.5; }
+  .vt td:first-child { font-weight: 600; color: var(--ink); }
+  .vt td:last-child { text-align: right; font-family: 'DM Mono', monospace; font-size: 12px; }
+  .vt tr:last-child td { border-bottom: none; }
+  .vt tr.hl td { background: rgba(0,0,0,0.03); font-weight: 600; color: var(--ink); }
+
+  /* VERDICT PILL */
+  .verdict-pill { font-family: 'DM Mono', monospace; font-size: 9px; padding: 3px 8px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; display: inline-block; }
+  .pill-g { background: rgba(42,92,42,0.1); color: var(--green); }
+  .pill-a { background: rgba(200,134,10,0.12); color: var(--amber); }
+  .pill-r { background: rgba(139,32,32,0.1); color: var(--red); }
+
+  /* SCORE SUMMARY */
+  .score-summary { border: 1px solid var(--border); display: grid; grid-template-columns: auto 1fr; gap: 0; overflow: hidden; margin: 20px 0; }
+  .score-left { padding: 22px 28px; display: flex; flex-direction: column; justify-content: center; align-items: center; min-width: 140px; }
+  .score-num { font-family: 'Playfair Display', serif; font-size: 56px; font-weight: 700; line-height: 1; }
+  .score-denom { font-family: 'DM Mono', monospace; font-size: 12px; color: var(--ink-faded); margin-top: 2px; }
+  .score-class { font-family: 'Playfair Display', serif; font-size: 13px; font-style: italic; margin-top: 8px; text-align: center; line-height: 1.35; }
+  .score-right { padding: 18px 22px; border-left: 1px solid var(--border-light); }
+  .score-right-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 10px; }
+  .score-right p { font-size: 14px; font-weight: 300; color: var(--ink-light); line-height: 1.68; }
+  @media(max-width:520px) { .score-summary { grid-template-columns: 1fr; } .score-left { border-bottom: 1px solid var(--border-light); } .score-right { border-left: none; } }
+
+  /* SYNTHESIS TABLE */
+  .synthesis-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  .synthesis-table th { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.09em; text-transform: uppercase; color: var(--ink-faded); padding: 10px 14px; border-bottom: 1px solid var(--border); font-weight: 400; text-align: left; }
+  .synthesis-table td { padding: 12px 14px; border-bottom: 1px solid var(--border-light); font-weight: 300; color: var(--ink-light); vertical-align: top; line-height: 1.55; font-size: 13px; }
+  .synthesis-table td:first-child { font-weight: 600; color: var(--ink); width: 120px; }
+  .synthesis-table tr:last-child td { border-bottom: none; }
+  .master-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+
+  /* PRICE ZONES */
+  .zones { margin: 20px 0; display: flex; flex-direction: column; gap: 3px; }
+  .zone-row { display: flex; align-items: center; overflow: hidden; }
+  .zone-bar { height: 40px; display: flex; align-items: center; padding: 0 14px; flex-shrink: 0; }
+  .zone-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.1em; text-transform: uppercase; color: #fff; }
+  .zone-range { font-family: 'DM Mono', monospace; font-size: 11px; color: rgba(255,255,255,0.75); margin-left: 10px; }
+  .zone-desc { font-size: 13px; font-weight: 300; color: var(--ink-faded); padding: 0 14px; flex: 1; line-height: 1.45; }
+  .zone-current { font-family: 'DM Mono', monospace; font-size: 10px; padding: 2px 7px; background: var(--cphl); color: #fff; border-radius: 2px; white-space: nowrap; margin-left: 8px; }
+
+  /* CALLOUT */
+  .callout { border-left: 3px solid var(--cphl); padding: 14px 18px; background: rgba(27,94,55,0.05); margin: 24px 0; }
+  .callout p { font-family: 'Playfair Display', serif; font-size: 16px; font-style: italic; color: var(--ink); line-height: 1.6; margin: 0; }
+
+  /* KPI GRID */
+  .kpi-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin: 20px 0; }
+  @media(max-width:580px) { .kpi-grid { grid-template-columns: 1fr 1fr; } }
+  .kpi-card { border: 1px solid var(--border-light); padding: 14px 16px; }
+  .kpi-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faded); margin-bottom: 5px; }
+  .kpi-value { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--cphl); }
+  .kpi-sub { font-size: 12px; font-weight: 300; color: var(--ink-faded); margin-top: 3px; }
+
+  /* FINAL WORD */
+  .final-word { border-top: 2px solid var(--ink); padding-top: 28px; margin-top: 48px; }
+  .final-label { font-family: 'DM Mono', monospace; font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--cphl); margin-bottom: 14px; }
+  .final-word p { font-size: 15.5px; font-weight: 300; color: var(--ink-light); line-height: 1.78; margin-bottom: 14px; }
+  .final-word p strong { font-weight: 600; color: var(--ink); }
+
+  .colophon { margin-top: 52px; border-top: 1px solid var(--border-light); padding-top: 14px; font-family: 'DM Mono', monospace; font-size: 11px; color: var(--ink-faded); display: flex; justify-content: space-between; flex-wrap: wrap; gap: 6px; }
+  .colophon em { font-style: italic; font-family: 'Source Serif 4', serif; }
+
+  @media print {
+    h1, h2, h3, h4,
+    .section-rule, .section-header, .s-title,
+    .kicker, .report-type, .flag, .masthead,
+    .final-label, .final-kicker, .closing-rule,
+    .vg-label, .rc-tag, .arch-flag, .tb-label,
+    .rs-heading, .ts-label, .at-label, .ql-quarter {
+      page-break-after: avoid;
+      break-after: avoid;
+    }
+    .stat-grid, .scorecard, .verdict-box, .price-zones,
+    .callout, .moat-list, .pattern-grid, .thesis-box,
+    .wrong-peers, .metrics-table, .monitor-table,
+    .arch-card, .val-gap, .caplin-position,
+    .ts-card, .anda-track, .at-cell, .q-log,
+    .ss-item, .as-item, .misclass, .final,
+    .vg-side, .rc-findings, .how-to, .verdict-row,
+    .ql-body, .ql-header, .earnings-table {
+      page-break-inside: avoid;
+      break-inside: avoid;
+    }
+    p { orphans: 3; widows: 3; }
+  }
+
+/* === REDACTED PUBLISHER STRIP === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -4px;
+  right: -4px;
+  bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+/* Slight roughness on hover to signal intentionality */
+.redacted-pub:hover::after {
+  background: #111;
+}
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+  <div class="masthead">
+    <span class="masthead-pub"><span class="redacted-pub">Clarity Research</span></span>
+    <span class="masthead-tag">Valuation · Three Frameworks · CAPLIN POINT LABORATORIES</span>
+  </div>
+
+  <div class="series-band">
+    <span class="series-label">Caplin Point · Special Report · Three Masters Valuation Tribunal</span>
+  </div>
+
+  <div class="report-type">Valuation Tribunal · Three Masters · One Company</div>
+  <h1>If Munger, Damodaran, and Terry Smith Each Valued Caplin Point — What Would They Say?</h1>
+  <div class="subhead">A debt-free, high-ROCE Indian pharma compounder with a geographic moat most analysts missed for fifteen years. This is the company where the three frameworks converge — and their convergence is more interesting than their divergence was for Zomato.</div>
+
+  <div class="meta-strip">
+    <div class="meta-item"><span class="meta-label">Ticker</span><span class="meta-value">NSE: CAPLIPOINT</span></div>
+    <div class="meta-item"><span class="meta-label">CMP (Mar 2026)</span><span class="meta-value">~₹1,651</span></div>
+    <div class="meta-item"><span class="meta-label">Market Cap</span><span class="meta-value">~₹12,530 Cr</span></div>
+    <div class="meta-item"><span class="meta-label">TTM Revenue</span><span class="meta-value">₹2,089 Cr</span></div>
+    <div class="meta-item"><span class="meta-label">TTM Net Profit</span><span class="meta-value">₹622 Cr</span></div>
+    <div class="meta-item"><span class="meta-label">ROCE / ROE</span><span class="meta-value">25.8% / 22.7%</span></div>
+    <div class="meta-item"><span class="meta-label">EBITDA Margin</span><span class="meta-value">~34–35%</span></div>
+    <div class="meta-item"><span class="meta-label">Debt</span><span class="meta-value">Zero</span></div>
+  </div>
+
+  <!-- BUSINESS SNAPSHOT -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">00</span>
+      <h2>The Business — What Caplin Point Actually Is</h2>
+    </div>
+    <div class="prose">
+      <p>Caplin Point Laboratories is not a conventional Indian pharma company. It is an integrated manufacturer-distributor-brand owner that built a dominant position in the pharmaceutical markets of Latin America (Central America, Caribbean, parts of South America) and Francophone Africa — markets that most Indian pharma companies considered too difficult, too small, or too risky to enter systematically.</p>
+      <p>The founder, C.C. Paarthipan, built this position through a deliberately contrarian strategy: enter markets where competition was low because logistics were hard, regulatory frameworks were unfamiliar, and geopolitical risk was perceived as high. Own the distribution network rather than appointing importers. Sell branded generics rather than commoditised generics. Collect payment in advance from customers who have few other options — creating a structurally negative working capital position that is rare in Indian manufacturing.</p>
+      <p>The result, compounded over 25 years: <strong>10-year revenue CAGR of 27%, 10-year profit CAGR of 35%, debt-free balance sheet, ROCE consistently above 24%, and EBITDA margins of 33–35%.</strong> Now layering on a regulated-market (US injectables) growth vector through Caplin Steriles — its FDA-approved subsidiary with 48 ANDAs filed, 38 approvals. The three masters evaluate a company that has already proven itself in one domain and is now attempting a second, more competitive one.</p>
+    </div>
+
+    <div class="kpi-grid">
+      <div class="kpi-card">
+        <div class="kpi-label">Profit CAGR (10 yr)</div>
+        <div class="kpi-value">35%</div>
+        <div class="kpi-sub">FY2014 → FY2024; sustained compounding</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">ROCE (avg, 5 yr)</div>
+        <div class="kpi-value">25%+</div>
+        <div class="kpi-sub">No debt; organic capital deployment</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">EBITDA Margin</div>
+        <div class="kpi-value">34–35%</div>
+        <div class="kpi-sub">TTM; expanding from 30% in FY20</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Working Capital</div>
+        <div class="kpi-value">Negative</div>
+        <div class="kpi-sub">Customers pay advance; suppliers extend credit</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">US ANDAs</div>
+        <div class="kpi-value">38/48</div>
+        <div class="kpi-sub">Approvals / filed; injectables + ophthalmic</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Stock P/E (TTM)</div>
+        <div class="kpi-value">~20×</div>
+        <div class="kpi-sub">vs 10-yr profit CAGR of 35%; notable discount</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= MASTER 1: MUNGER ======= -->
+  <div class="master-card munger">
+    <div class="master-header">
+      <div class="master-avatar">CM</div>
+      <div class="master-meta">
+        <div class="master-name">Charlie Munger</div>
+        <div class="master-title">Vice Chairman, Berkshire Hathaway · Mental Models · Moat · Inversion</div>
+        <div class="master-philosophy">"Invert, always invert." Start by finding the ways the thesis fails. If you cannot kill it, it's probably real. Munger pays close attention to the quality of a business's moat, the character of its management, and whether the business can deploy capital at above-average rates indefinitely.</div>
+      </div>
+      <span class="master-verdict-chip" style="background:rgba(42,92,42,0.1);color:var(--green);">Verdict: Buy — Quietly</span>
+    </div>
+
+    <div class="master-tabs">
+      <div class="tab active" data-panel="m1-moat">Moat Test</div>
+      <div class="tab" data-panel="m1-mgmt">Management</div>
+      <div class="tab" data-panel="m1-val">His Valuation</div>
+      <div class="tab" data-panel="m1-verdict">Verdict</div>
+    </div>
+
+    <div class="master-body">
+      <div class="tab-panel active" id="m1-moat">
+        <div class="master-quote">
+          <p>"The most important thing to me is figuring out how big the moat is around the business — and what's going to happen to that moat over time."</p>
+          <div class="quote-attr">Charlie Munger — various Berkshire Annual Meetings</div>
+        </div>
+        <div class="panel-prose">
+          <p>Munger's moat taxonomy: low-cost producer, network effects, switching costs, intangibles (brand, regulation, geography). Caplin Point has an unusual moat type — what Munger would likely call a <strong>geographic first-mover moat</strong> — a category he has implicitly recognised in businesses like See's Candy (California brand dominance), Costco (logistics density), and certain railroads (right-of-way). The moat is not technical. It is structural and experiential.</p>
+        </div>
+        <div class="checklist">
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Geographic Moat — Hard to Replicate.</strong> Caplin spent two decades building distribution networks in Guatemala, El Salvador, Nicaragua, Honduras, Ecuador, and Francophone Africa. Replicating this requires not just capital but relationships, local regulatory approvals (country-by-country), and the patience to operate in markets with poor infrastructure and currency risk. A new entrant would take 10–15 years to match this — if they were willing to try. Most are not. Munger understands moats built on operational difficulty, not just patents.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Negative Working Capital — The Truest Moat Signal.</strong> Munger considers negative working capital one of the most reliable indicators of genuine pricing power and customer dependency. When customers pay in advance and suppliers extend credit, it means the business controls the relationship, not the customer. Caplin's customers in Latin America pay upfront because they have few other reliable suppliers of quality generic medicines at affordable prices. This is a genuine supply-side bottleneck.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Branded Generic Strategy — Pricing Power Preserved.</strong> Unlike commodity generic exporters (Sun Pharma US, Taro), Caplin sells branded generics in its core markets — products sold under Caplin's own brand names, commanding price premiums over unbranded competition. This is closer to See's Candy than to a commodity chemical business. The brand is local, not global, but within its geography it is real.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">⚠️</div>
+            <div class="check-text"><strong>Moat Portability — The Key Question.</strong> The LatAm/Africa moat is proven. The US injectable moat is being built. Munger would ask: does the same geographic insight, the same operational patience, translate to the US market — which is hyper-competitive, price-driven, and dominated by large generic manufacturers? The honest answer is: not automatically. The US business requires a different playbook, and the moat there is regulatory approval + niche product selection, not distribution ownership.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">⚠️</div>
+            <div class="check-text"><strong>Concentration Risk — A Munger Flag.</strong> 85% of revenue from Latin America and Africa. Munger dislikes extreme geographic concentration — not because he doubts the moat, but because political and currency events can disrupt cash flows unpredictably. A currency devaluation in Guatemala or a change in Central American trade policy is outside Caplin's control. He would want to see the US business contribute 20%+ of revenue before he relaxes this concern.</div>
+          </div>
+        </div>
+        <div class="panel-prose">
+          <p>Munger's moat verdict: <strong>Genuine, durable, and competitively hard to attack in the core market.</strong> The LatAm distribution moat is the kind of operational advantage that took decades to build and would take a decade to dismantle. He would call this a 7.5–8/10 moat — not IDEXX's 9.5, but better than most businesses he has encountered.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="m1-mgmt">
+        <div class="master-quote">
+          <p>"Show me the incentive and I'll show you the outcome."</p>
+          <div class="quote-attr">Charlie Munger — Psychology of Human Misjudgement lecture</div>
+        </div>
+        <div class="panel-prose">
+          <p>Munger evaluates management through three lenses: skin in the game (ownership), compensation structure, and capital allocation track record. Caplin Point's management profile is unusual by any standard — and Munger would notice.</p>
+        </div>
+        <div class="checklist">
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Founder with Zero Salary.</strong> C.C. Paarthipan, the founder-promoter-chairman, takes no remuneration from the company. His son, who manages operations, takes a nominal salary. Munger has repeatedly stated that the single most important alignment signal is a founder who is rich only if shareholders are rich. At 70.6% promoter holding and zero salary, Paarthipan's incentives are perfectly aligned with minority shareholders. This is Munger's favourite ownership structure.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Capital Allocation — Debt-Free, Reinvestment-First.</strong> Over 25 years, management has consistently reinvested profits into manufacturing capacity and geographic expansion rather than paying out dividends or pursuing acquisition-led growth. The result: compounding of capital at 25%+ ROCE without leverage. Munger calls this "the most important skill in business" — the ability to allocate capital well at scale, year after year.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Strategic Contrarianism — A Munger Virtue.</strong> Entering Latin American pharma markets in the 1990s when every Indian company was chasing the US or European generic opportunity was a classically contrarian bet. The willingness to do difficult, unsexy things in difficult, unsexy places — and to do them with patience — is exactly the management character Munger has described in his most admired investments.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">⚠️</div>
+            <div class="check-text"><strong>Succession — Not Yet Clear.</strong> Paarthipan's son is being groomed, but no formal succession announcement has been made. Munger is acutely aware that founder-dependent businesses carry key-person risk that does not appear in financial statements. He would want clarity on whether the son has the same strategic instincts as the father before treating the business as perpetually investable.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="m1-val">
+        <div class="master-quote">
+          <p>"I have nothing to add to what Buffett says about valuation — except that I think the concept of owner earnings is the right one and DCF is usually abused."</p>
+          <div class="quote-attr">Charlie Munger — paraphrased from multiple interviews</div>
+        </div>
+        <div class="panel-prose">
+          <p>Munger would calculate owner earnings: net profit adjusted for maintenance capex, minus the capital required to maintain the moat. For Caplin, this is close to reported net profit — the business is asset-light in its distribution model and capex-light in its core operations. Caplin Steriles (US injectable facility) is the only meaningful capex sink, and it is now largely built.</p>
+        </div>
+        <table class="vt">
+          <thead><tr><th>Munger Framework Input</th><th>Estimate</th><th>Signal</th></tr></thead>
+          <tbody>
+            <tr><td>TTM Net Profit (Owner Earnings proxy)</td><td>₹622 Cr (90%+ FCF conversion — low capex model)</td><td><span class="verdict-pill pill-g">Excellent</span></td></tr>
+            <tr><td>Maintenance capex (LatAm/Africa operations)</td><td>~₹30–40 Cr; minimal — asset-light distribution</td><td><span class="verdict-pill pill-g">Low capex intensity</span></td></tr>
+            <tr><td>True Owner Earnings (TTM)</td><td>~₹580–590 Cr</td><td><span class="verdict-pill pill-g">Near-full conversion</span></td></tr>
+            <tr><td>Moat certainty (Munger's subjective score)</td><td>70–75% — LatAm moat durable; US moat unproven</td><td><span class="verdict-pill pill-a">Good not great</span></td></tr>
+            <tr><td>Munger's mental P/E multiple at 70% moat certainty</td><td>20–25× owner earnings (See's Candy class: 30×; average business: 12×)</td><td><span class="verdict-pill pill-a">Reasonable range</span></td></tr>
+            <tr class="hl"><td>Munger's fair value range</td><td>₹580 Cr × 22× = ₹12,760 Cr → ₹1,680/share (within 2% of CMP)</td><td><span class="verdict-pill pill-a">Fairly valued at 22×</span></td></tr>
+            <tr><td>Munger's "buy with confidence" price</td><td>₹1,200–1,400 — 15% margin of safety from fair value; requires a market correction or single-quarter miss</td><td><span class="verdict-pill pill-g">Not available today, but close</span></td></tr>
+            <tr><td>What tips it to a clear buy at CMP</td><td>US business scaling (first meaningful US revenue quarter, >₹50 Cr) would justify 25× multiple → fair value ₹1,850–2,000</td><td><span class="verdict-pill pill-g">Catalyst exists</span></td></tr>
+          </tbody>
+        </table>
+        <div class="panel-prose">
+          <p>Munger's conclusion: at ₹1,651, Caplin is <strong>approximately fairly valued to modestly cheap</strong> on a pure owner-earnings basis at his preferred multiple. The business quality is the best he has seen in Indian pharmaceuticals — the moat is real, the management is exceptional, and the capital allocation is textbook. His hesitation is not about quality; it is about concentration risk and the US execution variable. He would not pound the table at ₹1,651, but he would buy confidently at ₹1,300–1,400.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="m1-verdict">
+        <div class="score-summary">
+          <div class="score-left" style="background:var(--munger-light);">
+            <div class="score-num" style="color:var(--munger);">8.5</div>
+            <div class="score-denom">out of 10</div>
+            <div class="score-class" style="color:var(--munger);">Genuine Wide Moat<br>Exceptional Management</div>
+          </div>
+          <div class="score-right">
+            <div class="score-right-label" style="color:var(--munger);">Munger's Ruling</div>
+            <p>Caplin Point is a <strong>genuinely wonderful business</strong> — the kind that Munger has been searching for his entire career. A founder who takes no salary. A moat built through operational difficulty rather than patents. Negative working capital. 25%+ ROCE for a decade. Debt-free. He would not call the current price cheap, but he would call the business exceptional. His verdict: <strong>accumulate on any weakness; this is a hold-forever candidate if the US business scales without destroying the culture that built the LatAm moat.</strong></p>
+          </div>
+        </div>
+        <div class="panel-prose">
+          <p>The one thing that would give Munger the most conviction: a year of US injectable revenue demonstrating that Caplin can compete in a regulated market at reasonable margins without losing management focus on its core geographic advantage. He would watch the next 4–6 quarters of US revenue before forming a final view on the long-term multiple.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= MASTER 2: DAMODARAN ======= -->
+  <div class="master-card damodaran">
+    <div class="master-header">
+      <div class="master-avatar">AD</div>
+      <div class="master-meta">
+        <div class="master-name">Aswath Damodaran</div>
+        <div class="master-title">Professor of Finance, NYU Stern · DCF · Narrative & Numbers · Emerging Market Risk</div>
+        <div class="master-philosophy">"Every valuation is a story and a number. The story drives the number, but the number disciplines the story." He builds explicit DCF models with India-specific equity risk premia and country risk adjustments for Caplin's geographic exposure.</div>
+      </div>
+      <span class="master-verdict-chip" style="background:rgba(42,92,42,0.1);color:var(--green);">Verdict: Buy — Undervalued by 30–40%</span>
+    </div>
+
+    <div class="master-tabs">
+      <div class="tab active" data-panel="d1-narrative">Narrative</div>
+      <div class="tab" data-panel="d1-dcf">DCF Model</div>
+      <div class="tab" data-panel="d1-risk">Country Risk</div>
+      <div class="tab" data-panel="d1-verdict">Verdict</div>
+    </div>
+
+    <div class="master-body">
+      <div class="tab-panel active" id="d1-narrative">
+        <div class="master-quote">
+          <p>"A good valuation story must answer three questions: What does the company do? Why will it grow? And why will that growth be profitable?"</p>
+          <div class="quote-attr">Aswath Damodaran — Narrative and Numbers, 2017</div>
+        </div>
+        <div class="panel-prose">
+          <p>Damodaran's narrative for Caplin Point:</p>
+          <p><strong>What it does:</strong> Caplin is a vertically integrated pharma manufacturer-distributor that controls the last mile in medically underserved markets in Latin America and Africa — markets with growing middle classes, rising healthcare expenditure, and minimal domestic pharma manufacturing capability. It sells branded generics at prices accessible to the bottom-of-pyramid consumer, while charging a premium relative to unbranded alternatives.</p>
+          <p><strong>Why it will grow:</strong> Three simultaneous vectors — (1) organic deepening in existing LatAm/Africa markets as per-capita healthcare spending rises with GDP; (2) geographic expansion into new markets (Canada, MENA, Australia, CIS) using the same distribution-first playbook; (3) the US injectable/ophthalmic business scaling from near-zero to a material revenue contributor through Caplin Steriles' ANDA approval pipeline. The convergence of these three growth vectors over FY27–FY30 is what Damodaran's model is trying to value.</p>
+          <p><strong>Why growth will be profitable:</strong> The distribution moat means Caplin does not need to compete on price in its core markets — it competes on availability, reliability, and brand trust. EBITDA margins of 34–35% are not a transitional anomaly; they reflect structural pricing power in low-competition geographies. US injectables, if successful, add a higher-margin revenue stream on top.</p>
+        </div>
+        <div class="callout">
+          <p>"This is a company that found its moat by going where no one else wanted to go — and built a P&L that reflects the pricing power that comes from being the only reliable option."</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="d1-dcf">
+        <div class="master-quote">
+          <p>"The value of a business is the present value of the cash flows it will generate over its lifetime, discounted at a rate that reflects their riskiness."</p>
+          <div class="quote-attr">Aswath Damodaran — standard DCF framing</div>
+        </div>
+        <div class="panel-prose">
+          <p>Damodaran builds a 10-year explicit DCF with terminal value. His Caplin model has one important structural difference from his Zomato model: FCF conversion is already demonstrated (near 100% of net profit, minimal capex), so the terminal value calculation is grounded in observable margins rather than aspirational ones.</p>
+        </div>
+        <table class="vt">
+          <thead><tr><th>DCF Input</th><th>Damodaran's Estimate</th><th>Rationale</th></tr></thead>
+          <tbody>
+            <tr><td>Revenue FY26E</td><td>₹2,300–2,400 Cr</td><td>~13–15% growth; organic LatAm expansion + US ramp-up beginning</td></tr>
+            <tr><td>Revenue CAGR (FY26–FY31)</td><td>16–20%</td><td>LatAm at 12–15% organic; US injectable adding 4–6% incremental; new market expansion</td></tr>
+            <tr><td>Terminal Revenue (FY35)</td><td>₹6,500–8,000 Cr</td><td>15-year terminal; assumes sustained competitive position in core markets</td></tr>
+            <tr><td>EBITDA Margin at Terminal</td><td>32–36%</td><td>Margins stable — branded generic model not under price pressure in core geographies; US may slightly compress consolidated margins</td></tr>
+            <tr><td>Equity Risk Premium (India + country risk)</td><td>8.5–10% effective</td><td>India ERP 7–8% + additional 1–2% for LatAm/Africa revenue concentration; Damodaran explicitly adjusts for revenue-geography mismatch</td></tr>
+            <tr><td>Cost of Equity (WACC)</td><td>12–14%</td><td>Risk-free 7% + ERP 8.5% × beta ~0.7 (low-beta pharma); no debt premium</td></tr>
+            <tr><td>Terminal Growth Rate</td><td>5–5.5%</td><td>India nominal GDP; Damodaran standard for embedded-in-India businesses; conservative for a company with non-India revenue</td></tr>
+            <tr class="hl"><td>Implied Intrinsic Value / Share</td><td>₹2,100–2,500</td><td>Bear ₹1,600; base ₹2,200; bull ₹3,000. Central estimate: ₹2,200–2,400 at ~12–14% WACC.</td></tr>
+            <tr><td>Current price vs intrinsic value</td><td>₹1,651 vs ₹2,200–2,400 central estimate</td><td><span class="verdict-pill pill-g">25–45% undervalued on base case</span></td></tr>
+          </tbody>
+        </table>
+        <div class="panel-prose">
+          <p>Damodaran's striking finding: <strong>at ₹1,651 and a TTM P/E of ~20×, the market is pricing Caplin as a no-growth business</strong> — or pricing in significant moat deterioration that the evidence does not support. A 20× P/E on a business with 20%+ profit CAGR, 25%+ ROCE, zero debt, and negative working capital implies either deep scepticism about the sustainability of the business model or simple market neglect of a small-cap with limited analyst coverage. His model says the stock is mispriced by 25–45% on base case assumptions.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="d1-risk">
+        <div class="master-quote">
+          <p>"Country risk is real, but it can be priced. The question is not whether to invest in risky geographies, but whether you are being compensated for the risk."</p>
+          <div class="quote-attr">Aswath Damodaran — Equity Risk Premiums lecture series</div>
+        </div>
+        <div class="panel-prose">
+          <p>Damodaran is the world's leading academic practitioner of country risk quantification. He publishes annual country equity risk premia updates and applies them systematically. For Caplin's geographic exposure, he would make these specific adjustments:</p>
+        </div>
+        <div class="checklist">
+          <div class="check-row">
+            <div class="check-icon">🟡</div>
+            <div class="check-text"><strong>LatAm Currency Risk — Real, But Structurally Managed.</strong> Caplin's revenues in Central America are partly USD-denominated (Central American countries use USD or USD-pegged currencies — El Salvador uses USD directly). Ecuador is dollarised. The currency risk is concentrated in non-dollarised LatAm markets and Francophone Africa. Damodaran would add 1.5–2% to his effective discount rate for residual currency exposure. This is already embedded in his ₹2,200 central estimate.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">🟡</div>
+            <div class="check-text"><strong>Political Risk — Manageable, Not Negligible.</strong> Central American political risk (Venezuela spillover, El Salvador's Bitcoin experiment, Honduras political instability) is real. But Caplin's product — essential generic medicines — is not a discretionary purchase. Governments across the political spectrum need medicines. The healthcare sector is typically the last to be disrupted by political change. Damodaran would discount this risk by 30% relative to a comparable consumer goods business in the same geographies.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">🟢</div>
+            <div class="check-text"><strong>US Revenue — Reduces Country Risk Concentration.</strong> Each percentage point of revenue that migrates from LatAm/Africa to the US injectable market structurally reduces Caplin's weighted-average country risk. The US business is a de-risking mechanism, not just a growth mechanism. Damodaran would model the discount rate declining by 0.5–1% as US revenue grows from 3–5% today to 15–20% by FY30. This would add ₹200–300 to his intrinsic value estimate.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">🟢</div>
+            <div class="check-text"><strong>Debt-Free Balance Sheet — Eliminates Financial Risk.</strong> Damodaran's discount rate has no financial leverage component for Caplin — an unusual luxury in emerging market investing. A zero-debt company is one whose enterprise value equals its equity value, whose interest coverage is infinite, and whose financial distress probability is zero. This structural safety is worth 1–1.5% off his discount rate versus a comparable levered competitor.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="d1-verdict">
+        <div class="score-summary">
+          <div class="score-left" style="background:var(--damodaran-light);">
+            <div class="score-num" style="color:var(--damodaran);">8.8</div>
+            <div class="score-denom">out of 10</div>
+            <div class="score-class" style="color:var(--damodaran);">Undervalued<br>Clear Buy</div>
+          </div>
+          <div class="score-right">
+            <div class="score-right-label" style="color:var(--damodaran);">Damodaran's Ruling</div>
+            <p>Damodaran's verdict is the clearest buy of his three calls so far (Zomato was "hold/accumulate on weakness"). Caplin at ₹1,651 trades at approximately 20× TTM earnings — a <strong>significant discount to intrinsic value of ₹2,200–2,400 on his base case DCF.</strong> The discount is explained by geographic risk perception, limited analyst coverage, and the market's failure to credit the US injectable growth vector. All three are tractable. He would size this position meaningfully and set a price target of ₹2,200 over 18–24 months.</p>
+          </div>
+        </div>
+        <div class="panel-prose">
+          <p>Damodaran's key monitoring variable: <strong>US revenue trajectory over FY27.</strong> Caplin Steriles has 38 ANDA approvals. Revenue recognition from approved ANDAs should begin accelerating in FY27 as partnerships with US distributors solidify. If US revenue reaches ₹200–300 Cr by FY27 (currently negligible), the market's country-risk discount begins to compress and the stock re-rates toward his base case.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======= MASTER 3: TERRY SMITH ======= -->
+  <div class="master-card smith">
+    <div class="master-header">
+      <div class="master-avatar">TS</div>
+      <div class="master-meta">
+        <div class="master-name">Terry Smith</div>
+        <div class="master-title">Founder & CEO, Fundsmith · Quality Compounder · ROCE · Don't Overpay</div>
+        <div class="master-philosophy">"Buy good companies. Don't overpay. Do nothing." He screens for high gross margins, high and rising ROCE, strong FCF conversion, repeat-purchase economics, and demonstrated pricing power. He holds for decades. His portfolio resembles a museum of compounding machines.</div>
+      </div>
+      <span class="master-verdict-chip" style="background:rgba(42,92,42,0.1);color:var(--green);">Verdict: Would Buy — Rare Fit for His Criteria</span>
+    </div>
+
+    <div class="master-tabs">
+      <div class="tab active" data-panel="s1-quality">Quality Screen</div>
+      <div class="tab" data-panel="s1-roce">ROCE Deep Dive</div>
+      <div class="tab" data-panel="s1-price">Price Discipline</div>
+      <div class="tab" data-panel="s1-verdict">Verdict</div>
+    </div>
+
+    <div class="master-body">
+      <div class="tab-panel active" id="s1-quality">
+        <div class="master-quote">
+          <p>"We look for companies that can consistently generate high returns on capital over a long period of time. If you find one, the compounding does the work."</p>
+          <div class="quote-attr">Terry Smith — Fundsmith Annual Shareholder Letter, multiple years</div>
+        </div>
+        <div class="panel-prose">
+          <p>Terry Smith's quality screen is famously stringent. He eliminated Zomato on three criteria simultaneously. Caplin Point is a different conversation entirely. Run the same screen:</p>
+        </div>
+        <div class="checklist">
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Repeat-Purchase Economics — Pass.</strong> Generic medicines are among the highest-frequency repeat-purchase categories in consumer spending. Patients on chronic medications (diabetes, hypertension, cardiovascular disease) reorder monthly for years or decades. Smith's portfolio is full of this pattern — Colgate toothpaste, Novo Nordisk insulin, ADP payroll. Caplin's therapeutic mix (WHO essential drug list, chronic disease management) fits precisely.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Gross Margins — Borderline Pass.</strong> Smith's typical threshold is 40%+. Caplin's EBITDA margin is 34–35% — below Smith's preferred gross margin floor, but unusually high for a pharma manufacturer-distributor with a vertically integrated model. Importantly, the margin is <em>expanding</em> (from 30% in FY20 to 35% TTM) — a direction signal Smith weights heavily. He would note that a branded generic business in low-competition geographies can sustain 35%+ EBITDA margins indefinitely.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>FCF Conversion — Strong Pass.</strong> Smith requires 70%+ FCF/EBITDA conversion. Caplin's capex is minimal — the LatAm distribution model is asset-light; Caplin Steriles (the US facility) is largely built; ongoing maintenance capex is ~₹30–40 Cr against ₹650+ Cr EBITDA. FCF conversion is approximately 85–90% of net profit. This is exactly the capital-light compounding model Smith prizes above everything else.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>ROCE — Clear Pass.</strong> 25.8% ROCE (FY26 TTM) on a zero-debt balance sheet. This is structurally above Smith's 15% minimum threshold. The five-year average ROCE has been 25%+. More importantly: ROCE is rising, not falling. As the US business contributes revenue on an already-depreciated Caplin Steriles facility, incremental ROCE on that capital will be exceptional.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">✅</div>
+            <div class="check-text"><strong>Pricing Power — Pass (Structural, Not Brand).</strong> Smith's pricing power test is usually about brand premiums (Colgate, L'Oréal). Caplin's pricing power is geographic — it is the most reliable supplier in markets where the alternative is unreliable or absent. This is equivalent to pricing power, even if the mechanism differs. Negative working capital (customers pay in advance) is the observable proof.</div>
+          </div>
+          <div class="check-row">
+            <div class="check-icon">⚠️</div>
+            <div class="check-text"><strong>Geographic Concentration — A Smith Concern.</strong> Smith's portfolio is globally diversified — Unilever, Nestlé, MSCI serve customers in 100+ countries. Caplin's 85% revenue from LatAm/Africa is the only meaningful quality concern. He would consider this a structural risk worth monitoring but not a disqualifier for a business with demonstrated 25-year track record of navigating that geographic complexity.</div>
+          </div>
+        </div>
+        <div class="panel-prose">
+          <p>Smith's quality verdict: <strong>Caplin Point passes five of his six quality criteria — a near-perfect score.</strong> This is strikingly different from Zomato (three failures) and puts Caplin in rare company for an Indian small-cap. The quality is not aspirational — it has been demonstrated for 10+ years.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="s1-roce">
+        <div class="master-quote">
+          <p>"The most powerful force in investing is a high return on capital combined with the ability to reinvest at that same rate for a long time."</p>
+          <div class="quote-attr">Terry Smith — Fundsmith Annual Meeting</div>
+        </div>
+        <div class="panel-prose">
+          <p>Smith compares every investment candidate to his portfolio benchmark: businesses like ADP, Automatic Data Processing, Novo Nordisk, and Colgate — companies with 30–60% ROCE, growing for decades. Caplin is smaller and earlier in its compounding curve, but the profile is structurally similar.</p>
+        </div>
+        <table class="vt">
+          <thead><tr><th>ROCE Metric</th><th>Caplin Point</th><th>Smith's Typical Portfolio</th><th>Assessment</th></tr></thead>
+          <tbody>
+            <tr><td>ROCE (TTM)</td><td>25.8%</td><td>30–60%</td><td><span class="verdict-pill pill-g">Below top-tier but strong</span></td></tr>
+            <tr><td>ROE (TTM)</td><td>22.7%</td><td>25–50%</td><td><span class="verdict-pill pill-g">Solid</span></td></tr>
+            <tr><td>FCF / Net Profit conversion</td><td>~85–90%</td><td>80–95%</td><td><span class="verdict-pill pill-g">Excellent</span></td></tr>
+            <tr><td>Gross Margin</td><td>~34–35% EBITDA (est. gross ~55–60%)</td><td>40–80%</td><td><span class="verdict-pill pill-a">Borderline acceptable</span></td></tr>
+            <tr><td>ROCE direction (5-yr trend)</td><td>Rising: 20% → 25.8%</td><td>Stable or rising preferred</td><td><span class="verdict-pill pill-g">Improving — positive signal</span></td></tr>
+            <tr><td>Reinvestment rate</td><td>Low capex; organically funded growth</td><td>Prefers low reinvestment needs</td><td><span class="verdict-pill pill-g">Capital-light — Smith's ideal</span></td></tr>
+            <tr class="hl"><td>Smith's quality verdict</td><td colspan="2">Near-investment-grade — ROCE is below his top portfolio holdings but above his minimum threshold and trending correctly. FCF conversion is excellent. Geographic concentration is the only structural concern.</td><td><span class="verdict-pill pill-g">Would invest</span></td></tr>
+          </tbody>
+        </table>
+        <div class="panel-prose">
+          <p>The key differentiator that would excite Smith most: <strong>the compounding trajectory over 10 years has been extraordinary by any absolute standard.</strong> 35% profit CAGR over 10 years means ₹1 invested in Caplin's earnings power in 2014 is worth ₹20 today. Smith's portfolio companies compound at 15–20% per year. Caplin's historical compounding rate is in a different tier — which explains why the business, if it sustains even 15% growth, is materially undervalued at current prices.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="s1-price">
+        <div class="master-quote">
+          <p>"I would rather pay a fair price for a wonderful company than a wonderful price for a fair company. But 'fair price' does not mean unlimited price."</p>
+          <div class="quote-attr">Terry Smith — Fundsmith Annual Meeting</div>
+        </div>
+        <div class="panel-prose">
+          <p>Smith typically pays up to 25–30× FCF for his highest-quality holdings. For a company he considers marginally below his top tier (due to geographic concentration), he would apply a modest discount — say 22–25×. The current price offers a compelling opportunity even against his demanding price discipline.</p>
+        </div>
+        <table class="vt">
+          <thead><tr><th>Price Metric</th><th>At ₹1,651</th><th>Smith's Parameters</th><th>Assessment</th></tr></thead>
+          <tbody>
+            <tr><td>P/E (TTM)</td><td>~20×</td><td>25–30× for top quality; 20–25× for good quality</td><td><span class="verdict-pill pill-g">At or below his floor multiple</span></td></tr>
+            <tr><td>P/FCF (TTM)</td><td>~21–22× (near-full FCF conversion)</td><td>Maximum 30×; preference below 25×</td><td><span class="verdict-pill pill-g">Well within his discipline</span></td></tr>
+            <tr><td>EV/EBITDA (TTM)</td><td>~17× (no debt; EV ≈ Mkt Cap)</td><td>Would accept 20–25× for this quality</td><td><span class="verdict-pill pill-g">Clear discount</span></td></tr>
+            <tr><td>PEG ratio (P/E / profit growth)</td><td>~1.0× (20 P/E / ~20% growth)</td><td>Target &lt;1.5×; preference &lt;1.0×</td><td><span class="verdict-pill pill-g">Excellent — growth not priced in</span></td></tr>
+            <tr class="hl"><td>Smith's fair value range</td><td colspan="2">₹2,000–2,500 (25–28× FCF on ₹580 Cr owner earnings). Current ₹1,651 is 20–35% below his fair value. This is <strong>clearly cheap</strong> by his standards — unusual for a business that passes his quality screen.</td><td><span class="verdict-pill pill-g">Mispriced</span></td></tr>
+          </tbody>
+        </table>
+        <div class="panel-prose">
+          <p>Smith's pointed observation: <strong>this is the rarest of combinations — a business that passes his quality screen at a price below his valuation ceiling.</strong> In the Zomato report, Smith would not invest because the business failed quality checks and was priced too high. Caplin passes quality checks and is priced too low. These two facts together constitute a Smith-style conviction buy. He would likely call it the most interesting Indian equity he has seen run through his framework.</p>
+        </div>
+      </div>
+
+      <div class="tab-panel" id="s1-verdict">
+        <div class="score-summary">
+          <div class="score-left" style="background:var(--smith-light);">
+            <div class="score-num" style="color:var(--smith);">9.0</div>
+            <div class="score-denom">out of 10</div>
+            <div class="score-class" style="color:var(--smith);">Quality Compounder<br>Clear Buy on His Framework</div>
+          </div>
+          <div class="score-right">
+            <div class="score-right-label" style="color:var(--smith);">Smith's Ruling</div>
+            <p>Terry Smith's verdict on Caplin Point is the polar opposite of his verdict on Zomato. This business <strong>passes his quality screen on five of six criteria, and is priced at 20–22× FCF — well below his 25–30× ceiling for quality businesses.</strong> The combination of demonstrated ROCE above 25%, near-perfect FCF conversion, repeat-purchase economics, and pricing power embedded in geographic monopoly produces a score Smith would rarely give an emerging market company. Geographic concentration is the only deduction. He would invest and hold for 10+ years.</p>
+          </div>
+        </div>
+        <div class="panel-prose">
+          <p>Smith's final comment: "The market is pricing this as if the LatAm moat will disappear and the US business will fail. I see no evidence of either. I see a 25-year track record of compounding at rates that most Western companies would envy, run by a founder who doesn't take a salary. At 20× earnings, that's a bargain."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SYNTHESIS -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>The Synthesis — Where the Three Masters Agree</h2>
+    </div>
+
+    <div class="prose">
+      <p>Unlike the Zomato tribunal — where the three frameworks diverged sharply — Caplin Point produces a striking convergence. All three masters are bullish. The degree of conviction differs; the direction does not.</p>
+    </div>
+
+    <table class="synthesis-table">
+      <thead>
+        <tr>
+          <th>Dimension</th>
+          <th><span class="master-dot" style="background:var(--munger);"></span>Munger</th>
+          <th><span class="master-dot" style="background:var(--damodaran);"></span>Damodaran</th>
+          <th><span class="master-dot" style="background:var(--smith);"></span>Smith</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Moat Quality</td>
+          <td>Strong geographic moat; operational difficulty as the barrier; 7.5–8/10</td>
+          <td>Real and durable; embedded in distribution network; prices in 1.5–2% country risk premium</td>
+          <td>Passes — geographic pricing power equivalent to brand pricing power; rare for emerging markets</td>
+        </tr>
+        <tr>
+          <td>Management Quality</td>
+          <td>Exceptional — zero salary founder, 70%+ skin in game, textbook capital allocation</td>
+          <td>Narrative-to-execution alignment excellent; 25-year track record validates the story</td>
+          <td>Aligned incentives; Smith invests in systems but notes founder ownership as a positive signal</td>
+        </tr>
+        <tr>
+          <td>Fair Value Estimate</td>
+          <td>₹1,850–2,000 (22–25× owner earnings)</td>
+          <td>₹2,200–2,400 (DCF base case)</td>
+          <td>₹2,000–2,500 (25–28× FCF, quality-adjusted)</td>
+        </tr>
+        <tr>
+          <td>At ₹1,651 (Current)</td>
+          <td>Modestly cheap — buy on weakness; confidence at ₹1,300–1,400</td>
+          <td>Clear buy — 25–45% undervaluation vs base case DCF</td>
+          <td>Clear buy — below his fair value ceiling; rare quality at this price</td>
+        </tr>
+        <tr>
+          <td>Primary Risk</td>
+          <td>Succession uncertainty; US execution requiring different management muscle</td>
+          <td>Country risk concentration; US injectable scaling slower than modelled</td>
+          <td>Geographic concentration; gross margin compression if LatAm competition intensifies</td>
+        </tr>
+        <tr>
+          <td>Time Horizon</td>
+          <td>Forever — if US business doesn't destroy the culture</td>
+          <td>5–7 years; re-rate as US revenue contributes and country risk discount compresses</td>
+          <td>10+ years; compound and do nothing</td>
+        </tr>
+        <tr>
+          <td>Conviction Level</td>
+          <td>High — among best Indian businesses he has analysed</td>
+          <td>Very high — significant mispricing on quantitative basis</td>
+          <td>Very high — rare quality/price combination in his screening universe</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout">
+      <p>"In the Zomato report, two of three masters said no. In the Caplin report, all three say yes. The only variable they disagree on is the degree of conviction and the precise entry price — not the direction."</p>
+    </div>
+  </div>
+
+  <!-- PRICE ZONES -->
+  <div class="section">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Price Zones — Composite Three-Master View</h2>
+    </div>
+
+    <div class="zones">
+      <div class="zone-row">
+        <div class="zone-bar" style="background:#8b2020;width:140px;"><span class="zone-label">Overvalued</span><span class="zone-range">₹3,000+</span></div>
+        <div class="zone-desc">Prices in US business scaling rapidly (₹400–500 Cr revenue by FY28) + LatAm sustained at 18%+ growth + multiple re-rating to 35×. All three masters trim here.</div>
+      </div>
+      <div class="zone-row">
+        <div class="zone-bar" style="background:#6b5f4e;width:120px;"><span class="zone-label">Hold/Trim</span><span class="zone-range">₹2,500–3,000</span></div>
+        <div class="zone-desc">Smith's upper valuation range. Damodaran's bull case. Munger holds but does not add. Still a quality business, just less margin of safety.</div>
+      </div>
+      <div class="zone-row">
+        <div class="zone-bar" style="background:#1b5e37;width:105px;"><span class="zone-label">Fair Value</span><span class="zone-range">₹2,000–2,500</span></div>
+        <div class="zone-desc">Damodaran's and Smith's central fair value. All three masters hold positions at these levels. Not cheap, but quality justifies the multiple.</div>
+      </div>
+      <div class="zone-row">
+        <div class="zone-bar" style="background:#c8860a;width:90px;"><span class="zone-label">Buy</span><span class="zone-range">₹1,500–2,000</span></div>
+        <div class="zone-desc">Current zone (~₹1,651). All three masters say accumulate here. Damodaran calls it significantly undervalued. Smith calls it rare. Munger calls it fairly priced to modestly cheap.</div>
+        <div class="zone-current">~Current ₹1,651</div>
+      </div>
+      <div class="zone-row">
+        <div class="zone-bar" style="background:#2a5c2a;width:75px;"><span class="zone-label">Strong Buy</span><span class="zone-range">₹1,200–1,500</span></div>
+        <div class="zone-desc">Munger's high-conviction entry zone. Damodaran would size up aggressively. Smith would add meaningfully. Requires a market correction, a single-quarter miss, or LatAm currency event. When it arrives, act.</div>
+      </div>
+      <div class="zone-row">
+        <div class="zone-bar" style="background:#1a1510;width:60px;"><span class="zone-label">Investigate</span><span class="zone-range">&lt;₹1,200</span></div>
+        <div class="zone-desc">Below net cash + core business valuation. Likely indicates either macro dislocation, a fundamental business development, or irrational panic. Investigate urgently — all three masters would be buying hand over fist if fundamentals are intact.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FINAL WORD -->
+  <div class="final-word">
+    <div class="final-label">Clarity Verdict — Three Masters, One Conclusion</div>
+    <p>The Caplin Point tribunal produces a verdict that would have been impossible with Zomato: all three frameworks converge on the same answer. This convergence is itself the most important signal in the report. When Munger (moat-and-owner-earnings), Damodaran (DCF-and-narrative), and Smith (quality-and-FCF) all arrive at the same "buy" conclusion using different methods, it strongly suggests the market is making an error — not the investors.</p>
+    <p>The error the market is making is well-defined: it is pricing Caplin as a geographically risky LatAm exporter with limited upside, rather than as a geographic-moat compounder with 25%+ ROCE, negative working capital, exceptional management alignment, and a US growth vector that has not yet been priced. <strong>The 20× P/E on a 20%+ profit CAGR business with these financial characteristics is anomalous.</strong></p>
+    <p>The primary risk all three masters acknowledge: the US injectable business requires different management capability than the LatAm distribution business. If the US expansion consumes management attention without delivering revenue, the thesis frays. The monitoring signal: Caplin Steriles revenue on a quarterly basis beginning FY27. The secondary risk: succession — whether Paarthipan's son inherits not just the equity stake but the strategic judgment that built the LatAm moat.</p>
+    <p><strong>The composite verdict:</strong> Caplin Point at ₹1,651 is one of the most attractively priced quality compounders in Indian small-cap equities. The margin of safety is genuine. The moat is proven. The management alignment is extraordinary. Three independent frameworks agree. The only question is patience — and Caplin has spent 25 years teaching that lesson.</p>
+  </div>
+
+  <div class="colophon">
+    <span><em>The crowd reads headlines. The thinker reads structures.</em></span>
+  </div>
+
+</div>
+
+<script>
+  document.querySelectorAll('.master-card').forEach(card => {
+    const tabs = card.querySelectorAll('.tab');
+    const panels = card.querySelectorAll('.tab-panel');
+    tabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const target = tab.dataset.panel;
+        tabs.forEach(t => t.classList.remove('active'));
+        panels.forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        const panel = card.querySelector('#' + target);
+        if (panel) panel.classList.add('active');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
