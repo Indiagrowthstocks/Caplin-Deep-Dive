@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caplin Point Laboratories — Deep Dive Series</title>
+    <title>Caplin Point Laboratories — Deep Dive Research</title>
     <style>
         * {
             margin: 0;
@@ -11,187 +11,269 @@
             box-sizing: border-box;
         }
         
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 40px 20px;
+        html, body {
+            height: 100%;
         }
         
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #ffffff;
+            color: #1d1d1d;
+            line-height: 1.4;
+        }
+        
+        .viewport {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            justify-content: space-between;
         }
         
         header {
+            padding: 60px 40px;
             text-align: center;
-            color: white;
-            margin-bottom: 50px;
+            border-bottom: 1px solid #e5e5e5;
         }
         
-        header h1 {
-            font-size: 48px;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        .header-content h1 {
+            font-size: 56px;
+            font-weight: 700;
+            letter-spacing: -1.2px;
+            margin-bottom: 16px;
+            color: #1d1d1d;
         }
         
-        header p {
-            font-size: 18px;
-            opacity: 0.9;
-        }
-        
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 25px;
-            margin-bottom: 40px;
-        }
-        
-        .card {
-            background: white;
-            border-radius: 10px;
-            padding: 25px;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
-            text-decoration: none;
-            color: #333;
-            transition: all 0.3s ease;
-            display: block;
-            border-left: 5px solid #667eea;
-        }
-        
-        .card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            border-left-color: #764ba2;
-        }
-        
-        .card-number {
-            display: inline-block;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            width: 50px;
-            height: 50px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 24px;
-            font-weight: bold;
-            margin-bottom: 15px;
-        }
-        
-        .card h2 {
-            font-size: 20px;
-            margin-bottom: 10px;
-            color: #333;
-        }
-        
-        .card p {
-            font-size: 14px;
+        .header-content p {
+            font-size: 21px;
+            font-weight: 400;
             color: #666;
-            line-height: 1.6;
-            margin-bottom: 15px;
+            max-width: 640px;
+            margin: 0 auto;
+            line-height: 1.38;
         }
         
-        .card-tag {
-            display: inline-block;
-            background: #f0f0f0;
-            color: #667eea;
-            padding: 5px 12px;
-            border-radius: 20px;
+        .header-meta {
             font-size: 12px;
+            color: #999;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+            margin-top: 24px;
+        }
+        
+        main {
+            flex: 1;
+            padding: 80px 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+        
+        .reports-section {
+            margin-bottom: 60px;
+        }
+        
+        .section-title {
+            font-size: 28px;
             font-weight: 600;
+            margin-bottom: 48px;
+            color: #1d1d1d;
+            letter-spacing: -0.5px;
+        }
+        
+        .reports-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+            gap: 24px;
+        }
+        
+        .report-item {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+            border: 1px solid #e5e5e5;
+            border-radius: 12px;
+            padding: 32px;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #ffffff;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .report-item:hover {
+            border-color: #333;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+            transform: translateY(-4px);
+        }
+        
+        .report-number {
+            display: inline-block;
+            font-size: 48px;
+            font-weight: 300;
+            color: #d0d0d0;
+            line-height: 1;
+            margin-bottom: 16px;
+            letter-spacing: -1px;
+        }
+        
+        .report-item h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #1d1d1d;
+            letter-spacing: -0.3px;
+        }
+        
+        .report-item p {
+            font-size: 15px;
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+        
+        .report-tag {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 500;
+            color: #666;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+            padding: 6px 12px;
+            background: #f5f5f5;
+            border-radius: 6px;
         }
         
         footer {
+            padding: 40px;
             text-align: center;
-            color: white;
-            opacity: 0.9;
-            padding: 20px;
+            border-top: 1px solid #e5e5e5;
+            background: #f9f9f9;
+        }
+        
+        .footer-text {
+            font-size: 13px;
+            color: #999;
+            line-height: 1.6;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            header {
+                padding: 40px 20px;
+            }
+            
+            .header-content h1 {
+                font-size: 40px;
+            }
+            
+            .header-content p {
+                font-size: 18px;
+            }
+            
+            main {
+                padding: 50px 20px;
+            }
+            
+            .reports-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .report-item {
+                padding: 24px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="viewport">
         <header>
-            <h1>Caplin Point Laboratories</h1>
-            <p>Complete Research Series — 10 Deep Dive Reports</p>
+            <div class="header-content">
+                <h1>Caplin Point</h1>
+                <p>A structured investigation into one of India's most underestimated pharmaceutical stories.</p>
+                <div class="header-meta">Complete Research Series • March 2026</div>
+            </div>
         </header>
         
-        <div class="grid">
-            <a href="01-the-quiet-gorilla.html" class="card">
-                <div class="card-number">01</div>
-                <h2>The Quiet Gorilla</h2>
-                <p>The canonical long-form piece. Full investment thesis and framework analysis.</p>
-                <span class="card-tag">Foundation Report</span>
-            </a>
-            
-            <a href="02-financial-dna.html" class="card">
-                <div class="card-number">02</div>
-                <h2>Financial DNA</h2>
-                <p>Revenue, margins, ROCE, and EPS forensics over 10 years of growth.</p>
-                <span class="card-tag">Financial Analysis</span>
-            </a>
-            
-            <a href="03-tam-growth-runway.html" class="card">
-                <div class="card-number">03</div>
-                <h2>TAM & Growth Runway</h2>
-                <p>Three continents, $180B+ addressable market analysis and projections.</p>
-                <span class="card-tag">Market Sizing</span>
-            </a>
-            
-            <a href="04-management-quality.html" class="card">
-                <div class="card-number">04</div>
-                <h2>Management Quality</h2>
-                <p>Promise vs. delivery forensic. Zero salary, zero dilution track record.</p>
-                <span class="card-tag">Management</span>
-            </a>
-            
-            <a href="05-moat-bottleneck-screen.html" class="card">
-                <div class="card-number">05</div>
-                <h2>Moat & Bottleneck Screen</h2>
-                <p>Five moat layers classified and scored. Composite score: 8.5/10.</p>
-                <span class="card-tag">Moat Analysis</span>
-            </a>
-            
-            <a href="06-three-masters-valuation.html" class="card">
-                <div class="card-number">06</div>
-                <h2>Three Masters Valuation</h2>
-                <p>Buffett, Munger & Fisher frameworks applied to Caplin Point.</p>
-                <span class="card-tag">Special Report</span>
-            </a>
-            
-            <a href="07-peer-comparison.html" class="card">
-                <div class="card-number">07</div>
-                <h2>Peer Comparison</h2>
-                <p>Why Caplin has no real peers. Category error quantified with analysis.</p>
-                <span class="card-tag">Valuation</span>
-            </a>
-            
-            <a href="08-risk-register.html" class="card">
-                <div class="card-number">08</div>
-                <h2>Risk Register</h2>
-                <p>Nine risks assessed. Thesis killers defined. Exit signals established.</p>
-                <span class="card-tag">Risk Assessment</span>
-            </a>
-            
-            <a href="09-return-profile-2035.html" class="card">
-                <div class="card-number">09</div>
-                <h2>Return Profile to 2035</h2>
-                <p>Four scenarios. 12.9× probability-weighted return at ~29% CAGR.</p>
-                <span class="card-tag">Scenario Analysis</span>
-            </a>
-            
-            <a href="10-monitoring-dashboard.html" class="card">
-                <div class="card-number">10</div>
-                <h2>Monitoring Dashboard</h2>
-                <p>Ten core thesis monitors with green/amber/red thresholds. Living document.</p>
-                <span class="card-tag">Live Document</span>
-            </a>
-        </div>
+        <main>
+            <div class="reports-section">
+                <h2 class="section-title">Deep Dives</h2>
+                
+                <div class="reports-grid">
+                    <a href="01-the-quiet-gorilla.html" class="report-item">
+                        <div class="report-number">01</div>
+                        <h3>The Quiet Gorilla</h3>
+                        <p>The foundational thesis. How Caplin built a moat in the geography nobody watched.</p>
+                        <span class="report-tag">Framework</span>
+                    </a>
+                    
+                    <a href="02-financial-dna.html" class="report-item">
+                        <div class="report-number">02</div>
+                        <h3>Financial DNA</h3>
+                        <p>Earnings power. Ten years of revenue, margin, and ROCE forensics.</p>
+                        <span class="report-tag">Analysis</span>
+                    </a>
+                    
+                    <a href="03-tam-growth-runway.html" class="report-item">
+                        <div class="report-number">03</div>
+                        <h3>TAM & Growth Runway</h3>
+                        <p>Market opportunity. $180B+ addressable across three geographies.</p>
+                        <span class="report-tag">Market Sizing</span>
+                    </a>
+                    
+                    <a href="04-management-quality.html" class="report-item">
+                        <div class="report-number">04</div>
+                        <h3>Management Quality</h3>
+                        <p>Promise versus delivery. 35 years, zero debt, zero dilution.</p>
+                        <span class="report-tag">Assessment</span>
+                    </a>
+                    
+                    <a href="05-moat-bottleneck-screen.html" class="report-item">
+                        <div class="report-number">05</div>
+                        <h3>Moat & Bottleneck Screen</h3>
+                        <p>Structural advantages. Five layers of durable competitive moats.</p>
+                        <span class="report-tag">Classification</span>
+                    </a>
+                    
+                    <a href="06-three-masters-valuation.html" class="report-item">
+                        <div class="report-number">06</div>
+                        <h3>Three Masters</h3>
+                        <p>Buffett, Munger & Fisher frameworks converge on one conclusion.</p>
+                        <span class="report-tag">Valuation</span>
+                    </a>
+                    
+                    <a href="07-peer-comparison.html" class="report-item">
+                        <div class="report-number">07</div>
+                        <h3>Peer Comparison</h3>
+                        <p>Why Caplin has no real peers. The category error explained.</p>
+                        <span class="report-tag">Benchmarking</span>
+                    </a>
+                    
+                    <a href="08-risk-register.html" class="report-item">
+                        <div class="report-number">08</div>
+                        <h3>Risk Register</h3>
+                        <p>Nine material risks. Thesis killers identified. Exit signals defined.</p>
+                        <span class="report-tag">Risk</span>
+                    </a>
+                    
+                    <a href="09-return-profile-2035.html" class="report-item">
+                        <div class="report-number">09</div>
+                        <h3>Return Profile to 2035</h3>
+                        <p>Four scenarios. 12.9× probability-weighted at 29% CAGR.</p>
+                        <span class="report-tag">Scenarios</span>
+                    </a>
+                    
+                    <a href="10-monitoring-dashboard.html" class="report-item">
+                        <div class="report-number">10</div>
+                        <h3>Monitoring Dashboard</h3>
+                        <p>Ten thesis pillars tracked quarterly. Living document. Ever updated.</p>
+                        <span class="report-tag">Tracker</span>
+                    </a>
+                </div>
+            </div>
+        </main>
         
         <footer>
-            <p>The crowd reads headlines. The thinker reads structures. — Independent investment research, March 2026</p>
+            <p class="footer-text">The crowd reads headlines. The thinker reads structures.</p>
+            <p class="footer-text" style="margin-top: 8px; font-size: 12px;">Independent investment research • March 2026</p>
         </footer>
     </div>
 </body>
