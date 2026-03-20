@@ -1,280 +1,511 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Caplin Point Laboratories — Deep Dive Research</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html, body {
-            height: 100%;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            background: #ffffff;
-            color: #1d1d1d;
-            line-height: 1.4;
-        }
-        
-        .viewport {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            justify-content: space-between;
-        }
-        
-        header {
-            padding: 60px 40px;
-            text-align: center;
-            border-bottom: 1px solid #e5e5e5;
-        }
-        
-        .header-content h1 {
-            font-size: 56px;
-            font-weight: 700;
-            letter-spacing: -1.2px;
-            margin-bottom: 16px;
-            color: #1d1d1d;
-        }
-        
-        .header-content p {
-            font-size: 21px;
-            font-weight: 400;
-            color: #666;
-            max-width: 640px;
-            margin: 0 auto;
-            line-height: 1.38;
-        }
-        
-        .header-meta {
-            font-size: 12px;
-            color: #999;
-            letter-spacing: 0.5px;
-            text-transform: uppercase;
-            margin-top: 24px;
-        }
-        
-        main {
-            flex: 1;
-            padding: 80px 40px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-        }
-        
-        .reports-section {
-            margin-bottom: 60px;
-        }
-        
-        .section-title {
-            font-size: 28px;
-            font-weight: 600;
-            margin-bottom: 48px;
-            color: #1d1d1d;
-            letter-spacing: -0.5px;
-        }
-        
-        .reports-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
-            gap: 24px;
-        }
-        
-        .report-item {
-            display: block;
-            text-decoration: none;
-            color: inherit;
-            border: 1px solid #e5e5e5;
-            border-radius: 12px;
-            padding: 32px;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            background: #ffffff;
-            cursor: pointer;
-            position: relative;
-        }
-        
-        .report-item:hover {
-            border-color: #333;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-            transform: translateY(-4px);
-        }
-        
-        .report-number {
-            display: inline-block;
-            font-size: 48px;
-            font-weight: 300;
-            color: #d0d0d0;
-            line-height: 1;
-            margin-bottom: 16px;
-            letter-spacing: -1px;
-        }
-        
-        .report-item h3 {
-            font-size: 18px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            color: #1d1d1d;
-            letter-spacing: -0.3px;
-        }
-        
-        .report-item p {
-            font-size: 15px;
-            color: #666;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
-        
-        .report-tag {
-            display: inline-block;
-            font-size: 12px;
-            font-weight: 500;
-            color: #666;
-            letter-spacing: 0.3px;
-            text-transform: uppercase;
-            padding: 6px 12px;
-            background: #f5f5f5;
-            border-radius: 6px;
-        }
-        
-        footer {
-            padding: 40px;
-            text-align: center;
-            border-top: 1px solid #e5e5e5;
-            background: #f9f9f9;
-        }
-        
-        .footer-text {
-            font-size: 13px;
-            color: #999;
-            line-height: 1.6;
-        }
-        
-        /* Responsive */
-        @media (max-width: 768px) {
-            header {
-                padding: 40px 20px;
-            }
-            
-            .header-content h1 {
-                font-size: 40px;
-            }
-            
-            .header-content p {
-                font-size: 18px;
-            }
-            
-            main {
-                padding: 50px 20px;
-            }
-            
-            .reports-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .report-item {
-                padding: 24px;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Caplin Point Laboratories — Deep Dive Series</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;0,900;1,400;1,700&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=DM+Mono:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --parchment: #f5f0e8;
+  --parchment-dark: #ede7d8;
+  --ink: #1a1510;
+  --ink-mid: #3d3528;
+  --ink-faded: #6b5f4e;
+  --ink-ghost: #a09482;
+  --caplin: #1a4a6b;
+  --caplin-soft: rgba(26,74,107,0.06);
+  --gold: #c8860a;
+  --gold-soft: rgba(200,134,10,0.07);
+  --green: #2a5c2a;
+  --red: #8b2020;
+  --border: #c4b49a;
+  --border-light: #ddd0b8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--parchment);
+  color: var(--ink);
+  font-family: 'Source Serif 4', Georgia, serif;
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.7;
+}
+
+.page {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 56px 40px 100px;
+}
+
+/* === MASTHEAD === */
+.masthead {
+  border-top: 2px solid var(--ink);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 0 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 72px;
+}
+.masthead-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-faded);
+}
+.masthead-meta {
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  color: var(--ink-ghost);
+}
+
+/* === REDACTED PUBLISHER === */
+.redacted-pub {
+  font-family: 'Playfair Display', serif;
+  font-size: 13px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  user-select: none;
+  -webkit-user-select: none;
+}
+.redacted-pub::after {
+  content: '';
+  position: absolute;
+  top: -1px; left: -4px; right: -4px; bottom: -1px;
+  background: #1a1a1a;
+  border-radius: 1px;
+}
+
+/* === HERO === */
+.hero {
+  margin-bottom: 56px;
+  padding-bottom: 48px;
+  border-bottom: 1px solid var(--border);
+}
+.hero-kicker {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--caplin);
+  margin-bottom: 18px;
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(38px, 5.5vw, 64px);
+  font-weight: 900;
+  line-height: 0.95;
+  color: var(--ink);
+  margin-bottom: 10px;
+  letter-spacing: -0.02em;
+}
+.hero-ticker {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  color: var(--ink-ghost);
+  letter-spacing: 0.13em;
+  margin-bottom: 28px;
+}
+.hero-deck {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 1.7vw, 17px);
+  font-weight: 400;
+  font-style: italic;
+  color: var(--ink-faded);
+  line-height: 1.6;
+  max-width: 640px;
+  border-left: 2px solid var(--border);
+  padding-left: 18px;
+}
+
+/* === STATS ROW === */
+.stats-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1px;
+  background: var(--border-light);
+  border: 1px solid var(--border-light);
+  margin-bottom: 56px;
+}
+.stat {
+  background: var(--parchment);
+  padding: 16px 14px;
+}
+.stat-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 7.5px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+  margin-bottom: 6px;
+}
+.stat-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.stat-val.gold { color: var(--gold); }
+.stat-val.blue { color: var(--caplin); }
+.stat-sub {
+  font-family: 'DM Mono', monospace;
+  font-size: 8.5px;
+  color: var(--ink-ghost);
+}
+
+/* === THESIS BAND === */
+.thesis-band {
+  background: var(--ink);
+  padding: 24px 28px;
+  margin-bottom: 64px;
+}
+.thesis-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 10px;
+}
+.thesis-text {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(14px, 1.6vw, 17px);
+  font-weight: 400;
+  font-style: italic;
+  color: rgba(245,240,232,0.82);
+  line-height: 1.6;
+}
+
+/* === SECTION HEADER === */
+.section-rule {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin-bottom: 28px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+}
+.s-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 10px;
+  color: var(--caplin);
+  letter-spacing: 0.08em;
+}
+.s-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 20px;
+  font-weight: 700;
+}
+.s-aside {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-ghost);
+  margin-left: auto;
+}
+
+/* === REPORTS LIST === */
+.reports-list {
+  margin-bottom: 64px;
+}
+.report-entry {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 0 20px;
+  align-items: baseline;
+  padding: 20px 12px;
+  margin-left: -12px;
+  margin-right: -12px;
+  border-bottom: 1px solid var(--border-light);
+  text-decoration: none;
+  color: var(--ink);
+  transition: background 0.15s;
+}
+.report-entry:first-child {
+  border-top: 1px solid var(--border-light);
+}
+.report-entry:hover {
+  background: var(--caplin-soft);
+}
+.re-num {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  color: var(--ink-ghost);
+}
+.re-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.re-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16.5px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.re-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: var(--ink-faded);
+  line-height: 1.55;
+}
+.re-tag {
+  font-family: 'DM Mono', monospace;
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+  padding: 3px 8px;
+  border: 1px solid var(--border-light);
+  align-self: center;
+  white-space: nowrap;
+}
+.re-tag.special {
+  color: var(--gold);
+  border-color: rgba(200,134,10,0.25);
+  background: var(--gold-soft);
+}
+.re-tag.live {
+  color: var(--green);
+  border-color: rgba(42,92,42,0.2);
+  background: rgba(42,92,42,0.06);
+}
+
+/* === METHODOLOGY NOTE === */
+.method-note {
+  border-top: 1px solid var(--border);
+  padding-top: 28px;
+  margin-bottom: 64px;
+}
+.method-label {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-ghost);
+  margin-bottom: 10px;
+}
+.method-text {
+  font-size: 14px;
+  font-weight: 300;
+  color: var(--ink-faded);
+  line-height: 1.7;
+  max-width: 620px;
+}
+
+/* === FOOTER === */
+.footer {
+  border-top: 2px solid var(--ink);
+  padding-top: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.footer-left {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-ghost);
+}
+.footer-right {
+  font-family: 'DM Mono', monospace;
+  font-size: 9px;
+  color: var(--ink-ghost);
+  font-style: italic;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 700px) {
+  .page { padding: 36px 20px 60px; }
+  .stats-row { grid-template-columns: repeat(3, 1fr); }
+  .report-entry { grid-template-columns: 36px 1fr; }
+  .re-tag { display: none; }
+  .masthead { flex-direction: column; gap: 4px; }
+}
+
+@media print {
+  * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  .report-entry { page-break-inside: avoid; break-inside: avoid; }
+  .stats-row, .thesis-band { page-break-inside: avoid; break-inside: avoid; }
+}
+</style>
 </head>
 <body>
-    <div class="viewport">
-        <header>
-            <div class="header-content">
-                <h1>Caplin Point</h1>
-                <p>A structured investigation into one of India's most underestimated pharmaceutical stories.</p>
-                <div class="header-meta">Complete Research Series • March 2026</div>
-            </div>
-        </header>
-        
-        <main>
-            <div class="reports-section">
-                <h2 class="section-title">Deep Dives</h2>
-                
-                <div class="reports-grid">
-                    <a href="01-the-quiet-gorilla.html" class="report-item">
-                        <div class="report-number">01</div>
-                        <h3>The Quiet Gorilla</h3>
-                        <p>The foundational thesis. How Caplin built a moat in the geography nobody watched.</p>
-                        <span class="report-tag">Framework</span>
-                    </a>
-                    
-                    <a href="02-financial-dna.html" class="report-item">
-                        <div class="report-number">02</div>
-                        <h3>Financial DNA</h3>
-                        <p>Earnings power. Ten years of revenue, margin, and ROCE forensics.</p>
-                        <span class="report-tag">Analysis</span>
-                    </a>
-                    
-                    <a href="03-tam-growth-runway.html" class="report-item">
-                        <div class="report-number">03</div>
-                        <h3>TAM & Growth Runway</h3>
-                        <p>Market opportunity. $180B+ addressable across three geographies.</p>
-                        <span class="report-tag">Market Sizing</span>
-                    </a>
-                    
-                    <a href="04-management-quality.html" class="report-item">
-                        <div class="report-number">04</div>
-                        <h3>Management Quality</h3>
-                        <p>Promise versus delivery. 35 years, zero debt, zero dilution.</p>
-                        <span class="report-tag">Assessment</span>
-                    </a>
-                    
-                    <a href="05-moat-bottleneck-screen.html" class="report-item">
-                        <div class="report-number">05</div>
-                        <h3>Moat & Bottleneck Screen</h3>
-                        <p>Structural advantages. Five layers of durable competitive moats.</p>
-                        <span class="report-tag">Classification</span>
-                    </a>
-                    
-                    <a href="06-three-masters-valuation.html" class="report-item">
-                        <div class="report-number">06</div>
-                        <h3>Three Masters</h3>
-                        <p>Buffett, Munger & Fisher frameworks converge on one conclusion.</p>
-                        <span class="report-tag">Valuation</span>
-                    </a>
-                    
-                    <a href="07-peer-comparison.html" class="report-item">
-                        <div class="report-number">07</div>
-                        <h3>Peer Comparison</h3>
-                        <p>Why Caplin has no real peers. The category error explained.</p>
-                        <span class="report-tag">Benchmarking</span>
-                    </a>
-                    
-                    <a href="08-risk-register.html" class="report-item">
-                        <div class="report-number">08</div>
-                        <h3>Risk Register</h3>
-                        <p>Nine material risks. Thesis killers identified. Exit signals defined.</p>
-                        <span class="report-tag">Risk</span>
-                    </a>
-                    
-                    <a href="09-return-profile-2035.html" class="report-item">
-                        <div class="report-number">09</div>
-                        <h3>Return Profile to 2035</h3>
-                        <p>Four scenarios. 12.9× probability-weighted at 29% CAGR.</p>
-                        <span class="report-tag">Scenarios</span>
-                    </a>
-                    
-                    <a href="10-monitoring-dashboard.html" class="report-item">
-                        <div class="report-number">10</div>
-                        <h3>Monitoring Dashboard</h3>
-                        <p>Ten thesis pillars tracked quarterly. Living document. Ever updated.</p>
-                        <span class="report-tag">Tracker</span>
-                    </a>
-                </div>
-            </div>
-        </main>
-        
-        <footer>
-            <p class="footer-text">The crowd reads headlines. The thinker reads structures.</p>
-            <p class="footer-text" style="margin-top: 8px; font-size: 12px;">Independent investment research • March 2026</p>
-        </footer>
+<div class="page">
+
+  <!-- MASTHEAD -->
+  <div class="masthead">
+    <span class="masthead-pub"><span class="redacted-pub">Clarity Research</span></span>
+    <span class="masthead-meta">NSE: CAPLINPNT · 10 Reports · March 2026</span>
+  </div>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-kicker">Caplin Point Laboratories · Complete Research Series</div>
+    <div class="hero-title">Caplin Point</div>
+    <div class="hero-ticker">NSE: CAPLINPNT · CMP ~₹1,651 · Market Cap ~₹12,654 Cr · TTM EPS ₹80.74</div>
+    <div class="hero-deck">"The crowd is hunting for the next big Indian pharma story in the US, in large-cap CDMO, in blockbuster APIs. Caplin has been compounding quietly in the geography nobody wanted — and building the second moat while the first one generates the cash to pay for it."</div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-row">
+    <div class="stat">
+      <div class="stat-label">10-Year PAT CAGR</div>
+      <div class="stat-val gold">29%</div>
+      <div class="stat-sub">FY15–FY25</div>
     </div>
+    <div class="stat">
+      <div class="stat-label">Debt · 35 Years</div>
+      <div class="stat-val">₹0</div>
+      <div class="stat-sub">Zero. Always.</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">ROCE</div>
+      <div class="stat-val blue">25.8%</div>
+      <div class="stat-sub">5yr avg 25%+</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Current P/E</div>
+      <div class="stat-val">21×</div>
+      <div class="stat-sub">vs 28× sector avg</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Liquid Surplus</div>
+      <div class="stat-val gold">₹2,459 Cr</div>
+      <div class="stat-sub">Q3 FY26</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Bottleneck Score</div>
+      <div class="stat-val">8.5/10</div>
+      <div class="stat-sub">5 moat layers</div>
+    </div>
+  </div>
+
+  <!-- THESIS -->
+  <div class="thesis-band">
+    <div class="thesis-label">Core Thesis</div>
+    <div class="thesis-text">Caplin owns five structural bottlenecks — LatAm distribution, 5,000+ regulatory licences, vertical integration, US injectable ANDA portfolio, and a ₹2,459 Cr self-funding balance sheet. The market prices it as a generic exporter with concentration risk. The structure says toll booth. The price says restaurant. That gap is the opportunity.</div>
+  </div>
+
+  <!-- REPORTS -->
+  <div class="section-rule">
+    <span class="s-label">—</span>
+    <span class="s-title">Complete Research Series</span>
+    <span class="s-aside">10 Reports · March 2026</span>
+  </div>
+
+  <div class="reports-list">
+
+    <a href="01-the-quiet-gorilla.html" class="report-entry">
+      <span class="re-num">01</span>
+      <div class="re-content">
+        <span class="re-title">The Quiet Gorilla — The Deep Dive</span>
+        <span class="re-desc">The canonical long-form piece. BYD analogy. Gorilla Framework. How Caplin built a distribution moat in 23 countries while Indian pharma fought for US shelf space.</span>
+      </div>
+      <span class="re-tag">Foundation</span>
+    </a>
+
+    <a href="02-financial-dna.html" class="report-entry">
+      <span class="re-num">02</span>
+      <div class="re-content">
+        <span class="re-title">Financial DNA — Revenue, Margins, Returns & Cash</span>
+        <span class="re-desc">Seven-section forensic analysis. Revenue 8× in 10 years. PAT 13×. EBITDA 35%. ROCE, ROIC, FCF conversion, and the net cash fortress.</span>
+      </div>
+      <span class="re-tag">Financial</span>
+    </a>
+
+    <a href="03-tam-growth-runway.html" class="report-entry">
+      <span class="re-num">03</span>
+      <div class="re-content">
+        <span class="re-title">TAM & Growth Runway — Three Markets, One Engine</span>
+        <span class="re-desc">Full TAM build across three geographies. LatAm $75B→$102B. US injectables $18B→$43B. Africa $27B→$37B. Combined $170B+ at sub-0.2% penetration.</span>
+      </div>
+      <span class="re-tag">Market Sizing</span>
+    </a>
+
+    <a href="04-management-quality.html" class="report-entry">
+      <span class="re-num">04</span>
+      <div class="re-content">
+        <span class="re-title">The Man Who Takes No Salary — Management Forensic</span>
+        <span class="re-desc">Zero salary. Zero dilution. Zero debt in 35 years. Six tracked commitments — four kept, one exceeded. KMP pay at 1.35% of PAT.</span>
+      </div>
+      <span class="re-tag">Management</span>
+    </a>
+
+    <a href="05-moat-bottleneck-screen.html" class="report-entry">
+      <span class="re-num">05</span>
+      <div class="re-content">
+        <span class="re-title">Find the Toll Booth — Moat Profile & Bottleneck Screen</span>
+        <span class="re-desc">Five moat layers classified and scored. LatAm distribution 9.2/10. Regulatory licences 9.0/10. Vertical integration 8.5/10. Composite 8.5/10.</span>
+      </div>
+      <span class="re-tag">Moat Analysis</span>
+    </a>
+
+    <a href="06-three-masters-valuation.html" class="report-entry">
+      <span class="re-num">06</span>
+      <div class="re-content">
+        <span class="re-title">Three Masters, One Verdict — Valuation Tribunal</span>
+        <span class="re-desc">If Munger, Damodaran, and Terry Smith each valued Caplin Point — what would they say? Three frameworks converge on one conclusion.</span>
+      </div>
+      <span class="re-tag special">Special Report</span>
+    </a>
+
+    <a href="07-peer-comparison.html" class="report-entry">
+      <span class="re-num">07</span>
+      <div class="re-content">
+        <span class="re-title">Why Caplin Has No Real Peers</span>
+        <span class="re-desc">The category error in standard peer tables. The right archetype is distribution-moat businesses in underserved geographies — not Indian pharma exporters.</span>
+      </div>
+      <span class="re-tag">Valuation</span>
+    </a>
+
+    <a href="08-risk-register.html" class="report-entry">
+      <span class="re-num">08</span>
+      <div class="re-content">
+        <span class="re-title">The Risk Register — A Forensic Threat Assessment</span>
+        <span class="re-desc">Nine risks assessed. Thesis killers defined. Exit signals established. Three material risks, none fatal if the moat structure holds.</span>
+      </div>
+      <span class="re-tag">Risk</span>
+    </a>
+
+    <a href="09-return-profile-2035.html" class="report-entry">
+      <span class="re-num">09</span>
+      <div class="re-content">
+        <span class="re-title">Return Profile — What ₹1,699 Buys You to 2035</span>
+        <span class="re-desc">Four EPS scenarios. Bear 12% CAGR → Bull 33% CAGR. The return map across multiple P/E re-rating paths over a 10-year horizon.</span>
+      </div>
+      <span class="re-tag">Returns</span>
+    </a>
+
+    <a href="10-monitoring-dashboard.html" class="report-entry">
+      <span class="re-num">10</span>
+      <div class="re-content">
+        <span class="re-title">Quarterly Monitoring Dashboard</span>
+        <span class="re-desc">Post-investment tracking. Green/amber/red thresholds for every thesis variable. Updated Q3 FY26. The discipline to watch what matters.</span>
+      </div>
+      <span class="re-tag live">Live Document</span>
+    </a>
+
+  </div>
+
+  <!-- METHODOLOGY -->
+  <div class="method-note">
+    <div class="method-label">Methodology</div>
+    <div class="method-text">This series applies the Bottleneck Strategy — a framework that distinguishes between businesses that sell solutions and those that own structural constraints. Every report tests whether Caplin controls a point in the value chain that others cannot bypass, cannot replicate quickly, and must pay to access.</div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <span class="footer-left">March 2026 · 10 Reports · 111 Pages</span>
+    <span class="footer-right">This is research, not investment advice.</span>
+  </div>
+
+</div>
 </body>
 </html>
